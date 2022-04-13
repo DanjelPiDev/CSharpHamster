@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b287e039a01014b8559f2f25a01bc2, type: 3}
+  m_Name: SampleQuest2
+  m_EditorClassIdentifier: 
+  questName: Aufgabe 2
+  questDescription: "Alle Felder m\xFCssen eine bestimmte Anzahl an K\xF6rner besitzen."
+  stageInfo:
+    stage: 0
+    stageDescription: "Alle Felder m\xFCssen 1 Korn enthalten"
+    condition: {fileID: 11400000, guid: 442d662b762b17d4d9631363fcb8040b, type: 2}
+  questDone: 0
