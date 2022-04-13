@@ -24,7 +24,8 @@ In diesem Abschnitt werde ich dir Step-by-Step erklären wie Du sachen wie Items
 Um ein neues Item zu erstellen, mache eine rechte Maustaste in Unity im Projekt Ordner (Standard Ordner für Items: Asstes/Objects/Items/)
 * Rechte Maustaste --> Create --> HamsterGame --> Items --> Item
 
-Der Standardname des Items ist "new Item", ändere diesen nach belieben. Klicke anschließend auf die neu erstellte Datei. Im Inspector solltest Du dann folgendes sehen: 
+Der Standardname des Items ist "new Item", ändere diesen nach belieben. Klicke anschließend auf die neu erstellte Datei. Im Inspector solltest Du dann folgendes sehen:
+
 ![ItemInspector](https://user-images.githubusercontent.com/103567242/163169299-c046baf7-2a35-488b-99ad-867716cf10f9.png)
 
 Zu beachten:
@@ -57,9 +58,11 @@ Erläuterung zu den einzelnen Punkten:
 | **OnUse()** | UnityEvent | Was soll passieren, wenn der Hamster dieses Item verwendet? (Consumable) |
 
 Nachdem Du alles eingestellt hast, musst Du das Item noch in den Manager einfügen, klicke dazu in der Level Hierarchie (Links) einmal auf das GameObject "Manager".
+
 ![Inspector_Manager](https://user-images.githubusercontent.com/103567242/163173331-612f348c-917a-403f-af0b-900e223f7eb3.png)
 
 Auf der rechten Seite müsstest Du dann runterscrollen, bis Du die Komponente "Item Collection" findest.
+
 ![Inspector_Manager_ItemCollection](https://user-images.githubusercontent.com/103567242/163173619-075883dc-703d-4627-8593-da282ee47ebb.png)
 
 Klicke hier auf das "+" zeichen und füge dein Item hinzu. Du musst anschließend nichts mehr machen, bei Spielstart sortiert das Script die Liste von alleine und list die Infos aus.
