@@ -2,7 +2,7 @@
 C#-Hamster für GDC
 
 ***
-Für mehr Infos die [C#-Hamster-Wiki](https://github.com/<user-name>/<repo-name>/wiki) Seite
+Für mehr Infos die [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) Seite
 
 ***
 # Setup
