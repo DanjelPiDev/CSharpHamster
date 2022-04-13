@@ -5,7 +5,7 @@ C#-Hamster for GDC
 # Setup
 To get the C#-Hamster running on your PC, just download the whole project. After that, simply unpack everything, remember the folder you unpacked this project. Now you have to start UnityHub.
 
-* If you don't have UnityHub already installed, go and see the installation instruction on there main page, also see: [https://unity.com/download](https://unity.com/download)
+* If you don't have UnityHub already installed, go and see the installation instruction on their main page, also see: [https://unity.com/download](https://unity.com/download)
 
 ## Import the Project
 If UnityHub is running, your application should look like this:
