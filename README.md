@@ -2,6 +2,9 @@
 C#-Hamster für GDC
 
 ***
+Für mehr Infos die [C#-Hamster-Wiki](https://github.com/<user-name>/<repo-name>/wiki) Seite
+
+***
 # Setup
 Um den C#-Hamster auf deinem PC zum laufen zu bekommen musst Du zunächst das gesamte Projekt herunterladen. Anschließend alles entpacken, merke dir auch den Ordner wo Du es entpacken hast.
 Jetzt musst Du nur noch UnityHub starten.
