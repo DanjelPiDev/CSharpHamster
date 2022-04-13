@@ -15,4 +15,4 @@ Now press the button on the upper right corner which says "Open", you have to ch
 ### Version
 After importing this project with the steps above, it can happen that Unity will show you a warning message because you own a different Unity-Engine version, just select "Choose another Version" and select the version you have installed.
 
-If you're working with a different OS than Windows, there will be a warning that this projects build settings are not for "Linux" or "Mac", just proceed with letting do Unity everything.
+If you're working with a different OS than Windows, there will be a warning that this projects build settings are not for "Linux" or "Mac", just proceed, and Unity will do the magic.
