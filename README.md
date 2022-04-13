@@ -13,6 +13,6 @@ If UnityHub is running, your application should look like this:
 
 Now press on the upper right corner the button "Open", you have to choose the unpacked folder of this project. That's it!
 ### Version
-It can happen that after importing this project with the steps above, that Unity will show you a warning message because you own a different Unity-Engine version, just select "Choose Version" and select the version you have installed.
+After importing this project with the steps above, it can happen that Unity will show you a warning message because you own a different Unity-Engine version, just select "Choose another Version" and select the version you have installed.
 
 If you're working with a different OS than Windows, there will be a warning that this projects build settings are not for "Linux" or "Mac", just proceed with letting do Unity everything.
