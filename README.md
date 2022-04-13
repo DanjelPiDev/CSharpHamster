@@ -26,6 +26,7 @@ Um ein neues Item zu erstellen, mache eine rechte Maustaste in Unity im Projekt 
 
 Der Standardname des Items ist "new Item", ändere diesen nach belieben. Klicke anschließend auf die neu erstellte Datei. Im Inspector solltest Du dann folgendes sehen: 
 ![ItemInspector](https://user-images.githubusercontent.com/103567242/163169299-c046baf7-2a35-488b-99ad-867716cf10f9.png)
+
 Zu beachten:
 * Jede Id muss einzigartig sein, also aufpassen das Du keine doppelten Id's vergibst
 * Nachdem Du  alles eingestellt hast, musst Du das Item im Manager hinzufügen, dazu später mehr.
@@ -60,4 +61,5 @@ Nachdem Du alles eingestellt hast, musst Du das Item noch in den Manager einfüg
 
 Auf der rechten Seite müsstest Du dann runterscrollen, bis Du die Komponente "Item Collection" findest.
 ![Inspector_Manager_ItemCollection](https://user-images.githubusercontent.com/103567242/163173619-075883dc-703d-4627-8593-da282ee47ebb.png)
+
 Klicke hier auf das "+" zeichen und füge dein Item hinzu. Du musst anschließend nichts mehr machen, bei Spielstart sortiert das Script die Liste von alleine und list die Infos aus.
