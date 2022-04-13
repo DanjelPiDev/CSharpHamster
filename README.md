@@ -11,7 +11,7 @@ To get the C#-Hamster running on your PC, just download the whole project. After
 If UnityHub is running, your application should look like this:
 ![UnityHub](https://drive.google.com/uc?export=view&id=1VSR71zn3Suo9ihXuKVvc4_hnSVyh5fy5)
 
-Now press on the upper right corner the button "Open", you have to choose the unpacked folder of this project. That's it!
+Now press the button on the upper right corner which says "Open", you have to choose the unpacked folder of this project. That's it!
 ### Version
 After importing this project with the steps above, it can happen that Unity will show you a warning message because you own a different Unity-Engine version, just select "Choose another Version" and select the version you have installed.
 
