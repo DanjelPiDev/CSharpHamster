@@ -1,5 +1,5 @@
 # GDC_CSharpHamster
-C#-Hamster für die GDC
+C#-Hamster for GDC
 
 
 # Setup
