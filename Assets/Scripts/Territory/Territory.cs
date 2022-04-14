@@ -50,6 +50,7 @@ public class Territory : MonoBehaviour
     public static int globalGrainCount = 0;
     public static List<Hamster> activHamsters = new List<Hamster>();
     public static bool playerCanMove = false;
+    public static bool player2CanMove = false;
 
     private static Tilemap tilemap;
     private static Tilemap lampTilemap;
@@ -199,9 +200,11 @@ public class Territory : MonoBehaviour
         globalGrainCount = grainCount;
 
         playerCanMove = true;
+        player2CanMove = true;
         gameSpeed = HamsterGameManager.hamsterGameSpeed;
         wait = new WaitForSeconds(gameSpeed);
         base.StartCoroutine(PlayerControlMovementTimer());
+        base.StartCoroutine(Player2ControlMovementTimer());
     }
 
     private void CheckLight()
@@ -1014,6 +1017,25 @@ public class Territory : MonoBehaviour
         }
 
         
+    }
+
+    private IEnumerator Player2ControlMovementTimer()
+    {
+        while (true)
+        {
+            if (HamsterGameManager.isTrading || HamsterGameManager.isTalking)
+            {
+                yield return null;
+            }
+
+            if (!player2CanMove)
+            {
+                yield return wait;
+                player2CanMove = true;
+            }
+            yield return null;
+        }
+
     }
 
     /// <summary>

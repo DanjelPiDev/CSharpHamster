@@ -1290,6 +1290,7 @@ public class Hamster : ScriptableObject
             if (hamster1.playerControl || hamster2.playerControl)
             {
                 Territory.playerCanMove = false;
+                Territory.player2CanMove = false;
             }
             HamsterGameManager.isTrading = true;
         }
@@ -1306,6 +1307,8 @@ public class Hamster : ScriptableObject
             if (hamster1.playerControl || hamster2.playerControl)
             {
                 Territory.playerCanMove = true;
+                // Aktiviere auch wieder die Bewegung von Spieler 2
+                Territory.player2CanMove = true;
             }
 
             for (int i = 0; i < hamsterGameManager.tradeItemContentHamster1.childCount; i++)

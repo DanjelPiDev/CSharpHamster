@@ -57,7 +57,7 @@ public class PlayerControl : MonoBehaviour
         {
             foreach (Hamster ham in Territory.activHamsters)
             {
-                if (ham != playerHamster)
+                if (ham != playerHamster && ham.PlayerControl)
                 {
                     hamster2 = ham;
                     playerHamster2 = ham;
@@ -83,332 +83,337 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    
+
+
     private void ManagePlayerMovement()
     {
         if (hamster == null) return;
 
+        /*
+        * Für den Fall das 2 auf einer Tastatur spielen
+        */
+        if (multiplayer)
+        {
+            if (Input.GetKeyDown(moveRight[0]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        hamster.TurnLeft();
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        hamster.Move();
+                        Territory.playerCanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveRight[1]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster2.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        hamster2.TurnLeft();
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        hamster2.Move();
+                        Territory.player2CanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveLeft[0]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        hamster.TurnLeft();
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        hamster.Move();
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveLeft[1]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster2.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        hamster2.TurnLeft();
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        hamster2.Move();
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveUp[0]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        hamster.Move();
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        hamster.TurnLeft();
+                        Territory.playerCanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveUp[1]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster2.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        hamster2.Move();
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        hamster2.TurnLeft();
+                        Territory.player2CanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveDown[0]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        hamster.Move();
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        hamster.TurnLeft();
+                        Territory.playerCanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster.TurnLeft();
+                        }
+                        Territory.playerCanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(moveDown[1]))
+            {
+                /* 
+                 * Check here in which direction the hamster is looking at, 
+                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 */
+                switch (hamster2.Direction)
+                {
+                    case Hamster.LookingDirection.North:
+                        for (int i = 0; i < 2; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.South:
+                        hamster2.Move();
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.West:
+                        hamster2.TurnLeft();
+                        Territory.player2CanMove = false;
+                        break;
+                    case Hamster.LookingDirection.East:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            hamster2.TurnLeft();
+                        }
+                        Territory.player2CanMove = false;
+                        break;
+                }
+            }
+            else if (Input.GetKeyDown(pickUpGrain[0]))
+            {
+                hamster.PickUpGrain();
+            }
+            else if (Input.GetKeyDown(pickUpGrain[1]))
+            {
+                hamster2.PickUpGrain();
+            }
+            else if (Input.GetKeyDown(dropGrain[0]))
+            {
+                hamster.DropGrain();
+            }
+            else if (Input.GetKeyDown(dropGrain[1]))
+            {
+                hamster2.DropGrain();
+            }
+            else if (Input.GetKeyDown(talk[0]))
+            {
+                hamster.Talk();
+            }
+            else if (Input.GetKeyDown(talk[1]))
+            {
+                hamster2.Talk();
+            }
+            else if (Input.GetKeyDown(trade[0]))
+            {
+                hamster.Trade();
+            }
+            else if (Input.GetKeyDown(trade[1]))
+            {
+                hamster2.Trade();
+            }
+            else if (Input.GetKeyDown(inventory[0]))
+            {
+                hamster.DisplayInventory();
+            }
+            else if (Input.GetKeyDown(inventory[1]))
+            {
+                hamster2.DisplayInventory();
+            }
+            else if (Input.GetKeyDown(controlEffects[0]))
+            {
+                hamster.SetEquipmentEffects(!hamster.EffectsActiv);
+            }
+            else if (Input.GetKeyDown(controlEffects[1]))
+            {
+                hamster2.SetEquipmentEffects(!hamster.EffectsActiv);
+            }
+            else if (Input.GetKeyDown(pickUpItem[0]))
+            {
+                hamster.PickUpItem();
+            }
+            else if (Input.GetKeyDown(pickUpItem[1]))
+            {
+                hamster2.PickUpItem();
+            }
+
+            return;
+        }
+
         if (Territory.playerCanMove)
         {
-            /*
-             * Für den Fall das 2 auf einer Tastatur spielen
-             */
-            if (multiplayer)
-            {
-                if (Input.GetKeyDown(moveRight[0]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            hamster.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            hamster.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveRight[1]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster2.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            hamster2.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            hamster2.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveLeft[0]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            hamster.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            hamster.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveLeft[1]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster2.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            hamster2.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            hamster2.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveUp[0]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            hamster.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            hamster.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveUp[1]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster2.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            hamster2.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            hamster2.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveDown[0]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            hamster.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            hamster.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(moveDown[1]))
-                {
-                    /* 
-                     * Check here in which direction the hamster is looking at, 
-                     * if hamster is not looking to east, then the hamster will first turn to this side 
-                     */
-                    switch (hamster2.Direction)
-                    {
-                        case Hamster.LookingDirection.North:
-                            for (int i = 0; i < 2; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.South:
-                            hamster2.Move();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.West:
-                            hamster2.TurnLeft();
-                            Territory.playerCanMove = false;
-                            break;
-                        case Hamster.LookingDirection.East:
-                            for (int i = 0; i < 3; i++)
-                            {
-                                hamster2.TurnLeft();
-                            }
-                            Territory.playerCanMove = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKeyDown(pickUpGrain[0]))
-                {
-                    hamster.PickUpGrain();
-                }
-                else if (Input.GetKeyDown(pickUpGrain[1]))
-                {
-                    hamster2.PickUpGrain();
-                }
-                else if (Input.GetKeyDown(dropGrain[0]))
-                {
-                    hamster.DropGrain();
-                }
-                else if (Input.GetKeyDown(dropGrain[1]))
-                {
-                    hamster2.DropGrain();
-                }
-                else if (Input.GetKeyDown(talk[0]))
-                {
-                    hamster.Talk();
-                }
-                else if (Input.GetKeyDown(talk[1]))
-                {
-                    hamster2.Talk();
-                }
-                else if (Input.GetKeyDown(trade[0]))
-                {
-                    hamster.Trade();
-                }
-                else if (Input.GetKeyDown(trade[1]))
-                {
-                    hamster2.Trade();
-                }
-                else if (Input.GetKeyDown(inventory[0]))
-                {
-                    hamster.DisplayInventory();
-                }
-                else if (Input.GetKeyDown(inventory[1]))
-                {
-                    hamster2.DisplayInventory();
-                }
-                else if (Input.GetKeyDown(controlEffects[0]))
-                {
-                    hamster.SetEquipmentEffects(!hamster.EffectsActiv);
-                }
-                else if (Input.GetKeyDown(controlEffects[1]))
-                {
-                    hamster2.SetEquipmentEffects(!hamster.EffectsActiv);
-                }
-                else if (Input.GetKeyDown(pickUpItem[0]))
-                {
-                    hamster.PickUpItem();
-                }
-                else if (Input.GetKeyDown(pickUpItem[1]))
-                {
-                    hamster2.PickUpItem();
-                }
-
-                return;
-            }
+            
 
             /*
              * Für den Fall der Doppelbelegung

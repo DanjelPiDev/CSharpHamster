@@ -11,6 +11,7 @@ public class Aufgabe1 : MonoBehaviour
 
     /* Dein Code startet hier ... */
     Hamster meinHamster;
+    Hamster meinHamster2;
     /* Dein Code endet hier ... */
 
     private void HamsterEigenschaften()
@@ -19,6 +20,15 @@ public class Aufgabe1 : MonoBehaviour
         meinHamster = new Hamster();
         meinHamster.SetName("Hamtaro");
         meinHamster.SetPosition(-5, -3);
+        
+
+        meinHamster2 = new Hamster();
+        meinHamster2.SetName("Loou");
+        meinHamster2.SetPosition(-5, -2);
+        meinHamster2.SetColor(Hamster.HamsterColor.Blue);
+
+        meinHamster.SetPlayerControls(true);
+        meinHamster2.SetPlayerControls(true);
         /* Dein Code endet hier ... */
     }
 
