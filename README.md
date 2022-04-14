@@ -11,6 +11,8 @@ Jetzt musst Du nur noch UnityHub starten.
 
 * Falls Du UnityHub noch nicht installiert hast, gehe auf folgende Seite (Wähle dein OS): [https://unity.com/download](https://unity.com/download)
 
+Installiere anschließend die Unity Version 2020. Falls es noch nicht von alleine passiert ist.
+
 ## Importiere das Projekt
 Nachdem Du UnityHub installiert hast, kannst Du UnityHub starten. Es sollte ungefähr so aussehen:
 
