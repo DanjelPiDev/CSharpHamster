@@ -10056,7 +10056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91cb66749681d44458be49f4356bf079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSpeed: 0.064
+  gameSpeed: 0.1
   hamsterInstance: {fileID: 8688514454558771519, guid: ca5d1e19324b75b4fb5cfa2d14a10c9f, type: 3}
   hamsterSprites:
   - {fileID: 21300000, guid: 2ed77e6e78cc8044ab01f483c816e645, type: 3}

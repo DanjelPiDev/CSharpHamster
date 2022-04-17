@@ -7,6 +7,7 @@ public class Aufgabe1 : MonoBehaviour
     #region Variablen defintion
     public ItemCollection itemCollection;
     private WaitForSeconds wait;
+    private float gameSpeed = 1;
     #endregion
 
     /* Dein Code startet hier ... */
@@ -52,13 +53,18 @@ public class Aufgabe1 : MonoBehaviour
     #region Methoden
     private void Start()
     {
+        gameSpeed = HamsterGameManager.hamsterGameSpeed;
         base.StartCoroutine(HamsterBewegung());
     }
 
     private void Update()
     {
-        // Aktualisiere die gameSpeed
-        wait = new WaitForSeconds(HamsterGameManager.hamsterGameSpeed);
+        // Refresh the gameSpeed
+        if (gameSpeed != HamsterGameManager.hamsterGameSpeed)
+        {
+            gameSpeed = HamsterGameManager.hamsterGameSpeed;
+            wait = new WaitForSeconds(gameSpeed);
+        }
     }
     #endregion
 }

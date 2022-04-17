@@ -11,7 +11,7 @@ public class Quest : ScriptableObject
     public StageInfo stageInfo;
 
 #if UNITY_EDITOR
-    [Help("QuestDone und QuestFailed nicht abändern!\nAusser für Testzwecke!", UnityEditor.MessageType.Warning)]
+    [Help("Do not change QuestDone or QuestFailed!\nOnly for testing!", UnityEditor.MessageType.Warning)]
 #endif
     public bool questDone = false;
     public bool questFailed = false;

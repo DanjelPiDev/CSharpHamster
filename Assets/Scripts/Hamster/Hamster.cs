@@ -24,7 +24,7 @@ public class Hamster : ScriptableObject
 {
     [Header("General Hamster Info")]
 #if UNITY_EDITOR
-    [Help("Jede Hamster Id muss einzigartig sein!", UnityEditor.MessageType.Warning)]
+    [Help("Has to be unique for each hamster!", UnityEditor.MessageType.Warning)]
 #endif
     [SerializeField] private int id;
     [SerializeField] private new string name;

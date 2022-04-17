@@ -12,10 +12,10 @@ using UnityEditor;
 public class HamsterGameManager : MonoBehaviour
 {
 #if UNITY_EDITOR
-    [Help("Desto niedriger dieser Wert, desto schneller läuft die Simulation.", UnityEditor.MessageType.Info)]
+    [Help("The lower this value, the faster the simulation.", UnityEditor.MessageType.Info)]
 #endif
     [Header("Global Gamespeed"), Range(0f, 2f)]
-    [Tooltip("Desto niedriger dieser Wert, desto schneller läuft die Simulation.")]public float gameSpeed;
+    [Tooltip("The lower this value, the faster the simulation.")]public float gameSpeed;
 
     [Header("Hamster Gamemanager references")]
     [Space(50)]
@@ -121,7 +121,9 @@ public class HamsterGameManager : MonoBehaviour
 
     public void RefreshTradeWindow()
     {
-        /* Remove all items */
+        /* 
+         * Remove all items 
+         */
         for (int i = 0; i < tradeItemContentHamster1.childCount; i++)
         {
             Destroy(tradeItemContentHamster1.GetChild(i).gameObject);
@@ -133,7 +135,9 @@ public class HamsterGameManager : MonoBehaviour
         }
 
 
-        /* Füge alle items in die inventare ein "Hamster1" */
+        /* 
+         * Add all items into the inventory of "Hamster1" 
+         */
         for (int i = 0; i < hamster1.Inventory.Count; i++)
         {
             GameObject itemSlot = Instantiate(this.itemPrefab, this.tradeItemContentHamster1);
@@ -147,7 +151,9 @@ public class HamsterGameManager : MonoBehaviour
             itemSlot.GetComponent<ItemHolder>().item.IsEquipped = hamster1.Inventory[i].item.IsEquipped;
         }
 
-        /* Füge alle items in die inventare ein "Hamster2" */
+        /* 
+         * Add all items into the inventory of "Hamster2"  
+         */
         for (int i = 0; i < hamster2.Inventory.Count; i++)
         {
             GameObject itemSlot = Instantiate(this.itemPrefab, this.tradeItemContentHamster2);
@@ -166,7 +172,9 @@ public class HamsterGameManager : MonoBehaviour
     {
         Hamster hamster = null;
 
-        /* Entferne alle items */
+        /* 
+         * Remove all items  
+         */
         for (int i = 0; i < tradeItemContentHamster1.childCount; i++)
         {
             Destroy(itemContent.GetChild(i).gameObject);

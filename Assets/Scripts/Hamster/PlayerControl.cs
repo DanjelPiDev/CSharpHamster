@@ -5,13 +5,13 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
 #if UNITY_EDITOR
-    [Help("Falls 2 Spieler mithilfe einer Tastatur spielen wollen (Offline)!\nTaste 1 für Spieler 1 und Taste 2 für Spieler 2\n\nWenn Du eine doppelbelegung willst, musst Du hier weitere Tasten Einstellen. Füge ein weiteres Element dem Array mit dem '+' Zeichen hinzu und anschließend die Taste.(Funktioniert nicht mit multiplePlayers!)", UnityEditor.MessageType.Info)]
+    [Help("If two players want to play on one keyboard (Offline)!\nKey 1 of the key array is for player 1, and Key 2 of the key array is for player 2.\n\nIf you want a double assignment of the keys, you have to add them to the array in the inspector (max. 2 keys per array).\nDouble assignment of the keys not working with Multiplayer!", UnityEditor.MessageType.Info)]
 #endif
     [Header("Player Options")]
     public bool multiplayer = false;
     /* 
-     * Wenn Du eine Doppelbelegung willst, musst Du eine weitere Taste im Inspector Einstellen.
-     * Nicht hier im Script! Da das keinen Effekt hätte. Füge ein weiteres Element dem array hinzu und anschließend die Taste.
+     * If you want a double assignment of the keys, you have to set them in the inspector.
+     * Changing it in the script will not take any effect.
      */
     [Header("Keybindings")]
     public KeyCode[] moveRight = new KeyCode[] { KeyCode.RightArrow };
@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
         Hamster playerHamster = null;
         Hamster playerHamster2 = null;
 
-        // Für Spieler 1
+        // Player 1
         foreach(Hamster ham in Territory.activHamsters)
         {
             if(ham.PlayerControl)
@@ -52,7 +52,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        // Für Spieler 2
+        // Check for player 2
         if (multiplayer)
         {
             foreach (Hamster ham in Territory.activHamsters)
@@ -91,7 +91,7 @@ public class PlayerControl : MonoBehaviour
         if (hamster == null) return;
 
         /*
-        * Für den Fall das 2 auf einer Tastatur spielen
+        * Case: 2 Player, 1 Keyboard
         */
         if (multiplayer)
         {
@@ -99,7 +99,7 @@ public class PlayerControl : MonoBehaviour
             {
                 /* 
                  * Check here in which direction the hamster is looking at, 
-                 * if hamster is not looking to east, then the hamster will first turn to this side 
+                 * if the hamster is not looking to the east, then the hamster will first turn to this side 
                  */
                 switch (hamster.Direction)
                 {
@@ -416,8 +416,8 @@ public class PlayerControl : MonoBehaviour
             
 
             /*
-             * Für den Fall der Doppelbelegung
-             * Nicht kompatibel mit mehrspieler!
+             * Double assignment case.
+             * Not compatible with Multiplayer!
              */
 
 

@@ -7,26 +7,26 @@ public class Item : ScriptableObject, IComparable<Item>
 {
     [Header("General Item Info")]
 #if UNITY_EDITOR
-    [Help("Jede Id muss einzigartig sein.\nItem anschließend im GameObject 'Manager' in der Komponente ItemHolder einfügen.\nListe wird automatisch zu spielbegin sortiert.", UnityEditor.MessageType.Info)]
+    [Help("Every id needs to be unique for each item.\nAdd item to the GameObject 'Manager' into the 'Item Collection' component.\nList sorts automatically.", UnityEditor.MessageType.Info)]
 #endif
     [SerializeField] private int id;
 #if UNITY_EDITOR
-    [Help("Dieser Name muss für die Tiles verwendet werden!", UnityEditor.MessageType.Warning)]
+    [Help("Use this name creating a tile for this item.", UnityEditor.MessageType.Warning)]
 #endif
     [SerializeField] private new string name;
     [SerializeField] private Sprite itemImage;
     [SerializeField, TextArea(5, 5)] private string description;
     [SerializeField] private ItemType type;
     [ConditionalHide("type", true)] public bool canChangeHamsterValues = false;
-    [SerializeField, Tooltip("Ist nur relevant falls Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int healValue;
-    [SerializeField, Tooltip("Ist nur relevant falls Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int damageValue;
-    [SerializeField, Tooltip("Ist nur relevant falls Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int enduranceHealValue;
-    [SerializeField, Tooltip("Ist nur relevant falls Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int enduranceDamageValue;
+    [SerializeField, Tooltip("Relevant if Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int healValue;
+    [SerializeField, Tooltip("Relevant if Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int damageValue;
+    [SerializeField, Tooltip("Relevant if Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int enduranceHealValue;
+    [SerializeField, Tooltip("Relevant if Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int enduranceDamageValue;
     public bool isEquipment = false;
     [SerializeField, ConditionalHide("isEquipment", true)] private EquipmentType equipType;
     [SerializeField] private int buyPrice;
     [SerializeField] private int sellPrice;
-    [SerializeField, Tooltip("Wieviele Items können auf einem Stack gestapelt werden.")] private int stackAmount;
+    [SerializeField, Tooltip("How many items can you stack in one slot?")] private int stackAmount;
     private bool isEquipped = false;
     [SerializeField] private int slotId;
     public bool hasSpecialEffects = false;

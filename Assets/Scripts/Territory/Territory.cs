@@ -237,22 +237,25 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktualisiere ein bestimmtes Teil des Spielfelds z.B. nach dem aufheben eines Korns / Körner
-    /// <para><paramref name="column"/> = x</para>
-    /// <para><paramref name="row"/> = y</para>
+    /// Refresh a specific tile in the world (E.g., after picking up a grain)
+    /// <para>x = <paramref name="column"/></para>
+    /// <para>y = <paramref name="row"/></para>
     /// </summary>
     /// <param name="row"></param>
     /// <param name="column"></param>
     public void UpdateTile(int column, int row, bool addingItem = false, Hamster hamster = null)
     {
-        /* Loop durch alle Tiles die es gibt */
+        /* 
+         * Loop through all available tiles in the world
+         * Not really efficient.
+         */
         for(int i = 0; i < tileCollection.childCount; i++)
         {
             if(tileCollection.GetChild(i).name.Contains(" (" + column + ", " + row + ")"))
             {
                 /* 
-                 * Falls einem Hamster ein Item aufhebt und dem inventar hinzugefügt wird, 
-                 * oder einfach nur ein Korn aufsammelt 
+                 * If a hamster is picking up an item, and adds it afterwards to the inventory,
+                 * or if a hamster picks up a grain.
                  */
                 if (!addingItem)
                 {
@@ -283,14 +286,15 @@ public class Territory : MonoBehaviour
                     if (hamster == null) return;
 
                     /* 
-                     * Hier können weitere Bodentexturen eingefügt werden, bis jetzt gibt es Sand und Grass 
-                     * Index Beschreibung:
-                     * 0 (+10) = Keine Körner mehr
-                     * 1 (+10) = 1 Korn
-                     * 2 (+10) = 2 Körner
-                     * usw.
+                     * Here you can add more floor textures.
+                     * Currently available: Sand, Grass.
+                     * Writing Indizies like:
+                     * 0 (+10) = No more grains
+                     * 1 (+10) = 1 Grain
+                     * 2 (+10) = 2 Grains
+                     * etc.
                      * 
-                     * Nächster Boden wäre dann +20, übernächsterboden +30...
+                     * --> Next floor would be +20, than +30...
                      */
                     // ================================ SAND TILES ==============%00%================
                     if (tilemap.GetTile(new Vector3Int(hamster.Column, hamster.Row, 0)).name.Contains(SAND_TILE))
@@ -390,7 +394,7 @@ public class Territory : MonoBehaviour
                                 break;
                         }
                     }
-                    // ================================ WEITERE TILES ===========%20%================
+                    // ================================ ADDITIONAL TILES ===========%20%================
                     // ...
                     // ...
                 }
@@ -420,7 +424,9 @@ public class Territory : MonoBehaviour
 
     public void DisplayTradeWindow(Hamster hamster1, Hamster hamster2)
     {
-        /* Aktiviere den Canvas für den Handel und deaktivere alle anderen UIs */
+        /* 
+         * Activate/Deactivate the trading canvas and disable all the other UIs 
+         */
         hamsterGameManager.SetCanvasVisibility(hamsterGameManager.tradeCanvas, true);
 
         hamsterGameManager.SetCanvasVisibility(hamsterGameManager.inventoryCanvas, false);
@@ -434,8 +440,8 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte den Inhalt eines speziellen Teils des Spielfelds an der Position(<paramref name="column"/>, <paramref name="row"/>).
-    /// Falls sich das Feld nicht im Spielfeld befindet / nicht gesetzt wurde wird null zurückgegeben
+    /// Get the content of a specific tile at the Position(<paramref name="column"/>, <paramref name="row"/>).
+    /// If tile is not set (Not in the world), this method will return null.
     /// </summary>
     /// <param name="row"></param>
     /// <param name="column"></param>
@@ -454,21 +460,21 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Setze ein <paramref name="tile"/> für eine bestimmte Tilemap <paramref name="map"/> an der
-    /// Position(<paramref name="column"/>, <paramref name="row"/>)
+    /// Change a <paramref name="tile"/> to an other for a specific <paramref name="tilemap"/>,
+    /// Position(<paramref name="column"/>, <paramref name="row"/>).
     /// </summary>
     /// <param name="column"></param>
     /// <param name="row"></param>
-    /// <param name="map"></param>
+    /// <param name="tilemap"></param>
     /// <param name="tile"></param>
-    public void SetTileAt(int column, int row, Tilemap map, TileBase tile)
+    public void SetTileAt(int column, int row, Tilemap tilemap, TileBase tile)
     {
-        map.SetTile(new Vector3Int(column, row, 0), tile);
+        tilemap.SetTile(new Vector3Int(column, row, 0), tile);
     }
 
     /// <summary>
-    /// Entferne ein Item vom Tile an der Position(<paramref name="column"/>, <paramref name="row"/>) und entferne das
-    /// GameObject
+    /// Remove an item from a tile at the Position(<paramref name="column"/>, <paramref name="row"/>),
+    /// and remove the GameObject.
     /// </summary>
     /// <param name="column"></param>
     /// <param name="row"></param>
@@ -484,7 +490,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte das Item das sich an der Position(<paramref name="column"/>, <paramref name="row"/>) befindet.
+    /// Get an item at the Position(<paramref name="column"/>, <paramref name="row"/>)
     /// </summary>
     /// <param name="column"></param>
     /// <param name="row"></param>
@@ -504,7 +510,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Verändere die Anzahl <paramref name="grainCount"/> der Körner an der Position(<paramref name="column"/>, <paramref name="row"/>)
+    /// Change the amount (<paramref name="grainCount"/>) of grains at the Position(<paramref name="column"/>, <paramref name="row"/>)
     /// </summary>
     /// <param name="grainCount"></param>
     /// <param name="column"></param>
@@ -553,7 +559,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Gehe durch alle Tiles und aktualisiere diese (Falls ein Hamster ein Korn abgelegt oder aufgehoben hat)
+    /// Go through all tiles and refresh each one (Extra for grains)
     /// </summary>
     public void UpdateGrainCount()
     {
@@ -600,7 +606,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte die Anzahl der Hamster die sich in der Welt befinden (Aktiv/Inaktiv)
+    /// Get the amount of hamsters' available in the world (Aktiv/Inaktiv)
     /// </summary>
     /// <returns></returns>
     public int GetHamsterCount()
@@ -624,10 +630,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Gebe den Hamster an einer gewissen Position auf dem Spielfeld zurück.
-    /// Falls sich kein Hamster auf dieser Position befindet wird null zurückgegeben.
-    /// <para><paramref name="column"/> = x</para>
-    /// <para><paramref name="row"/> = y</para>
+    /// Get a hamster at the specific Position(<paramref name="column"/>, <paramref name="row"/>).
     /// </summary>
     /// <param name="row"></param>
     /// <param name="column"></param>
@@ -649,7 +652,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte den Hamster mit einer bestimmten <paramref name="id"/>
+    /// Get a hamster with a specific <paramref name="id"/>
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -666,7 +669,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte das Hamster GameObject anhand der hamster <paramref name="id"/>
+    /// Get the hamster gameObject by the hamsters' <paramref name="id"/>.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -683,8 +686,8 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktualisiere die Rotation (Richtung in die der Hamster schaut) eines bestimmten Hamster <paramref name="hamster"/>
-    /// in eine spezielle Richtung <paramref name="direction"/>
+    /// Refresh the rotation (Direction in which the hamster is looking at), for a specific <paramref name="hamster"/>
+    /// in a specific <paramref name="direction"/>
     /// </summary>
     /// <param name="direction"></param>
     /// <param name="hamster"></param>
@@ -703,7 +706,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktualisiere die Positionen aller Hamster auf dem Spielfeld
+    /// Refresh the position of all hamsters' in the world.
     /// </summary>
     public void UpdateHamsterPosition()
     {
@@ -815,7 +818,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktualisiere die Position eines bestimmten Hamsters
+    /// Refresh the position of a specific hamster in the world.
     /// </summary>
     /// <param name="hamster"></param>
     public void UpdateHamsterPosition(Hamster hamster)
@@ -839,7 +842,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Aktualisiere die Anzahl an Körner, die der Hamster besitzt.
+    /// Refresh the amount of grains a hamster owns.
     /// </summary>
     /// <param name="hamster"></param>
     public void UpdateHamsterGrainCount(Hamster hamster)
@@ -886,7 +889,7 @@ public class Territory : MonoBehaviour
                 ham.EffectsActiv            = hamster.EffectsActiv;
 
 
-                // Aktualisiere den Bewegungseffekt
+                // Refresh moving effect (Aktiv or not)
                 if (!ham.EffectsActiv)
                 {
                     ham.MoveSpeed = 1;
@@ -1039,7 +1042,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte die Anzahl aller Körner auf dem Spielfeld
+    /// Get the amount of grains available in the world
     /// </summary>
     /// <returns></returns>
     public int GetGrainCount()
@@ -1048,7 +1051,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erhalte die Anzahl der Körner auf der <paramref name="row"/>=y (Reihe) und der <paramref name="column"/>=x (Spalte)
+    /// Get the amount of grains available at a specific Position(<paramref name="column"/>, <paramref name="row"/>)
     /// </summary>
     /// <param name="row"></param>
     /// <param name="column"></param>
@@ -1070,9 +1073,7 @@ public class Territory : MonoBehaviour
         if (hamster == null) return;
 
         /* 
-         * Überprüfe ob ein Hamster mit der selben Id bereits existiert. (Jeder Hamster sollte eine einzigartige Id besitzen)
-         * Ein Fehler kann im grunde nicht passieren, trotzdem sollte es überprüft werden.
-         * Da es ansonsten später zu Fehler führen könnte.
+         * Check if there is already a hamster with the same id. (Every hamster should have an unique id)
          */
         foreach(Hamster ham in hamsters)
         {
@@ -1089,7 +1090,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Erstelle einen Hamster GameObject und füge in als Kind zum hamsterCollection Transform hinzu.
+    /// Create a hamster gameObject and add it as a child to the hamsterCollection Transform.
     /// </summary>
     /// <param name="hamster"></param>
     private void CreateHamsterGo(Hamster hamster)
@@ -1143,20 +1144,20 @@ public class Territory : MonoBehaviour
 
     private void Update()
     {
-        // Aktualisiere die UI jeden Frame
+        // Refresh the UI each frame
         UpdateUI();
 
-        // Aktualisiere die Positionen aller Hamster jeden Frame
+        // Refresh the Positions for every hamster for each frame
         UpdateHamsterPosition();
 
-        // Überprüfe und aktualisiere die Körner in der Spielewelt
+        // Check and refresh grains available in the world.
         RemoveGrain();
         AddGrain();
 
         // Check if it is night or not. If it is night -> turn on lights
         CheckLight();
 
-        // Überprüfe ob die gamespeed verändert wurde
+        // Check if the gamespeed got changed.
         if (gameSpeed != HamsterGameManager.hamsterGameSpeed)
         {
             gameSpeed = HamsterGameManager.hamsterGameSpeed;
