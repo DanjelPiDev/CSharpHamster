@@ -10,9 +10,9 @@ If you downloaded the master branch you have to unpack everything and remember t
 
 Now you must start the UnityHub.
 
-* If you don't have UnityHub installed, go to the following page (Choose your OS): [https://unity.com/download](https://unity.com/download)
+* If you don't have UnityHub installed, go to the following page (Select your OS): [https://unity.com/download](https://unity.com/download)
 
-After you installed UnityHub download the Unity Engine Version 2020 LTS.
+After you installed UnityHub, download the Unity Engine Version 2020 LTS.
 
 ## Import the project
 After you did all the steps above, the UnityHub should look like this:
