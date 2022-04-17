@@ -2,7 +2,8 @@
 
 ***
 
-This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/). I created this for a small tutorium teaching Object-Oriented-Programming. Feel free to use this project to do whatever you want to do with it.
+This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/). I created this for a small tutorial teaching Object-Oriented-Programming. It sure is far from perfect, and my skills are WIP.
+Feel free to use this project to do whatever you want to do with it.
 
 For more information go to the [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) page.
 
