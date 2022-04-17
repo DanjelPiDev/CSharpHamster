@@ -1,23 +1,39 @@
-# GDC C# Hamster
-<img src="https://user-images.githubusercontent.com/103567242/163177176-4abee211-c507-4ec7-a977-45d5e20223d8.png" width="100">
+# C# Hamster
 
 ***
-Für mehr Infos die [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) Seite
+
+This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/). I created this for a small tutorial teaching Object-Oriented-Programming. It sure is far from perfect, and my skills are WIP.
+Feel free to use this project to do whatever you want to do with it.
+
+For more information go to the [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) page.
 
 ***
 # Setup
-Um den C#-Hamster auf deinem PC zum laufen zu bekommen musst Du zunächst das gesamte Projekt herunterladen. Anschließend alles entpacken, merke dir auch den Ordner wo Du es entpacken hast.
-Jetzt musst Du nur noch UnityHub starten.
+To get the C#-Hamster running on your PC, you do have to download or clone this project.
+If you downloaded the master branch you have to unpack everything and remember the location!
 
-* Falls Du UnityHub noch nicht installiert hast, gehe auf folgende Seite (Wähle dein OS): [https://unity.com/download](https://unity.com/download)
+Now you must start the UnityHub.
 
-## Importiere das Projekt
-Nachdem Du UnityHub installiert hast, kannst Du UnityHub starten. Es sollte ungefähr so aussehen:
+* If you don't have UnityHub installed, go to the following page (Select your OS): [https://unity.com/download](https://unity.com/download)
+
+After you installed UnityHub, download the Unity Engine Version 2020 LTS.
+
+## Import the project
+After you did all the steps above, the UnityHub should look like this:
 
 ![UnityHub_Empty](https://user-images.githubusercontent.com/103567242/163169324-e12be060-1858-4150-a649-496e57e1288e.png)
 
-Jetzt nur noch den "Open" Button oben rechts einmal anklicken und wähle den Ordner aus, den Du nach dem entpacken vorhin erhalten hast.
+Now you must press the "Open" button in the upper right corner. Select the folder you cloned or unpacked.
 ### Version
-Nach dem importieren kann es vorkommen das Unity dir eine Warnmeldung gibt, das Du eine andere Unity Version verwendest. Das ist nicht weiters schlimm, wähle einfach "Choose another Version", danach sollte alles von alleine gehen.
+After you imported the project, it can happen that Unity is telling you that this project was edited with a different Version, just press "Choose another Editor version", then a window will open showing all your installed Editor versions, choose the one you will work with and press the button saying "Open with xyz" (xyz stands for the version you choose), and you're good to go.
 
-Falls Du ein anderes Betriebssystem als Windows verwendest, könnte ein weiterer Warnhinweis auftauchen, der sagt das die Build Settings nicht auf deinem Betriebssystem passt. Das ist auch nicht schlimm, Unity dürfte alles alleine Regeln.
+![EditorVersion](https://user-images.githubusercontent.com/103567242/163705618-f288a691-63a0-4f8e-80fa-4b1b98a260a2.png)
+
+![EditorVersion_selection](https://user-images.githubusercontent.com/103567242/163705634-4dbf8866-782c-4e4f-ad4c-e1e08fe48898.png)
+
+
+
+If you are working with a different OS than Windows, a warning will appear telling you "Unsupported Build Target", just press the button saying "Switch Target", and Unity will do the rest for you.
+
+![EditorVersion_unsupportedBuildTarget](https://user-images.githubusercontent.com/103567242/163705638-4aecfb21-c5eb-4218-91b0-ed6663a437c6.png)
+
