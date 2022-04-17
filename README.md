@@ -23,4 +23,13 @@ Now you must press the "Open" button on the upper right corner. Select the folde
 ### Version
 After you imported the project, it can happen that Unity is telling you that this project was edited with an different Version, just press "Choose another Editor version", then a window will open showing all your installed Editor versions, choose the one you will working with and press afterwards on the button saying "Open with xyz" (xyz stands for your version you choose), and you're good to go.
 
+![EditorVersion](https://user-images.githubusercontent.com/103567242/163705618-f288a691-63a0-4f8e-80fa-4b1b98a260a2.png)
+
+![EditorVersion_selection](https://user-images.githubusercontent.com/103567242/163705634-4dbf8866-782c-4e4f-ad4c-e1e08fe48898.png)
+
+
+
 If you are working with a different OS than Windows, a warning will appear telling you "Unsupported Build Target", just press the button "Switch Target", and Unity will do the rest for you.
+
+![EditorVersion_unsupportedBuildTarget](https://user-images.githubusercontent.com/103567242/163705638-4aecfb21-c5eb-4218-91b0-ed6663a437c6.png)
+
