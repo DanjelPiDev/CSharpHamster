@@ -1,5 +1,4 @@
 # GDC C# Hamster
-<img src="https://user-images.githubusercontent.com/103567242/163177176-4abee211-c507-4ec7-a977-45d5e20223d8.png" width="100">
 
 ***
 Für mehr Infos die [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) Seite
