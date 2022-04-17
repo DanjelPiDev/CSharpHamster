@@ -21,7 +21,7 @@ After you did all the steps above, the UnityHub should look like this:
 
 Now you must press the "Open" button on the upper right corner. Select the folder you cloned or unpacked.
 ### Version
-After you imported the project, it can happen that Unity is telling you that this project was edited with a different Version, just press "Choose another Editor version", then a window will open showing all your installed Editor versions, choose the one you will work with and press afterwards on the button saying "Open with xyz" (xyz stands for your version you choose), and you're good to go.
+After you imported the project, it can happen that Unity is telling you that this project was edited with a different Version, just press "Choose another Editor version", then a window will open showing all your installed Editor versions, choose the one you will work with and press the button saying "Open with xyz" (xyz stands for your version you choose), and you're good to go.
 
 ![EditorVersion](https://user-images.githubusercontent.com/103567242/163705618-f288a691-63a0-4f8e-80fa-4b1b98a260a2.png)
 
