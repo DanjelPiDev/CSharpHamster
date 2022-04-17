@@ -1,6 +1,9 @@
 # C# Hamster
 
 ***
+
+This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/).
+
 For more information go to the [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) page.
 
 ***
