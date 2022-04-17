@@ -1,4 +1,4 @@
-# GDC C# Hamster
+# C# Hamster
 
 ***
 Für mehr Infos die [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) Seite
