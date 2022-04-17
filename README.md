@@ -29,7 +29,7 @@ After you imported the project, it can happen that Unity is telling you that thi
 
 
 
-If you are working with a different OS than Windows, a warning will appear telling you "Unsupported Build Target", just press the button "Switch Target", and Unity will do the rest for you.
+If you are working with a different OS than Windows, a warning will appear telling you "Unsupported Build Target", just press the button saying "Switch Target", and Unity will do the rest for you.
 
 ![EditorVersion_unsupportedBuildTarget](https://user-images.githubusercontent.com/103567242/163705638-4aecfb21-c5eb-4218-91b0-ed6663a437c6.png)
 
