@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: DebugMsg_de
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: de
+  m_SharedData: {fileID: 11400000, guid: bc81e11a83ed885429a22325e2c29db3, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 90183696384
+    m_Localized: ': Bewege mich vor.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6831201976320
+    m_Localized: ': Ich habe keine Ausdauer mehr.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6839619944448
+    m_Localized: ': Vor mir befindet sich etwas!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7039860211712
+    m_Localized: ": Es gibt hier keine K\xF6rner zum aufheben."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8343848353792
+    m_Localized: ": Ich besitze nicht genug K\xF6rner"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8993877393408
+    m_Localized: ': Drehe mich nach links.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9263650832384
+    m_Localized: ': Es gibt hier kein Item zum aufheben.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9504395493376
+    m_Localized: ': Item aufgehoben: '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9793294958592
+    m_Localized: ": Ich habe keine Lebenspunkte mehr, setze mich zum startpunkt zur\xFCck!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10155120787456
+    m_Localized: ': Meine Lebenspunkte sind bereits voll.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10311677378560
+    m_Localized: ': Meine Ausdauer ist bereits voll.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10560550600704
+    m_Localized: ": Ich habe keine K\xF6rner zum ablegen!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10771473760256
+    m_Localized: ': Lege Korn ab.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10908203876352
+    m_Localized: ": Der Platz ist zu voll f\xFCr noch mehr K\xF6rner."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7061842558976
+    m_Localized: ': Hebe Korn auf.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11303730937856
+    m_Localized: ": Vor mir befindet sich kein Hamster f\xFCr einen Handel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11662071300096
+    m_Localized: ' hat scheinbar kein Interesse an einem Handel.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13538569355264
+    m_Localized: ' hat scheinbar kein Interesse an einer Unterhaltung.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13635961094144
+    m_Localized: ": Vor mir befindet sich kein Hamster f\xFCr eine Unterhaltung."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 1
