@@ -2,10 +2,15 @@
 
 ***
 
+<!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/Dagait/CSharpHamster/archive/HEAD.zip" data-color-scheme="no-preference: dark_dimmed; light: light; dark: dark_dimmed;" data-icon="octicon-download" data-size="large" aria-label="Download Dagait/CSharpHamster on GitHub">Download</a>
+
 This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/). I created this for a small tutorial teaching Object-Oriented-Programming. It sure is far from perfect, and my skills are WIP.
 Feel free to use this project to do whatever you want to do with it.
 
 For more information go to the [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) page.
+
+[fork my repository](https://github.com/user/repository/fork)
 
 ***
 # Setup
