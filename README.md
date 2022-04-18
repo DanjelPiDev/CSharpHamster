@@ -2,7 +2,7 @@
 
 ***
 
-[<img src="https://user-images.githubusercontent.com/103567242/163793823-fe26a09e-f108-45e5-9430-ce8e251581f0.png" width="200"/>](https://github.com/Dagait/CSharpHamster/packages)
+[<img src="https://user-images.githubusercontent.com/103567242/163793823-fe26a09e-f108-45e5-9430-ce8e251581f0.png" width="200"/>](https://github.com/Dagait/CSharpHamster/archive/refs/heads/master.zip)
 
 This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/). I created this for a small tutorial teaching Object-Oriented-Programming. It sure is far from perfect, and my skills are WIP.
 Feel free to use this project to do whatever you want to do with it.
