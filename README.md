@@ -10,8 +10,6 @@ Feel free to use this project to do whatever you want to do with it.
 
 For more information go to the [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) page.
 
-[fork my repository](https://github.com/user/repository/fork)
-
 ***
 # Setup
 To get the C#-Hamster running on your PC, you do have to download or clone this project.
