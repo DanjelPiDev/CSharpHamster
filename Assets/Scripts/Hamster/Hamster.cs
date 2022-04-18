@@ -3,6 +3,9 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class ItemSlot : IComparable<ItemSlot>
 {
@@ -19,7 +22,7 @@ public class ItemSlot : IComparable<ItemSlot>
     }
 }
 
-
+[CreateAssetMenu(menuName = "HamsterGame/Hamster", fileName = "new Hamster")]
 public class Hamster : ScriptableObject
 {
     [Header("General Hamster Info")]
@@ -33,6 +36,9 @@ public class Hamster : ScriptableObject
     [SerializeField] private LookingDirection direction;
     [SerializeField] private int grainCount;
     [SerializeField] private bool playerControl;
+    [SerializeField] private bool isNPC;
+    [SerializeField] private bool moveRandom;
+    [SerializeField] private MovementPattern movementPattern;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject hamsterObject;
     [SerializeField] private HamsterColor hamsterColor;
@@ -98,6 +104,12 @@ public class Hamster : ScriptableObject
         set { healthPointsFull = value; }
     }
 
+    public MovementPattern Pattern
+    {
+        get { return movementPattern; }
+        set { movementPattern = value; }
+    }
+
     public int EndurancePointsFull
     {
         get { return endurancePointsFull; }
@@ -114,6 +126,18 @@ public class Hamster : ScriptableObject
     {
         get { return isInInventory; }
         set { isInInventory = value; }
+    }
+
+    public bool IsNPC
+    {
+        get { return isNPC; }
+        set { isNPC = value; }
+    }
+
+    public bool MoveRandom
+    {
+        get { return moveRandom; }
+        set { moveRandom = value; }
     }
 
     public bool IsUsingEndurance
@@ -261,34 +285,58 @@ public class Hamster : ScriptableObject
         this.id = Territory.GetInstance().GetHamsters().Count;
         Territory.GetInstance().AddHamster(Instantiate(this));
 
-        if (this.playerControl)
-            Camera.main.transform.parent = Territory.GetInstance().GetHamsterObject(this.id).transform;
+        //if (this.playerControl)
+        //    Camera.main.transform.parent = Territory.GetInstance().GetHamsterObject(this.id).transform;
 
         inventory = new List<ItemSlot>();
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
-        this.DisplayName(false);
-        this.DisplayHealth(false);
-        this.DisplayEndurance(false);
+        this.DisplayName(this.isDisplayingName);
+        this.DisplayHealth(this.isDisplayingHealth);
+        this.DisplayEndurance(this.isDisplayingEndurance);
+    }
+
+    public void RandomMove()
+    {
+        System.Random rnd = new System.Random();
+        int rndInt = rnd.Next(0, 2);
+
+        if (rndInt == 0)
+        {
+            int rndTurnInt = rnd.Next(1, 4);
+            for (int i = 0; i < rndTurnInt; i++)
+            {
+                this.TurnLeft();
+                Territory.GetInstance().UpdateHamsterProperties(this);
+            }
+        }
+        else
+        {
+            this.Move();
+            Territory.GetInstance().UpdateHamsterProperties(this);
+        }
     }
 
 
     /// <summary>
-    /// Der Hamster dreht sich einmal nach links (Gegen den Uhrzeigersinn).
+    /// Hamster turns to the left. (Anticlockwise: North -> West -> South -> East).
     /// </summary>
     public virtual void TurnLeft()
     {
+        string turnLeftString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "TURN_LEFT").Result;
+
         int currentDirection = (int)this.direction;
         currentDirection -= 1;
         if(currentDirection < 0)
         {
             currentDirection = 3;
         }
-        Debug.Log(this.name + ": Drehe mich nach links.");
+        if (!this.isNPC)
+            Debug.Log(this.name + turnLeftString);
         this.direction = (LookingDirection)currentDirection;
         Territory.GetInstance().UpdateRotation(this.direction, this);
 
-        /* Überprüfe ob der spieler sich bewegt, falls ja, deaktiviere alle menüs */
+        /* Check here if the player/hamster is moving, if yes, disable UIs like inventory/trade/dialogue */
         if (this.isTrading)
         {
             DisplayTradeWindow(HamsterGameManager.hamster1, HamsterGameManager.hamster2);
@@ -314,7 +362,7 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Erhalte die aktuelle Position des Hamsters
+    /// Get the current Position of this hamster
     /// </summary>
     /// <returns></returns>
     public Vector2 GetHamsterPosition()
@@ -323,58 +371,58 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Hebe ein Korn auf
+    /// Pick up one grain
     /// </summary>
-    public void PickUpGrain()
+    public virtual void PickUpGrain()
     {
-        if(Territory.GetInstance().GetGrainCountAtTile(this.column, this.row) > 0)
+        string pickUpGrainString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "PICK_UP_GRAIN").Result;
+        string noGrainsString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_GRAINS").Result;
+
+        if (Territory.GetInstance().GetGrainCountAtTile(this.column, this.row) > 0)
         {
             this.grainCount += 1;
             Territory.GetInstance().UpdateHamsterGrainCount(this);
             Territory.changeGrainCount = true;
             Territory.addGrainCount = false;
             Territory.GetInstance().UpdateTile(this.column, this.row, hamster: this);
-            Debug.Log(this.name + ": Hebe Korn auf");
+            Debug.Log(this.name + pickUpGrainString);
         }
         else
         {
             if (this.playerControl) return;
-            Debug.LogError(this.name + ": Es gibt hier keine Körner zum aufheben.\nPosition (" + this.column + ", " + this.row + ")");
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPaused = true;
-#endif
+            Debug.LogError(this.name + noGrainsString + "\nPosition (" + this.column + ", " + this.row + ")");
         }
     }
 
     /// <summary>
-    /// Hebe ein Item auf
+    /// Pick up one item
     /// </summary>
     /*
-        ACHTUNG: Beim erstellen eines neuen items, muss die Texture und die Tile wie das
-                 Item heißen, sprich den namen den man dem Item im Inspector gibt!
+        WARNING: Durig the creation of a new item, the itemname and the texturename /tilename
+                 has to be the same, otherwise it is not gonna work!
      */
     public void PickUpItem()
     {
+        string noItemString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_ITEM_PICK_UP").Result;
+        string pickUpItemString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "PICK_UP_ITEM").Result;
+
         Item item = Territory.GetItemAt(this.column, this.row);
 
         if (item != null)
         {
             this.AddItem(item);
             Territory.GetInstance().UpdateTile(this.column, this.row, true, this);
-            Debug.Log(this.name + ": Hebe Item " + item.Name  + " auf.");
+            Debug.Log(this.name + pickUpItemString + item.Name);
         }
         else
         {
             if (this.playerControl) return;
-            Debug.LogError(this.name + ": Es gibt hier kein Item zum aufheben.\nPosition (" + this.column + ", " + this.row + ")");
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPaused = true;
-#endif
+            Debug.LogError(this.name + noItemString + "\nPosition (" + this.column + ", " + this.row + ")");
         }
     }
 
     /// <summary>
-    /// Setze die maximale Anzahl der Lebenspunkte <paramref name="points"/> die der Hamster besitzen kann.
+    /// Set the max amount of health <paramref name="points"/> the hamster has.
     /// </summary>
     /// <param name="points"></param>
     public void SetHealthPoints(int points)
@@ -386,7 +434,7 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Setze die maximale Anzahl der Ausdauerpunkte <paramref name="points"/> die der Hamster besitzen kann.
+    /// Set the max amount of endurance <paramref name="points"/> the hamster has.
     /// </summary>
     /// <param name="points"></param>
     public void SetEndurancePoints(int points)
@@ -398,16 +446,18 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Entferne die Anzahl der Lebenspunkte <paramref name="points"/> die der Hamster momentan besitzt (Maximale Anzahl wird nicht verändert).
+    /// Remove a specific amount of health <paramref name="points"/> (Not changing the max amount).
     /// </summary>
     /// <param name="points"></param>
     public void DamageHamster(int points = 1)
     {
+        string noMoreHealthString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_HEALTH").Result;
+
         points = Mathf.Abs(points);
         this.healthPointsFull -= points;
         if (this.healthPointsFull <= 0)
         {
-            Debug.Log(this.name + ": Ich habe keine Lebenspunkte mehr, setze mich zum startpunkt zurück!");
+            Debug.Log(this.name + noMoreHealthString);
             this.column = (int)startPoint.x;
             this.row = (int)startPoint.y;
 
@@ -418,31 +468,35 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Entferne die Anzahl der Lebenspunkte <paramref name="points"/> die der Hamster momentan besitzt (Maximale Anzahl wird nicht verändert)
+    /// Remove a specific amount of endurance <paramref name="points"/> the hamster has (Not changing the max amount).
     /// </summary>
     /// <param name="points"></param>
     public void DamageEndurance(int points = 1)
     {
+        string noMoreEnduranceString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_ENDURANCE").Result;
+
         points = Math.Abs(points);
         this.endurancePointsFull -= points;
         if (this.endurancePointsFull <= 0)
         {
-            Debug.Log(this.name + ": Ich habe keine Ausdauer mehr.");
+            Debug.Log(this.name + noMoreEnduranceString);
         }
 
         Territory.GetInstance().UpdateHamsterProperties(this, updateEnduranceUI: true);
     }
 
     /// <summary>
-    /// Heile die Anzahl der Lebenspunkte <paramref name="points"/> die der Hamster momentan besitzt (Maximale Anzahl wird nicht verändert).
+    /// Heal a specific amount of health <paramref name="points"/> (Not changing the max amount)
     /// </summary>
     /// <param name="points"></param>
     public void HealHamster(int points = 1)
     {
+        string healthFullString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "HEALTH_FULL").Result;
+
         points = Mathf.Abs(points);
         if (this.healthPointsFull == this.healthPoints)
         {
-            Debug.Log(this.name + ": Meine Lebenspunkte sind bereits voll.");
+            Debug.Log(this.name + healthFullString);
             return;
         }
         this.healthPointsFull += points;
@@ -456,10 +510,12 @@ public class Hamster : ScriptableObject
 
     public void HealEndurance(int points = 1)
     {
+        string enduranceFullString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "ENDURANCE_FULL").Result;
+
         points = Mathf.Abs(points);
         if (this.endurancePointsFull == this.endurancePoints)
         {
-            Debug.Log(this.name + ": Meine Ausdauer ist bereits voll.");
+            Debug.Log(this.name + enduranceFullString);
             return;
         }
         this.endurancePointsFull += points;
@@ -841,11 +897,15 @@ public class Hamster : ScriptableObject
     /// </summary>
     public virtual void DropGrain()
     {
-        if(this.grainCount == 0)
+        string noGrainsDropString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_GRAINS_DROP").Result;
+        string dropGrainString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "DROP_GRAIN").Result;
+        string tileFullString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "TILE_FULL").Result;
+
+        if (this.grainCount == 0)
         {
             /* Falls die Spielerkontrolle aktiv ist, zeige kein Error im Log und pausiere das spiel auch nicht. */
             if (this.playerControl) return;
-            Debug.LogError(this.name + ": Ich habe keine Körner zum ablegen!");
+            Debug.LogError(this.name + noGrainsDropString);
             /* Code nur wenn man sich im editor befinden. Pausiere die Unity Engine. */
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPaused = true;
@@ -861,11 +921,11 @@ public class Hamster : ScriptableObject
             Territory.changeGrainCount = true;
             Territory.addGrainCount = true;
             Territory.GetInstance().UpdateTile(this.column, this.row, hamster: this);
-            Debug.Log(this.name + ": Lege Korn ab");
+            Debug.Log(this.name + dropGrainString);
         }
         else
         {
-            Debug.Log(this.name + ": Der Platz ist zu voll für noch mehr Körner.");
+            Debug.Log(this.name + tileFullString);
         }
     }
 
@@ -876,6 +936,9 @@ public class Hamster : ScriptableObject
     /// </summary>
     public void Trade()
     {
+        string noTradeString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_TRADE").Result;
+        string noTradeInterString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_TRADE_INTER").Result;
+
         Hamster hamster = null;
 
         switch (this.direction)
@@ -886,7 +949,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für einen Handel\nFeld an Position: x = " + this.column + ", y = " + this.row + "ist 'null'.");
+                    Debug.LogError(this.name + noTradeString);
                     return;
                 }
 
@@ -902,7 +965,7 @@ public class Hamster : ScriptableObject
                 }
                 else if(hamster != null && !hamster.CanTrade)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einem Handel.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noTradeInterString);
                 }
                 break;
             case LookingDirection.South:
@@ -911,7 +974,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für einen Handel\nFeld an Position: x = " + this.column + ", y = " + this.row + "ist 'null'.");
+                    Debug.LogError(this.name + noTradeString);
                     return;
                 }
 
@@ -927,7 +990,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTrade)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einem Handel.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noTradeInterString);
                 }
                 break;
             case LookingDirection.East:
@@ -936,7 +999,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für einen Handel\nFeld an Position: x = " + this.column + ", y = " + this.row + "ist 'null'.");
+                    Debug.LogError(this.name + noTradeString);
                     return;
                 }
 
@@ -952,7 +1015,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTrade)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einem Handel.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noTradeInterString);
                 }
                 break;
             case LookingDirection.West:
@@ -961,7 +1024,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für einen Handel\nFeld an Position: x = " + this.column + ", y = " + this.row + "ist 'null'.");
+                    Debug.LogError(this.name + noTradeString);
                     return;
                 }
 
@@ -977,7 +1040,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTrade)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einem Handel.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noTradeInterString);
                 }
                 break;
         }
@@ -1222,23 +1285,34 @@ public class Hamster : ScriptableObject
 
     public void DisplayName(bool b)
     {
-        this.isDisplayingName = b;
-        // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-        Territory.GetInstance().UpdateHamsterProperties(this, createNameUI: true);
+        if (this.isDisplayingName != b)
+        {
+            this.isDisplayingName = b;
+            // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+            Territory.GetInstance().UpdateHamsterProperties(this, createNameUI: true);
+        }
     }
 
     public void DisplayHealth(bool b)
     {
-        this.isDisplayingHealth = b;
-        // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-        Territory.GetInstance().UpdateHamsterProperties(this, createHealthUI: true);
+        if (this.isDisplayingHealth != b)
+        {
+            this.isDisplayingHealth = b;
+            // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+            Territory.GetInstance().UpdateHamsterProperties(this, createHealthUI: true);
+        }
+            
     }
 
     public void DisplayEndurance(bool b)
     {
-        this.isDisplayingEndurance = b;
-        // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-        Territory.GetInstance().UpdateHamsterProperties(this, createEnduranceUI: true);
+        if (this.isDisplayingEndurance)
+        {
+            this.isDisplayingEndurance = b;
+            // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+            Territory.GetInstance().UpdateHamsterProperties(this, createEnduranceUI: true);
+        }
+            
     }
 
     public void DisplayTradeWindow(Hamster hamster1, Hamster hamster2)
@@ -1332,6 +1406,9 @@ public class Hamster : ScriptableObject
     /// </summary>
     public void Talk()
     {
+        string noDialogueInterString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_DIALOGUE_INTER").Result;
+        string noDialogueString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_DIALOGUE").Result;
+
         Hamster hamster = null;
 
         switch (this.direction)
@@ -1342,10 +1419,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für eine Unterhaltung\nPosition (" + this.column + ", " + (this.row + 1) + ")");
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-#endif
+                    Debug.LogError(this.name + noDialogueString);
                     return;
                 }
 
@@ -1361,7 +1435,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einer Unterhaltung.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noDialogueInterString);
                 }
                 break;
             case LookingDirection.South:
@@ -1370,10 +1444,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für eine Unterhaltung\nPosition (" + this.column + ", " + (this.row - 1) + ")");
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-#endif
+                    Debug.LogError(this.name + noDialogueString);
                     return;
                 }
 
@@ -1389,7 +1460,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einer Unterhaltung.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noDialogueInterString);
                 }
                 break;
             case LookingDirection.East:
@@ -1398,10 +1469,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für eine Unterhaltung\nPosition (" + (this.column + 1) + ", " + this.row + ")");
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-#endif
+                    Debug.LogError(this.name + noDialogueString);
                     return;
                 }
 
@@ -1417,7 +1485,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einer Unterhaltung.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noDialogueInterString);
                 }
                 break;
             case LookingDirection.West:
@@ -1426,10 +1494,7 @@ public class Hamster : ScriptableObject
                 if (hamster == null)
                 {
                     if (this.playerControl) return;
-                    Debug.LogError(this.name + ": Vor mir befindet sich kein Hamster für eine Unterhaltung\nPosition (" + (this.column - 1) + ", " + this.row + ")");
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPaused = true;
-#endif
+                    Debug.LogError(this.name + noDialogueString);
                     return;
                 }
 
@@ -1445,7 +1510,7 @@ public class Hamster : ScriptableObject
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
-                    Debug.Log(this.name + ": Der Hamster " + hamster.Name + " hat scheinbar kein Interesse an einer Unterhaltung.");
+                    Debug.Log(this.name + ": Hamster " + hamster.Name + noDialogueInterString);
                 }
                 break;
         }
@@ -1502,6 +1567,11 @@ public class Hamster : ScriptableObject
     /// </summary>
     public virtual void Move()
     {
+        string movingFString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "MOVE").Result;
+        string noEnduranceFString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_ENDURANCE").Result;
+        string frontNotClearFString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "FRONT_NOT_CLEAR").Result;
+
+
         if (FrontIsClear())
         {
             switch (this.direction)
@@ -1523,7 +1593,7 @@ public class Hamster : ScriptableObject
                                     this.endurancePointsFull -= 1;
                                 } 
                                 else
-                                    Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                                    Debug.LogError(this.name + noEnduranceFString);
                                 return;
                             }
                         }
@@ -1534,7 +1604,7 @@ public class Hamster : ScriptableObject
                         this.endurancePointsFull -= 1;
                     } 
                     else if (this.isUsingEndurance && this.endurancePointsFull == 0)
-                        Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                        Debug.LogError(this.name + noEnduranceFString);
                     else if (!this.isUsingEndurance)
                         this.column += this.moveSpeed;
                     break;
@@ -1555,7 +1625,7 @@ public class Hamster : ScriptableObject
                                     this.endurancePointsFull -= 1;
                                 }  
                                 else
-                                    Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                                    Debug.LogError(this.name + noEnduranceFString);
                                 return;
                             }
                         }
@@ -1566,7 +1636,7 @@ public class Hamster : ScriptableObject
                         this.endurancePointsFull -= 1;
                     } 
                     else if (this.isUsingEndurance && this.endurancePointsFull == 0)
-                        Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                        Debug.LogError(this.name + noEnduranceFString);
                     else if (!this.isUsingEndurance)
                         this.row += this.moveSpeed;
                     break;
@@ -1587,7 +1657,7 @@ public class Hamster : ScriptableObject
                                     this.endurancePointsFull -= 1;
                                 }
                                 else
-                                    Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                                    Debug.LogError(this.name + noEnduranceFString);
                                 return;
                             }
                         }
@@ -1598,7 +1668,7 @@ public class Hamster : ScriptableObject
                         this.endurancePointsFull -= 1;
                     }
                     else if(this.isUsingEndurance && this.endurancePointsFull == 0)
-                        Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                        Debug.LogError(this.name + noEnduranceFString);
                     else if (!this.isUsingEndurance)
                         this.column -= this.moveSpeed;
                     break;
@@ -1619,7 +1689,7 @@ public class Hamster : ScriptableObject
                                     this.endurancePointsFull -= 1;
                                 }
                                 else
-                                    Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                                    Debug.LogError(this.name + noEnduranceFString);
                                 return;
                             }
                         }
@@ -1630,7 +1700,7 @@ public class Hamster : ScriptableObject
                         this.endurancePointsFull -= 1;
                     }
                     else if (this.isUsingEndurance && this.endurancePointsFull == 0)
-                        Debug.LogError(this.name + ": Ich besitze keine Ausdauer mehr.");
+                        Debug.LogError(this.name + noEnduranceFString);
                     else if (!this.isUsingEndurance)
                         this.row -= this.moveSpeed;
                     break;
@@ -1641,7 +1711,8 @@ public class Hamster : ScriptableObject
 #endif
                     break;
             }
-            Debug.Log(this.name + ": Bewege mich vor.");
+            if (!this.isNPC)
+                Debug.Log(this.name + movingFString);
             this.canMove = true;
             Territory.GetInstance().UpdateHamsterPosition(this);
             
@@ -1655,8 +1726,8 @@ public class Hamster : ScriptableObject
         }
         else
         {
-            if (this.playerControl) return;
-            Debug.LogError(this.name + ": Vor mir befindet sich etwas!");
+            if (this.playerControl || this.isNPC) return;
+            Debug.LogError(this.name + frontNotClearFString);
         }
     }
 
@@ -1666,16 +1737,15 @@ public class Hamster : ScriptableObject
     /// <param name="amount"></param>
     public void EatGrainsFromGround(int amount = 1)
     {
+        string noGrains = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_GRAINS").Result;
+
         if (this.IsOnGrain())
         {
             // Friss korn
         }
         else
         {
-            Debug.LogError(this.name + ": Auf dem Boden befinden sich keine Körner.\nPosition (" + this.column + ", " + this.row + ")");
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPaused = true;
-#endif
+            Debug.LogError(this.name + noGrains + "\nPosition (" + this.column + ", " + this.row + ")");
         }
     }
 
@@ -1685,16 +1755,15 @@ public class Hamster : ScriptableObject
     /// <param name="amount"></param>
     public void EatGrainsFromInventory(int amount = 1)
     {
+        string noGrains = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NOT_OWNING_GRAINS").Result;
+
         if (this.grainCount > 0)
         {
             // Friss korn
         }
         else
         {
-            Debug.LogError(this.name + ": Ich besitze nicht genug Körner");
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPaused = true;
-#endif
+            Debug.LogError(this.name + noGrains);
         }
     }
 
@@ -1828,7 +1897,6 @@ public class Hamster : ScriptableObject
         // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
         Territory.GetInstance().UpdateHamsterProperties(this);
     }
-
     
     /// <summary>
     /// Überprüfe ob der Weg vor dem Hamster frei ist.
@@ -1843,40 +1911,40 @@ public class Hamster : ScriptableObject
                    Territory.GetInstance().GetTileAt(this.column + 1, this.row).type != Tile.TileType.Water &&
                    FrontIsClearNoHamster())
                 {
-                    Debug.Log(this.name + ": FrontIsClear(): true");
+                    // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
                 }
-                Debug.Log(this.name + ": FrontIsClear(): false");
+                // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             case LookingDirection.North:
                 if (Territory.GetInstance().GetTileAt(this.column, this.row + 1).type != Tile.TileType.Wall &&
                     Territory.GetInstance().GetTileAt(this.column, this.row + 1).type != Tile.TileType.Water &&
                     FrontIsClearNoHamster())
                 {
-                    Debug.Log(this.name + ": FrontIsClear(): true");
+                    // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
                 }
-                Debug.Log(this.name + ": FrontIsClear(): false");
+                // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             case LookingDirection.West:
                 if (Territory.GetInstance().GetTileAt(this.column - 1, this.row).type != Tile.TileType.Wall &&
                     Territory.GetInstance().GetTileAt(this.column - 1, this.row).type != Tile.TileType.Water &&
                     FrontIsClearNoHamster())
                 {
-                    Debug.Log(this.name + ": FrontIsClear(): true");
+                    // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
                 }
-                Debug.Log(this.name + ": FrontIsClear(): false");
+                // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             case LookingDirection.South:
                 if (Territory.GetInstance().GetTileAt(this.column, this.row - 1).type != Tile.TileType.Wall &&
                     Territory.GetInstance().GetTileAt(this.column, this.row - 1).type != Tile.TileType.Water &&
                     FrontIsClearNoHamster())
                 {
-                    Debug.Log(this.name + ": FrontIsClear(): true");
+                    // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
                 }
-                Debug.Log(this.name + ": FrontIsClear(): false");
+                // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             default:
                 return false;
@@ -1939,5 +2007,13 @@ public class Hamster : ScriptableObject
         East,
         South,
         West
+    };
+
+    public enum MovementPattern
+    {
+        Random,
+        LeftRight,
+        UpDown,
+        Rotate
     };
 }

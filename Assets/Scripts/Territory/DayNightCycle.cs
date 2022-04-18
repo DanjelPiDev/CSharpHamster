@@ -9,7 +9,7 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private Gradient lightColor;
     [SerializeField] private const float cycleLength = 500; // Ändere die cycleLength hier
 #if UNITY_EDITOR
-    [Help("Verändere die Tageslänge im Script, der Variablenname ist 'cycleLength'\nDefault cycleLength = 500\nDefault nightTime = 230.", UnityEditor.MessageType.Info)]
+    [Help("Change the length of a day in the script, varname = 'cycleLength'\nDefault cycleLength = 500\nDefault nightTime = 230.", UnityEditor.MessageType.Info)]
 #endif
     [SerializeField] private bool setNightTimeManually = true;
     [SerializeField, ConditionalHide("setNightTimeManually")] private float nightTime = 230;

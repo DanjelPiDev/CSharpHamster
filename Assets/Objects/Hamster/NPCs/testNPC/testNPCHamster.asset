@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1687dc0662a8d6478aa700a507dca5b, type: 3}
+  m_Name: testNPCHamster
+  m_EditorClassIdentifier: 
+  id: 0
+  name: Hami
+  row: 2
+  column: -10
+  direction: 2
+  grainCount: 0
+  playerControl: 0
+  isNPC: 1
+  moveRandom: 1
+  movementPattern: 0
+  spriteRenderer: {fileID: 0}
+  hamsterObject: {fileID: 0}
+  hamsterColor: 6
+  canMove: 1
+  canTrade: 0
+  canTalk: 0
+  healthPoints: 4
+  endurancePoints: 0
+  healthPointsFull: 4
+  endurancePointsFull: 0
+  moveSpeed: 1
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  isDisplayingName: 1
+  isDisplayingHealth: 1
+  isDisplayingEndurance: 0

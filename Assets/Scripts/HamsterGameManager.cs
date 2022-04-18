@@ -16,55 +16,66 @@ public class HamsterGameManager : MonoBehaviour
 #endif
     [Header("Global Gamespeed"), Range(0f, 2f)]
     [Tooltip("The lower this value, the faster the simulation.")]public float gameSpeed;
+    [Header("UI startup settings")]
+    public bool displayQuestLog = true;
+    public bool displayWorldInformation = true;
+
+    [Header("Inspector show references?")]
+    public bool showReferences = true;
+
 
     [Header("Hamster Gamemanager references")]
     [Space(50)]
-    public GameObject hamsterInstance;
-    public List<Sprite> hamsterSprites = new List<Sprite>();
-    public List<TileBase> grainSpritesTileBase = new List<TileBase>();
-    public GameObject heartPrefab;
-    public GameObject enduranceHeartPrefab;
-    public GameObject miniHeartPrefab;
-    public GameObject miniEndurancePrefab;
-    public List<Sprite> healthSprite = new List<Sprite>();
-    public List<Sprite> enduranceSprite = new List<Sprite>();
+    [ConditionalHide("showReferences", true)] public GameObject hamsterInstance;
+    [ConditionalHide("showReferences", true)] public List<Sprite> hamsterSprites = new List<Sprite>();
+    [ConditionalHide("showReferences", true)] public List<TileBase> grainSpritesTileBase = new List<TileBase>();
+    [ConditionalHide("showReferences", true)] public GameObject heartPrefab;
+    [ConditionalHide("showReferences", true)] public GameObject enduranceHeartPrefab;
+    [ConditionalHide("showReferences", true)] public GameObject miniHeartPrefab;
+    [ConditionalHide("showReferences", true)] public GameObject miniEndurancePrefab;
+    [ConditionalHide("showReferences", true)] public List<Sprite> healthSprite = new List<Sprite>();
+    [ConditionalHide("showReferences", true)] public List<Sprite> enduranceSprite = new List<Sprite>();
 
-    public TextMeshProUGUI grainAmountUI;
-    public TextMeshProUGUI hamsterAmountUI;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI grainAmountUI;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI hamsterAmountUI;
 
-    public Transform questContent;
-    public GameObject questContainer;
+    [ConditionalHide("showReferences", true)] public Transform questContent;
+    [ConditionalHide("showReferences", true)] public GameObject questContainer;
 
     [Header("UI")]
-    public GameObject generalUI;
-    public GameObject dialogueCanvas;
-    public GameObject tradeCanvas;
-    public GameObject inventoryCanvas;
+    [ConditionalHide("showReferences", true)] public GameObject generalUI;
+    [ConditionalHide("showReferences", true)] public GameObject dialogueCanvas;
+    [ConditionalHide("showReferences", true)] public GameObject tradeCanvas;
+    [ConditionalHide("showReferences", true)] public GameObject inventoryCanvas;
 
     [Header("Inventory")]
-    public GameObject itemPrefab;
-    public Transform itemContent;
+    [ConditionalHide("showReferences", true)] public GameObject itemPrefab;
+    [ConditionalHide("showReferences", true)] public Transform itemContent;
 
-    public Image hamsterImage;
-    public TextMeshProUGUI hamsterName;
-    public TextMeshProUGUI hamsterGrains;
+    [ConditionalHide("showReferences", true)] public Image hamsterImage;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI hamsterName;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI hamsterGrains;
 
-    public Transform hamsterHealthPoints;
-    public Transform hamsterEndurancePoints;
+    [ConditionalHide("showReferences", true)] public Transform hamsterHealthPoints;
+    [ConditionalHide("showReferences", true)] public Transform hamsterEndurancePoints;
 
-    public Transform Equipment;
+    [ConditionalHide("showReferences", true)] public Transform Equipment;
 
     [Header("Trading (Hamster 1)")]
-    public Transform tradeItemContentHamster1;
-    public Image tradeHamster1Image;
-    public TextMeshProUGUI tradeHamster1Name;
-    public TextMeshProUGUI tradeHamster1Grains;
+    [ConditionalHide("showReferences", true)] public Transform tradeItemContentHamster1;
+    [ConditionalHide("showReferences", true)] public Image tradeHamster1Image;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI tradeHamster1Name;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI tradeHamster1Grains;
 
     [Header("Trading (Hamster 2)")]
-    public Transform tradeItemContentHamster2;
-    public Image tradeHamster2Image;
-    public TextMeshProUGUI tradeHamster2Name;
-    public TextMeshProUGUI tradeHamster2Grains;
+    [ConditionalHide("showReferences", true)] public Transform tradeItemContentHamster2;
+    [ConditionalHide("showReferences", true)] public Image tradeHamster2Image;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI tradeHamster2Name;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI tradeHamster2Grains;
+
+    [Header("NPC Hamsters")]
+    [ConditionalHide("showReferences", true)] public Transform npcHamsterCollection;
+    [ConditionalHide("showReferences", true)] public Transform hamsterCollection;
 
     public static Hamster hamster1;
     public static Hamster hamster2;
@@ -81,7 +92,7 @@ public class HamsterGameManager : MonoBehaviour
 
     private void Start()
     {
-        List<Quest> quests = this.GetComponent<QuestHolder>().quests;
+        List<Quest> quests = this.GetComponent<QuestCollection>().quests;
 
         foreach (Quest quest in quests)
         {
@@ -97,12 +108,17 @@ public class HamsterGameManager : MonoBehaviour
         SetCanvasVisibility(inventoryCanvas, false);
 
         base.StartCoroutine(EnableQuestConditions());
+
+
+        SetCanvasVisibility(generalUI.transform.GetChild(2).gameObject, displayQuestLog);
+        SetCanvasVisibility(generalUI.transform.GetChild(0).gameObject, displayWorldInformation);
+        SetCanvasVisibility(generalUI.transform.GetChild(1).gameObject, displayWorldInformation);
     }
 
     private IEnumerator EnableQuestConditions()
     {
         yield return new WaitForSeconds(1f);
-        List<Quest> quests = this.GetComponent<QuestHolder>().quests;
+        List<Quest> quests = this.GetComponent<QuestCollection>().quests;
 
         foreach (Quest quest in quests)
         {
@@ -243,7 +259,7 @@ public class HamsterGameManager : MonoBehaviour
 
     private void CheckQuestState()
     {
-        List<Quest> quests = this.GetComponent<QuestHolder>().quests;
+        List<Quest> quests = this.GetComponent<QuestCollection>().quests;
 
         for (int i = 0; i < quests.Count; i++)
         {

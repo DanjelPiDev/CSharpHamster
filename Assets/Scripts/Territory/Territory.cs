@@ -205,6 +205,7 @@ public class Territory : MonoBehaviour
         wait = new WaitForSeconds(gameSpeed);
         base.StartCoroutine(PlayerControlMovementTimer());
         base.StartCoroutine(Player2ControlMovementTimer());
+        base.StartCoroutine(RandomHamsterMovements());
     }
 
     private void CheckLight()
@@ -264,7 +265,7 @@ public class Territory : MonoBehaviour
                     {
                         tileCollection.GetChild(i).GetComponent<TileHolder>().tile.grainCount -= 1;
                         tileGrainCount = tileCollection.GetChild(i).GetComponent<TileHolder>().tile.grainCount;
-                        List<Quest> quests = hamsterGameManager.GetComponent<QuestHolder>().quests;
+                        List<Quest> quests = hamsterGameManager.GetComponent<QuestCollection>().quests;
 
                         foreach (Quest quest in quests)
                         {
@@ -275,7 +276,7 @@ public class Territory : MonoBehaviour
                     {
                         tileCollection.GetChild(i).GetComponent<TileHolder>().tile.grainCount += 1;
                         tileGrainCount = tileCollection.GetChild(i).GetComponent<TileHolder>().tile.grainCount;
-                        List<Quest> quests = hamsterGameManager.GetComponent<QuestHolder>().quests;
+                        List<Quest> quests = hamsterGameManager.GetComponent<QuestCollection>().quests;
 
                         foreach (Quest quest in quests)
                         {
@@ -404,6 +405,7 @@ public class Territory : MonoBehaviour
                     Destroy(tileCollection.GetChild(i).GetComponent<ItemHolder>());
                     RemoveItemFromTile(column, row);
                     SetTileAt(column, row, itemsTilemap, null);
+                    //tilemap.SetTile(new Vector3Int(column, row, 0), null);
                 }
             }
         }
@@ -716,6 +718,10 @@ public class Territory : MonoBehaviour
         {
             transform.parent = hamsterCollection;
             Hamster hamster = transform.GetChild(1).GetComponent<HamsterHolder>().hamster;
+
+            hamster.DisplayHealth(hamster.IsDisplayingHealth);
+            hamster.DisplayName(hamster.IsDisplayingName);
+            hamster.DisplayEndurance(hamster.IsDisplayingEndurance);
 
             transform.position = new Vector3((hamster.Column * TILESIZE), (hamster.Row * TILESIZE), transform.position.z);
 
@@ -1086,6 +1092,7 @@ public class Territory : MonoBehaviour
 
         this.hamsters.Add(hamster);
         activHamsters = this.hamsters;
+        //if (!hamster.IsNPC)
         CreateHamsterGo(hamster);
     }
 
@@ -1139,6 +1146,45 @@ public class Territory : MonoBehaviour
             addGrainCount = false;
             this.grainCount += 1;
             globalGrainCount = grainCount;
+        }
+    }
+
+    private IEnumerator RandomHamsterMovements()
+    {
+        yield return new WaitForSeconds(2.5f);
+
+        while(true)
+        {
+            foreach(Hamster ham in activHamsters)
+            {
+                if (ham.IsNPC && 
+                    ham.MoveRandom && 
+                    ham.Pattern == Hamster.MovementPattern.Random)
+                {
+                    ham.RandomMove();
+                }
+                else if (ham.IsNPC &&
+                    (ham.Pattern == Hamster.MovementPattern.LeftRight || ham.Pattern == Hamster.MovementPattern.UpDown))
+                {
+                    if (ham.FrontIsClear())
+                    {
+                        ham.Move();
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 2; i++)
+                        {
+                            ham.TurnLeft();
+                        }
+                    }
+                }
+                else if (ham.IsNPC && ham.Pattern == Hamster.MovementPattern.Rotate)
+                {
+                    ham.TurnLeft();
+                }
+            }
+            yield return wait;
+            yield return null;
         }
     }
 

@@ -107,7 +107,9 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
                 if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().equipType == item.EquipType &&
                     equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
                 {
+                    equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item.OnUnequip();
                     equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item = null;
+
                     return;
                 }
             }

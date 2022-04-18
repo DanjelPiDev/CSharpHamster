@@ -11,25 +11,21 @@ public class Aufgabe1 : MonoBehaviour
     #endregion
 
     /* Dein Code startet hier ... */
-    Hamster meinHamster;
-    Hamster meinHamster2;
+    Hamster balu;
     /* Dein Code endet hier ... */
 
     private void HamsterEigenschaften()
     {
         /* Dein Code startet hier ... */
-        meinHamster = new Hamster();
-        meinHamster.SetName("Hamtaro");
-        meinHamster.SetPosition(-5, -3);
-        
+        balu = new Hamster();
+        balu.SetName("Balu");
+        balu.SetPosition(-5, -3);
+        balu.SetPlayerControls(true);
+        balu.SetHealthPoints(3);
+        balu.HealHamster(2);
 
-        meinHamster2 = new Hamster();
-        meinHamster2.SetName("Loou");
-        meinHamster2.SetPosition(-5, -2);
-        meinHamster2.SetColor(Hamster.HamsterColor.Blue);
-
-        meinHamster.SetPlayerControls(true);
-        meinHamster2.SetPlayerControls(true);
+        balu.DisplayName(true);
+        balu.DisplayHealth(true);
         /* Dein Code endet hier ... */
     }
 
@@ -59,7 +55,7 @@ public class Aufgabe1 : MonoBehaviour
 
     private void Update()
     {
-        // Refresh the gameSpeed
+        // Refresh the gamespeed if changed during runtime
         if (gameSpeed != HamsterGameManager.hamsterGameSpeed)
         {
             gameSpeed = HamsterGameManager.hamsterGameSpeed;

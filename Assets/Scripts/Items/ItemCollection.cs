@@ -17,8 +17,14 @@ public class ItemCollection : MonoBehaviour
 
     public Item GetItem(int id)
     {
-        if (id < 0 || id > items.Count) return null;
-        return items[id];
+        foreach (Item item in items)
+        {
+            if (item.Id == id)
+            {
+                return item;
+            }
+        }
+        return null;
     }
 
     public Item GetItem(string name)
