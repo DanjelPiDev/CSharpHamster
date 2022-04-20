@@ -66,6 +66,7 @@ public class Item : ScriptableObject, IComparable<Item>
     public int Id
     {
         get { return id; }
+        set { id = value; }
     }
 
     public int SlotId

@@ -307,7 +307,6 @@ public class Hamster : ScriptableObject
         string[] assets = AssetDatabase.FindAssets("hamster_");
         for (int i = 0; i < assets.Length; i++)
         {
-            Debug.Log(this.name);
             if (string.Compare(assets[i], "hamster_" + this.id + "_" + this.hamsterName + ".asset") == 0)
             {
                 AssetDatabase.SaveAssets();

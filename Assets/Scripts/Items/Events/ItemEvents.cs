@@ -44,8 +44,10 @@ public class ItemEvents : MonoBehaviour
 
     public void FasterMove(Item item)
     {
+        
         foreach(Hamster hamster in Territory.activHamsters)
         {
+            if (!hamster.IsInInventory) return;
             foreach (ItemSlot slot in hamster.Inventory)
             {
                 if (slot.item.Id == item.Id)

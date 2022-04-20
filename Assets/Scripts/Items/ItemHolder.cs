@@ -74,10 +74,10 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
 
         for (int i = 1; i < equipment.childCount; i++)
         {
-            // Erst überprüfen ob die Komponente existiert.
+            // First check if the component exists.
             if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>())
             {
-                // Falls die Komponente überprüft, prüfe ob der EquipmentType übereinstimmt.
+                // If the component does exists, check what type it is.
                 if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().equipType == item.EquipType)
                 {
                     if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item != null)

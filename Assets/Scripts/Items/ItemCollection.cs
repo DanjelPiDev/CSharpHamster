@@ -12,7 +12,19 @@ public class ItemCollection : MonoBehaviour
 
     private void Awake()
     {
+        AssignIDs();
         items.Sort();
+    }
+
+    private void AssignIDs()
+    {
+        int id = 0;
+
+        foreach (Item item in items)
+        {
+            item.Id = id;
+            id += 1;
+        }
     }
 
     public Item GetItem(int id)
