@@ -22,7 +22,6 @@ public class HamsterGameManager : MonoBehaviour
     [Header("Save/Load options")]
     public bool saveHamsterInfo = true;
     [ConditionalHide("saveHamsterInfo")] public bool savePlayer = false;
-    [ConditionalHide("saveHamsterInfo")] public bool saveNPCs = false;
     [ConditionalHide("saveHamsterInfo")] public bool saveEachFrame = false;
     public bool loadStoredInfo = false;
 

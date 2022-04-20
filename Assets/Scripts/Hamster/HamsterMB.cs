@@ -27,6 +27,7 @@ public class HamsterMB : MonoBehaviour
         {
             Hamster hamster = hamsterGameManager.npcHamsterCollection.GetChild(i).GetComponent<HamsterMB>().hamster;
 
+            
             if (hamster.IsNPC)
             {
                 if (hamster.IsDisplayingHealth)
@@ -38,10 +39,18 @@ public class HamsterMB : MonoBehaviour
                 hamsterGameManager.npcHamsterCollection.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
                 hamster.HamsterObject = hamsterGameManager.npcHamsterCollection.GetChild(i).gameObject;
 
-                hamster.Column = (int)Math.Round((hamsterGameManager.npcHamsterCollection.GetChild(i).position.x / 2.56f), MidpointRounding.ToEven);
-                hamster.Row = (int)Math.Round((hamsterGameManager.npcHamsterCollection.GetChild(i).position.y / 2.56f), MidpointRounding.ToEven);
+                /*
+                 * Look if the npc hamster should load the data from the file
+                 * instead of loading it from the gameObject position 
+                 */
+                if (!hamsterGameManager.loadStoredInfo)
+                {
+                    hamster.Column = (int)Math.Round((hamsterGameManager.npcHamsterCollection.GetChild(i).position.x / 2.56f), MidpointRounding.ToEven);
+                    hamster.Row = (int)Math.Round((hamsterGameManager.npcHamsterCollection.GetChild(i).position.y / 2.56f), MidpointRounding.ToEven);
+                }
 
                 hamster.Id = idCounter;
+
 
                 if (hamster.Pattern == Hamster.MovementPattern.LeftRight &&
                     (hamster.Direction != Hamster.LookingDirection.West || hamster.Direction != Hamster.LookingDirection.East))
@@ -62,13 +71,5 @@ public class HamsterMB : MonoBehaviour
             idCounter += 1;
         }
         
-    }
-
-    private void Update()
-    {
-        if (hamsterGameManager.saveEachFrame && hamsterGameManager.saveNPCs)
-        {
-            //hamster.Save();
-        }
     }
 }

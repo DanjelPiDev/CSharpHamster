@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: hamster_Balu_1
   m_EditorClassIdentifier: 
   id: 1
-  name: Balu
+  hamsterName: Balu
   row: -3
   column: -5
   direction: 1

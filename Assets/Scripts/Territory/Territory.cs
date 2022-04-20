@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class Territory : MonoBehaviour
 {
     [Header("Hamsters")]
@@ -845,6 +849,20 @@ public class Territory : MonoBehaviour
         }
 
         hamTransform.position = new Vector3((hamster.Column * TILESIZE), (hamster.Row * TILESIZE), hamTransform.position.z);
+    }
+
+
+    public void LoadFromAssets(int id)
+    {
+        string[] assets = AssetDatabase.FindAssets("hamster_");
+
+        for(int i = 0; i < assets.Length; i++)
+        {
+            if (assets[i].Contains("_" + id + "_"))
+            {
+                //
+            }
+        }
     }
 
     /// <summary>
