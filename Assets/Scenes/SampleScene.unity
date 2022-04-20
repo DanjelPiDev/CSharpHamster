@@ -851,7 +851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.026128277}
+  m_AnchoredPosition: {x: 0, y: 0.026018515}
   m_SizeDelta: {x: 0, y: 1003.6}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &61234005
@@ -9795,8 +9795,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 964632459}
   m_HandleRect: {fileID: 964632458}
   m_Direction: 2
-  m_Value: -0.0046838406
-  m_Size: 0.9999729
+  m_Value: 0
+  m_Size: 0.999974
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11029,6 +11029,11 @@ MonoBehaviour:
   gameSpeed: 0.25
   displayQuestLog: 1
   displayWorldInformation: 0
+  saveHamsterInfo: 1
+  savePlayer: 0
+  saveNPCs: 1
+  saveEachFrame: 1
+  loadStoredInfo: 0
   showReferences: 1
   hamsterInstance: {fileID: 8688514454558771519, guid: ca5d1e19324b75b4fb5cfa2d14a10c9f, type: 3}
   hamsterSprites:

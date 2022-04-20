@@ -7,6 +7,11 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class ItemSlot : IComparable<ItemSlot>
 {
     public int slotId = int.MinValue + 1;
@@ -66,6 +71,7 @@ public class Hamster : ScriptableObject
     private bool isUsingEndurance = false;
 
     private HamsterGameManager hamsterGameManager;
+    private readonly string path = "Assets/Objects/Hamster/Player/hamster_";
 
     #region Getter and Setter
     public string Name
@@ -294,6 +300,29 @@ public class Hamster : ScriptableObject
         this.DisplayName(this.isDisplayingName);
         this.DisplayHealth(this.isDisplayingHealth);
         this.DisplayEndurance(this.isDisplayingEndurance);
+    }
+
+    public void Save()
+    {
+        string[] assetes = AssetDatabase.FindAssets("hamster_" + this.name + "_" + this.id + ".asset");
+        for (int i = 0; i < assetes.Length; i++)
+        {
+
+        }
+
+
+        /* Only once */
+        if (AssetDatabase.FindAssets("hamster_" + this.name + "_" + this.id + ".asset").Length == 0)
+        {
+            AssetDatabase.CreateAsset(this, path + this.name + "_" + this.id + ".asset");
+            AssetDatabase.SaveAssets();
+        }
+
+        if (string.Compare(AssetDatabase.FindAssets("hamster_" + this.name + "_" + this.id + ".asset")[0], string.Empty) != 0)
+        {
+            AssetDatabase.CreateAsset(this, path + this.name + "_" + this.id + ".asset");
+        }
+        AssetDatabase.SaveAssets();
     }
 
     public void RandomMove()
@@ -1998,7 +2027,11 @@ public class Hamster : ScriptableObject
         White,
         Grey,
         Purple,
-        Pink
+        Pink,
+        FullBrown,
+        FullWhite,
+        FullGrey,
+        FullBlue
     };
 
     public enum LookingDirection

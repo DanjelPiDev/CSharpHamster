@@ -63,4 +63,12 @@ public class HamsterMB : MonoBehaviour
         }
         
     }
+
+    private void Update()
+    {
+        if (hamsterGameManager.saveEachFrame && hamsterGameManager.saveNPCs)
+        {
+            //hamster.Save();
+        }
+    }
 }

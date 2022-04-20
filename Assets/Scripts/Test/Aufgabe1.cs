@@ -26,6 +26,8 @@ public class Aufgabe1 : MonoBehaviour
 
         balu.DisplayName(true);
         balu.DisplayHealth(true);
+
+        //balu.Save();
         /* Dein Code endet hier ... */
     }
 
@@ -41,7 +43,7 @@ public class Aufgabe1 : MonoBehaviour
         #endregion
 
         /* Dein Code startet hier ... */
-
+        
         /* Dein Code endet hier ... */
     }
 

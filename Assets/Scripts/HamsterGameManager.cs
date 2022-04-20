@@ -19,6 +19,12 @@ public class HamsterGameManager : MonoBehaviour
     [Header("UI startup settings")]
     public bool displayQuestLog = true;
     public bool displayWorldInformation = true;
+    [Header("Save/Load options")]
+    public bool saveHamsterInfo = true;
+    [ConditionalHide("saveHamsterInfo")] public bool savePlayer = false;
+    [ConditionalHide("saveHamsterInfo")] public bool saveNPCs = false;
+    [ConditionalHide("saveHamsterInfo")] public bool saveEachFrame = false;
+    public bool loadStoredInfo = false;
 
     [Header("Inspector show references?")]
     public bool showReferences = true;
