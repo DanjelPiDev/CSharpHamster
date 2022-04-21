@@ -89,7 +89,12 @@ public class Territory : MonoBehaviour
                 {
                     GameObject go = new GameObject(tilemap.GetTile(currentTile).name + " (" + x + ", " + y + ")");
                     go.AddComponent<TileHolder>();
-                    go.GetComponent<TileHolder>().tile = new Tile(x, y, Tile.TileType.Floor);
+                    Tile tile = ScriptableObject.CreateInstance<Tile>();
+                    tile.Column = x;
+                    tile.Row = y;
+                    tile.type = Tile.TileType.Floor;
+                    go.GetComponent<TileHolder>().tile = tile;
+                    Debug.Log("tile x = " + x);// new Tile(x, y, Tile.TileType.Floor);
 
 
                     if (string.Compare(tilemap.GetTile(currentTile).name, GRASS_TILE) == 0 ||

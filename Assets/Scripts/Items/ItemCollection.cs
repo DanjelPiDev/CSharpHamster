@@ -12,8 +12,11 @@ public class ItemCollection : MonoBehaviour
 
     private void Awake()
     {
-        AssignIDs();
+        /*
+         * Sort the list, afterwards set the id for each item again, for simply get lateron
+         */
         items.Sort();
+        AssignIDs();
     }
 
     private void AssignIDs()
@@ -29,14 +32,9 @@ public class ItemCollection : MonoBehaviour
 
     public Item GetItem(int id)
     {
-        foreach (Item item in items)
-        {
-            if (item.Id == id)
-            {
-                return item;
-            }
-        }
-        return null;
+        Item item = items[id];
+        if (item != null) return item;
+        else return null;
     }
 
     public Item GetItem(string name)
@@ -49,9 +47,5 @@ public class ItemCollection : MonoBehaviour
             }
         }
         return null;
-    }
-
-    private void Update()
-    {
     }
 }

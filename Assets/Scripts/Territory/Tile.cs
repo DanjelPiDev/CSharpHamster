@@ -16,11 +16,13 @@ public class Tile : ScriptableObject
     public int Row
     {
         get { return row; }
+        set { row = value; }
     }
 
     public int Column
     {
         get { return column; }
+        set { column = value; }
     }
     #endregion
 

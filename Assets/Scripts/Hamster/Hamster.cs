@@ -398,7 +398,7 @@ public class Hamster : ScriptableObject
         string pickUpGrainString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "PICK_UP_GRAIN").Result;
         string noGrainsString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_GRAINS").Result;
 
-        if (Territory.GetInstance().GetGrainCountAtTile(this.column, this.row) > 0)
+        if (Territory.GetInstance().GetTileAt(this.column, this.row).hasGrain) // Territory.GetInstance().GetGrainCountAtTile(this.column, this.row) > 0
         {
             this.grainCount += 1;
             Territory.GetInstance().UpdateHamsterGrainCount(this);
@@ -549,7 +549,7 @@ public class Hamster : ScriptableObject
 
 
     /// <summary>
-    /// Füge ein item mit dem <paramref name="name"/>n dem Inventar hinzu, <paramref name="amount"/> kann optional mitangeben werden. Andernfalls wird ein "1" <paramref name="item"/> hinzugefügt.
+    /// Add a specific <paramref name="amount"/> of the item with the specific <paramref name="name"/> to the hamsters inventory. Default <paramref name="amount"/> = 1.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="amount"></param>
@@ -562,7 +562,7 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Füge ein item mit der speziellen <paramref name="id"/> dem Inventar hinzu, <paramref name="amount"/> kann optional mitangeben werden. Andernfalls wird ein "1" <paramref name="item"/> hinzugefügt.
+    /// Add a specific <paramref name="amount"/> of the item with the specific <paramref name="id"/> to the hamsters inventory. Default <paramref name="amount"/> = 1.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="amount"></param>
@@ -583,40 +583,44 @@ public class Hamster : ScriptableObject
     {
         if (item == null) return;
 
-        /* Überprüfe ob das item bereits im Inventar existiert. */
+        /* 
+         * Check if this item already exists in the hamsters inventory.
+         */
         for (int i = 0; i < this.inventory.Count; i++)
         {
-            /* Das Item wurde gefunden und der itemStack ist noch nicht voll. */
+            /* 
+             * Found the item, and the stack isn't full. 
+             */
             if (this.inventory[i].item.Id == item.Id &&
                 this.inventory[i].quantity < item.StackAmount &&
                 this.inventory[i].item.SlotId == item.SlotId)
             {
-                /* Falls man einfach nur draufzählen kann, ohne das der itemStack überlaufen würde. */
+                /* 
+                 * If you can just add the amount of items to the stack without overloading the stack.
+                 */
                 if (this.inventory[i].quantity + amount <= item.StackAmount)
                 {
                     this.inventory[i].quantity += amount;
                 }
-                /* Falls der itemStack überlaufen würde */
+                /* If you can't add the specific amount without overloading the current itemSlot */
                 else
                 {
                     int tmpAmount = item.StackAmount - (this.inventory[i].quantity + amount);
                     this.inventory[i].quantity = item.StackAmount;
                     Territory.GetInstance().UpdateHamsterProperties(this);
-                    /* Rufe diese Methode mit neuen Werten erneut auf, da der itemStack überlaufen ist. */
+                    /* Call AddItem again with new values (Difference). */
                     this.AddItem(item, tmpAmount);
                 }
                 Territory.GetInstance().UpdateHamsterProperties(this);
                 return;
             }
-            /* Falls das Item gefunden wurde, aber die SlotId eine andere ist
-             * Hinweis: (Dieses else if ist nur für das Handeln)
-             *          Jedes Item ist mit einer SlotId an ein Slot gebunden,
-             *          bei einem Kauf/Verkauf können die SlotIds nicht mehr
-             *          übereinstimmen, daher wird hier speziell nochmal
-             *          überprüft. Der rest ist dann wieder wie oben.
+            /* If it found the item, but the slotId does not fit
+             * Hint: (This else is only for the case if two hamsters trading)
+             *          Each item is connect through a slotId with the itemSlot,
+             *          in case buying from one another, the slotIds cannot be equal.
+             *          For this reason we are entering this else
+             *          rest is as the same as above.
              *          
-             *          Man kann die eine Bedingung nicht entfernen und es nur
-             *          in ein if umformen.
              */
             else if (this.inventory[i].item.Id == item.Id &&
                 this.inventory[i].quantity < item.StackAmount &&
@@ -637,8 +641,8 @@ public class Hamster : ScriptableObject
                 return;
             }
         }
+        /* This section is only, if the hamster doesn't own this item. */
 
-        /* Hier wird man nur ankommen, wenn das Item noch nicht im Inventar vorkommt */
         ItemSlot slot = new ItemSlot();
 
         /* Finde höchste SlotId im inventar */
