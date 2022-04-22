@@ -25,6 +25,7 @@ public class PlayerControl : MonoBehaviour
     public KeyCode[] trade = new KeyCode[] { KeyCode.T };
     public KeyCode[] inventory = new KeyCode[] { KeyCode.I };
     public KeyCode[] controlEffects = new KeyCode[] { KeyCode.Z };
+    public KeyCode[] attack = new KeyCode[] { KeyCode.LeftShift };
 
     private Hamster hamster;
     private Hamster hamster2;
@@ -584,6 +585,17 @@ public class PlayerControl : MonoBehaviour
                     return;
                 }
             }
+
+            
+            foreach (KeyCode keycode in attack)
+            {
+                if (Input.GetKeyDown(keycode))
+                {
+                    hamster.Hit();
+                    return;
+                }
+            }
+            
 
             foreach (KeyCode keycode in talk)
             {

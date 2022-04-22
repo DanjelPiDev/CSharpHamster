@@ -37,7 +37,7 @@ public class ItemEvents : MonoBehaviour
         {
             if (hamster.IsUsingItem)
             {
-                hamster.DamageHamster(item.DamageValue);
+                hamster.Damage(item.DamageValue);
             }
         }
     }
@@ -68,8 +68,7 @@ public class ItemEvents : MonoBehaviour
             foreach (ItemSlot slot in hamster.Inventory)
             {
                 if (slot.item.Id == item.Id &&
-                    slot.item.hasSpecialEffects &&
-                    slot.item.MoveSpeed > 0)
+                    slot.item.hasSpecialEffects)
                 {
                     hamster.MoveSpeed -= slot.item.MoveSpeed;
                     hamster.EffectsActiv = false;

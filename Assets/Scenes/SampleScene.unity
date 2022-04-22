@@ -851,7 +851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.025924703}
+  m_AnchoredPosition: {x: 0, y: 0.027044082}
   m_SizeDelta: {x: 0, y: 1003.6}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &61234005
@@ -16795,8 +16795,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 964632459}
   m_HandleRect: {fileID: 964632458}
   m_Direction: 2
-  m_Value: 0.0023419203
-  m_Size: 0.8637878
+  m_Value: -0.035128806
+  m_Size: 0.9999712
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18029,10 +18029,10 @@ MonoBehaviour:
   gameSpeed: 0.25
   displayQuestLog: 1
   displayWorldInformation: 0
-  saveHamsterInfo: 1
+  saveHamsterInfo: 0
   savePlayer: 0
   saveEachFrame: 0
-  loadStoredInfo: 1
+  loadStoredInfo: 0
   snapHamstersToGrid: 0
   showReferences: 1
   hamsterInstance: {fileID: 8688514454558771519, guid: ca5d1e19324b75b4fb5cfa2d14a10c9f, type: 3}
@@ -18081,6 +18081,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 92666536efa786245b38809439840744, type: 3}
   - {fileID: 21300000, guid: a857fed531681c0478fd92abf5c4cef7, type: 3}
   - {fileID: 21300000, guid: 69ad61f0c750b1c4ca73149c3f792752, type: 3}
+  - {fileID: 21300000, guid: 1a2e0545c9adbc149a3caeda4b0b30b8, type: 3}
+  - {fileID: 21300000, guid: 5e0ff6e52d4f6824da93cf2ed1b96345, type: 3}
+  - {fileID: 21300000, guid: d9e4fcfc1dc7c174fb66543a1ddec575, type: 3}
+  - {fileID: 21300000, guid: df659b3c96d1cf8449e229b6a571d456, type: 3}
   grainSpritesTileBase:
   - {fileID: 11400000, guid: 087d4c240607eb748a14da4ec5719aea, type: 2}
   - {fileID: 11400000, guid: 547c39a0918c06c49986ba12fc789377, type: 2}
@@ -22746,11 +22750,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5922676360520106153, guid: 874974325f679a64184702e5e2895c56, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.73
+      value: -16.07
       objectReference: {fileID: 0}
     - target: {fileID: 5922676360520106153, guid: 874974325f679a64184702e5e2895c56, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.52
+      value: 3.71
       objectReference: {fileID: 0}
     - target: {fileID: 5922676360520106153, guid: 874974325f679a64184702e5e2895c56, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22794,7 +22798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5922676360520106155, guid: 874974325f679a64184702e5e2895c56, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5922676360520106158, guid: 874974325f679a64184702e5e2895c56, type: 3}
       propertyPath: m_FlipX

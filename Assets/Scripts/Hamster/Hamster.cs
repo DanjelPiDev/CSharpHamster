@@ -41,6 +41,7 @@ public class Hamster : ScriptableObject
     [SerializeField] private LookingDirection direction;
     [SerializeField] private int grainCount;
     [SerializeField] private bool playerControl;
+    [SerializeField] private bool respawn = true;
     [SerializeField] private bool isNPC;
     [SerializeField] private bool moveRandom;
     [SerializeField] private MovementPattern movementPattern;
@@ -92,6 +93,12 @@ public class Hamster : ScriptableObject
     {
         get { return id; }
         set { id = value; }
+    }
+
+    public bool Respawn
+    {
+        get { return respawn; }
+        set { respawn = value; }
     }
 
     public int HealthPoints
@@ -346,6 +353,12 @@ public class Hamster : ScriptableObject
         }
     }
 
+    public void SetRespawn(bool b)
+    {
+        this.respawn = b;
+        Territory.GetInstance().UpdateHamsterProperties(this);
+    }
+
 
     /// <summary>
     /// Hamster turns to the left. (Anticlockwise: North -> West -> South -> East).
@@ -373,7 +386,7 @@ public class Hamster : ScriptableObject
 
         if (this.isTalking)
         {
-
+            // need to implement
         }
 
         if (this.isInInventory)
@@ -479,19 +492,27 @@ public class Hamster : ScriptableObject
     /// Remove a specific amount of health <paramref name="points"/> (Not changing the max amount).
     /// </summary>
     /// <param name="points"></param>
-    public void DamageHamster(int points = 1)
+    public void Damage(int points = 1)
     {
         string noMoreHealthString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_HEALTH").Result;
 
         points = Mathf.Abs(points);
         this.healthPointsFull -= points;
-        if (this.healthPointsFull <= 0)
+        if (this.healthPointsFull <= 0 && this.respawn)
         {
             Debug.Log(this.hamsterName + noMoreHealthString);
             this.column = (int)startPoint.x;
             this.row = (int)startPoint.y;
 
             this.healthPointsFull = this.healthPoints;
+        }
+        else if (this.healthPointsFull <= 0 && !this.respawn)
+        {
+            this.hamsterObject.transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+            this.isDisplayingHealth = false;
+            this.isDisplayingEndurance = false;
+            this.isDisplayingName = false;
         }
 
         Territory.GetInstance().UpdateHamsterProperties(this, updateHealthUI: true);
@@ -1951,6 +1972,33 @@ public class Hamster : ScriptableObject
         // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
         Territory.GetInstance().UpdateHamsterProperties(this);
     }
+
+    public void Hit()
+    {
+        if (!FrontIsClear() && !FrontIsClearNoHamster())
+        {
+            Hamster ham = null;
+            switch (this.direction)
+            {
+                case LookingDirection.North:
+                    ham = Territory.GetInstance().GetHamsterAt(this.column, this.row + 1);
+                    ham.Damage(1);
+                    return;
+                case LookingDirection.West:
+                    ham = Territory.GetInstance().GetHamsterAt(this.column - 1, this.row);
+                    ham.Damage(1);
+                    return;
+                case LookingDirection.South:
+                    ham = Territory.GetInstance().GetHamsterAt(this.column, this.row - 1);
+                    ham.Damage(1);
+                    return;
+                case LookingDirection.East:
+                    ham = Territory.GetInstance().GetHamsterAt(this.column + 1, this.row);
+                    ham.Damage(1);
+                    return;
+            }
+        }
+    }
     
     /// <summary>
     /// Überprüfe ob der Weg vor dem Hamster frei ist.
@@ -2056,7 +2104,8 @@ public class Hamster : ScriptableObject
         FullBrown,
         FullWhite,
         FullGrey,
-        FullBlue
+        FullBlue,
+        Evil
     };
 
     public enum LookingDirection
@@ -2072,6 +2121,7 @@ public class Hamster : ScriptableObject
         Random,
         LeftRight,
         UpDown,
-        Rotate
+        Rotate,
+        None
     };
 }

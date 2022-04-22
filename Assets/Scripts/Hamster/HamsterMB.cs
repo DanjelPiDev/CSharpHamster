@@ -13,6 +13,8 @@ public class HamsterMB : MonoBehaviour
     {
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
+        this.hamster = Instantiate(hamster);
+
         base.StartCoroutine(ReadInAllHamsterInformation());
     }
 

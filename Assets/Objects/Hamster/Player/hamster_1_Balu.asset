@@ -19,6 +19,7 @@ MonoBehaviour:
   direction: 1
   grainCount: 0
   playerControl: 1
+  respawn: 1
   isNPC: 0
   moveRandom: 0
   movementPattern: 0
@@ -39,7 +40,7 @@ MonoBehaviour:
   - serializedVersion: 2
     m_Bits: 16
   movePoint: {fileID: 0}
-  currentMovementSpeed: 0
+  currentMovementSpeed: 10
   isDisplayingName: 1
   isDisplayingHealth: 1
   isDisplayingEndurance: 0
