@@ -52,7 +52,27 @@ public class ItemEvents : MonoBehaviour
             {
                 if (slot.item.Id == item.Id)
                 {
-                    hamster.MoveSpeed = item.MoveSpeed;
+                    hamster.MoveSpeed += item.MoveSpeed;
+                    hamster.EffectsActiv = true;
+                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                }
+            }
+        }
+    }
+
+    public void ResetEffect(Item item)
+    {
+        foreach (Hamster hamster in Territory.activHamsters)
+        {
+            if (!hamster.IsInInventory) return;
+            foreach (ItemSlot slot in hamster.Inventory)
+            {
+                if (slot.item.Id == item.Id &&
+                    slot.item.hasSpecialEffects &&
+                    slot.item.MoveSpeed > 0)
+                {
+                    hamster.MoveSpeed -= slot.item.MoveSpeed;
+                    hamster.EffectsActiv = false;
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
                 }
             }

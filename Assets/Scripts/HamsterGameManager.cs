@@ -24,6 +24,8 @@ public class HamsterGameManager : MonoBehaviour
     [ConditionalHide("saveHamsterInfo")] public bool savePlayer = false;
     [ConditionalHide("saveHamsterInfo")] public bool saveEachFrame = false;
     public bool loadStoredInfo = false;
+    [Header("Hamster movement")]
+    public bool snapHamstersToGrid = true;
 
     [Header("Inspector show references?")]
     public bool showReferences = true;

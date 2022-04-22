@@ -58,7 +58,9 @@ public class Hamster : ScriptableObject
     private Vector2 startPoint;
     [Header("Location and Movement Info")]
     [SerializeField, Range(1,5)] private int moveSpeed = 1;
-    [SerializeField] private LayerMask collisionLayer;
+    [SerializeField] private LayerMask[] collisionLayer = new LayerMask[2];
+    [SerializeField] private Transform movePoint;
+    [SerializeField] private float currentMovementSpeed = 10f;
 
     private bool isTrading = false;
     private bool isTalking = false;
@@ -96,6 +98,12 @@ public class Hamster : ScriptableObject
     {
         get { return healthPoints; }
         set { healthPoints = value; }
+    }
+
+    public Transform MovePoint
+    {
+        get { return movePoint; }
+        set { movePoint = value; }
     }
 
     public int EndurancePoints
@@ -286,7 +294,8 @@ public class Hamster : ScriptableObject
         this.playerControl = playerControl;
         
 
-        collisionLayer |= (1 << LayerMask.NameToLayer("Wall"));
+        collisionLayer[0] |= (1 << LayerMask.NameToLayer("Wall"));
+        collisionLayer[1] |= (1 << LayerMask.NameToLayer("Water"));
 
         this.id = Territory.GetInstance().GetHamsters().Count;
         Territory.GetInstance().AddHamster(Instantiate(this));
@@ -427,6 +436,7 @@ public class Hamster : ScriptableObject
         string pickUpItemString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "PICK_UP_ITEM").Result;
 
         Item item = Territory.GetItemAt(this.column, this.row);
+        item = Instantiate(item);
 
         if (item != null)
         {
@@ -557,6 +567,7 @@ public class Hamster : ScriptableObject
     {
         ItemCollection itemCollection = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<ItemCollection>();
         Item item = itemCollection.GetItem(name);
+        item = Instantiate(item);
 
         this.AddItem(item, amount);
     }
@@ -1587,14 +1598,13 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Der Hamster läuft in die Richtung, in die er auch schaut. Move() bewegt sich einen Tile (Schritt) nach vorne
+    /// Hamster is moving in the direction, he/she looks at. Move moves the hamster one tile forward.
     /// </summary>
     public virtual void Move()
     {
         string movingFString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "MOVE").Result;
         string noEnduranceFString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "NO_ENDURANCE").Result;
         string frontNotClearFString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("DebugMsg", "FRONT_NOT_CLEAR").Result;
-
 
         if (FrontIsClear())
         {
@@ -1615,9 +1625,14 @@ public class Hamster : ScriptableObject
                                 {
                                     this.column += i - 1;
                                     this.endurancePointsFull -= 1;
-                                } 
-                                else
+                                }
+                                else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                                     Debug.LogError(this.hamsterName + noEnduranceFString);
+
+                                if (!this.isUsingEndurance)
+                                {
+                                    this.column += i - 1;
+                                }
                                 return;
                             }
                         }
@@ -1626,7 +1641,7 @@ public class Hamster : ScriptableObject
                     {
                         this.column += this.moveSpeed;
                         this.endurancePointsFull -= 1;
-                    } 
+                    }
                     else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                         Debug.LogError(this.hamsterName + noEnduranceFString);
                     else if (!this.isUsingEndurance)
@@ -1647,9 +1662,14 @@ public class Hamster : ScriptableObject
                                 {
                                     this.row += i - 1;
                                     this.endurancePointsFull -= 1;
-                                }  
-                                else
+                                }
+                                else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                                     Debug.LogError(this.hamsterName + noEnduranceFString);
+
+                                if (!this.isUsingEndurance)
+                                {
+                                    this.row += i - 1;
+                                }
                                 return;
                             }
                         }
@@ -1658,7 +1678,7 @@ public class Hamster : ScriptableObject
                     {
                         this.row += this.moveSpeed;
                         this.endurancePointsFull -= 1;
-                    } 
+                    }
                     else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                         Debug.LogError(this.hamsterName + noEnduranceFString);
                     else if (!this.isUsingEndurance)
@@ -1680,8 +1700,13 @@ public class Hamster : ScriptableObject
                                     this.column -= i - 1;
                                     this.endurancePointsFull -= 1;
                                 }
-                                else
+                                else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                                     Debug.LogError(this.hamsterName + noEnduranceFString);
+
+                                if (!this.isUsingEndurance)
+                                {
+                                    this.column -= i - 1;
+                                }
                                 return;
                             }
                         }
@@ -1691,7 +1716,7 @@ public class Hamster : ScriptableObject
                         this.column -= this.moveSpeed;
                         this.endurancePointsFull -= 1;
                     }
-                    else if(this.isUsingEndurance && this.endurancePointsFull == 0)
+                    else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                         Debug.LogError(this.hamsterName + noEnduranceFString);
                     else if (!this.isUsingEndurance)
                         this.column -= this.moveSpeed;
@@ -1712,8 +1737,13 @@ public class Hamster : ScriptableObject
                                     this.row -= i - 1;
                                     this.endurancePointsFull -= 1;
                                 }
-                                else
+                                else if (this.isUsingEndurance && this.endurancePointsFull == 0)
                                     Debug.LogError(this.hamsterName + noEnduranceFString);
+
+                                if (!this.isUsingEndurance)
+                                {
+                                    this.row -= i - 1;
+                                }
                                 return;
                             }
                         }
@@ -1739,7 +1769,7 @@ public class Hamster : ScriptableObject
                 Debug.Log(this.hamsterName + movingFString);
             this.canMove = true;
             Territory.GetInstance().UpdateHamsterPosition(this);
-            
+
 
             if (this.isInInventory)
             {

@@ -94,7 +94,7 @@ public class Territory : MonoBehaviour
                     tile.Row = y;
                     tile.type = Tile.TileType.Floor;
                     go.GetComponent<TileHolder>().tile = tile;
-                    Debug.Log("tile x = " + x);// new Tile(x, y, Tile.TileType.Floor);
+                    // new Tile(x, y, Tile.TileType.Floor);
 
 
                     if (string.Compare(tilemap.GetTile(currentTile).name, GRASS_TILE) == 0 ||
@@ -717,7 +717,7 @@ public class Territory : MonoBehaviour
     }
 
     /// <summary>
-    /// Refresh the position of all hamsters' in the world.
+    /// Refresh the position of all hamsters' in the world. Also refresh the display of name, health and endurance.
     /// </summary>
     public void UpdateHamsterPosition()
     {
@@ -758,6 +758,18 @@ public class Territory : MonoBehaviour
                     // Pink
                     else if (hamster.Color == Hamster.HamsterColor.Pink)
                         transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[24];
+                    // Brown (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBrown)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[28];
+                    // Blue (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBlue)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[32];
+                    // Grey (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullGrey)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[36];
+                    // White (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullWhite)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[40];
                     break;
                 case Hamster.LookingDirection.North:
                     // Orange
@@ -781,6 +793,18 @@ public class Territory : MonoBehaviour
                     // Pink
                     else if (hamster.Color == Hamster.HamsterColor.Pink)
                         transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[27];
+                    // Brown (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBrown)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[31];
+                    // Blue (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBlue)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[35];
+                    // Grey (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullGrey)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[39];
+                    // White (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullWhite)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[43];
                     break;
                 case Hamster.LookingDirection.West:
                     // Orange
@@ -804,6 +828,18 @@ public class Territory : MonoBehaviour
                     // Pink
                     else if (hamster.Color == Hamster.HamsterColor.Pink)
                         transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[26];
+                    // Brown (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBrown)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[30];
+                    // Blue (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBlue)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[34];
+                    // Grey (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullGrey)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[38];
+                    // White (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullWhite)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[42];
                     break;
                 case Hamster.LookingDirection.South:
                     // Orange
@@ -827,6 +863,18 @@ public class Territory : MonoBehaviour
                     // Pink
                     else if (hamster.Color == Hamster.HamsterColor.Pink)
                         transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[25];
+                    // Brown (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBrown)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[29];
+                    // Blue (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullBlue)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[33];
+                    // Grey (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullGrey)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[37];
+                    // White (Full)
+                    else if (hamster.Color == Hamster.HamsterColor.FullWhite)
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = hamsterGameManager.hamsterSprites[41];
                     break;
             }
         }
@@ -893,6 +941,13 @@ public class Territory : MonoBehaviour
         {
             Hamster ham = transform.GetChild(1).GetComponent<HamsterHolder>().hamster;
 
+            if (ham.MovePoint == null)
+            {
+                ham.MovePoint = transform.GetChild(0);
+            }
+
+            
+
             if (hamster.Id == ham.Id)
             {
                 ham.Name                    = hamster.Name;
@@ -916,12 +971,13 @@ public class Territory : MonoBehaviour
                 ham.IsDisplayingEndurance   = hamster.IsDisplayingEndurance;
                 ham.IsUsingItem             = hamster.IsUsingItem;
                 ham.EffectsActiv            = hamster.EffectsActiv;
+                ham.MoveSpeed               = hamster.MoveSpeed;
 
 
                 // Refresh moving effect (Aktiv or not)
-                if (!ham.EffectsActiv)
+                /*if (!ham.EffectsActiv)
                 {
-                    ham.MoveSpeed = 1;
+                    //ham.MoveSpeed = 1;
                 }
                 else
                 {
@@ -929,11 +985,11 @@ public class Territory : MonoBehaviour
                     {
                         if (slot.item.IsEquipped && slot.item.hasSpecialEffects && slot.item.MoveSpeed > 0)
                         {
-                            ham.MoveSpeed = slot.item.MoveSpeed;
+                            //ham.MoveSpeed = slot.item.MoveSpeed;
                         }
                     }
                     
-                }
+                }*/
 
                 if (createNameUI)
                 {

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1687dc0662a8d6478aa700a507dca5b, type: 3}
-  m_Name: hamster_1_Balu
+  m_Name: hamster_0_Balu
   m_EditorClassIdentifier: 
-  id: 1
+  id: 0
   hamsterName: Balu
   row: -3
   column: -5
@@ -39,7 +39,7 @@ MonoBehaviour:
   - serializedVersion: 2
     m_Bits: 16
   movePoint: {fileID: 0}
-  currentMovementSpeed: 0
+  currentMovementSpeed: 10
   isDisplayingName: 1
   isDisplayingHealth: 1
   isDisplayingEndurance: 0

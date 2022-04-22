@@ -27,9 +27,9 @@ MonoBehaviour:
   buyPrice: 5
   sellPrice: 3
   stackAmount: 1
-  slotId: 0
+  slotId: -2147483648
   hasSpecialEffects: 1
-  moveSpeed: 2
+  moveSpeed: 1
   onEquip:
     m_PersistentCalls:
       m_Calls:
@@ -47,7 +47,19 @@ MonoBehaviour:
         m_CallState: 2
   onUnequip:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3014111456525694037, guid: 0647f1b02b7e2514194b0a8ee18e1b88, type: 3}
+        m_TargetAssemblyTypeName: ItemEvents, Assembly-CSharp
+        m_MethodName: ResetEffect
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000}
+          m_ObjectArgumentAssemblyTypeName: Item, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onUse:
     m_PersistentCalls:
       m_Calls: []

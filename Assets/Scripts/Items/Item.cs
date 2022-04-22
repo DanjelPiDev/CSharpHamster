@@ -31,7 +31,7 @@ public class Item : ScriptableObject, IComparable<Item>
     [SerializeField] private int slotId;
     public bool hasSpecialEffects = false;
     [Header("Special Effects")]
-    [SerializeField, ConditionalHide("hasSpecialEffects", true)] private int moveSpeed = 1;
+    [SerializeField, ConditionalHide("hasSpecialEffects", true)] private int moveSpeed = 0;
     [Header("Item Events")]
     public UnityEvent onEquip;
     public UnityEvent onUnequip;
