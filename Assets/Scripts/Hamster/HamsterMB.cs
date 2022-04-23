@@ -18,6 +18,16 @@ public class HamsterMB : MonoBehaviour
         base.StartCoroutine(ReadInAllHamsterInformation());
     }
 
+    private void Guard(int aggroRadius = 1)
+    {
+        if (!this.hamster.IsEvil) return;
+
+        foreach (Hamster ham in Territory.activHamsters)
+        {
+            // check for the hamster
+        }
+    }
+
 
     private IEnumerator ReadInAllHamsterInformation()
     {

@@ -63,13 +63,21 @@ public class Hamster : ScriptableObject
     [SerializeField] private Transform movePoint;
     [SerializeField] private float currentMovementSpeed = 10f;
 
+    [Header("NPC Options")]
+    [SerializeField] private bool isEvil = false;
+    [SerializeField] private float aggroRadius = 1;
+
+    [Header("Hamster UI")]
+    [SerializeField] private bool isDisplayingName = false;
+    [SerializeField] private bool isDisplayingHealth = false;
+    [SerializeField] private bool isDisplayingEndurance = false;
+
+
     private bool isTrading = false;
     private bool isTalking = false;
     private bool isInInventory = false;
     private bool isUsingItem = false;
-    [SerializeField] private bool isDisplayingName = false;
-    [SerializeField] private bool isDisplayingHealth = false;
-    [SerializeField] private bool isDisplayingEndurance = false;
+    
     private bool effectsActiv = true;
     private bool isUsingEndurance = false;
 
@@ -111,6 +119,18 @@ public class Hamster : ScriptableObject
     {
         get { return movePoint; }
         set { movePoint = value; }
+    }
+
+    public bool IsEvil
+    {
+        get { return isEvil; }
+        set { isEvil = value; }
+    }
+
+    public float AggroRadius
+    {
+        get { return aggroRadius; }
+        set { aggroRadius = value; }
     }
 
     public int EndurancePoints
@@ -677,7 +697,7 @@ public class Hamster : ScriptableObject
 
         ItemSlot slot = new ItemSlot();
 
-        /* Finde höchste SlotId im inventar */
+        /* Find next highest SlotId in the inventory */
         int newSlotId = int.MinValue;
         foreach (ItemSlot itemSlot in this.inventory)
         {
@@ -687,12 +707,13 @@ public class Hamster : ScriptableObject
             }
         }
 
-        /* Item und ItemSlot besitzen die selbe SlotId. */
+        /* Item and ItemSlot have the same SlotId */
         slot.slotId = newSlotId;
         item.SlotId = newSlotId;
         slot.item = Instantiate(item);
 
-        /* Überprüfe hier ob der itemStack überlaufen würde.
+        /* 
+         * Überprüfe hier ob der itemStack überlaufen würde.
          * Rest ist dann wieder wie oben
          */
         if (item.StackAmount >= amount)
@@ -817,7 +838,9 @@ public class Hamster : ScriptableObject
         hamsterGameManager.SetCanvasVisibility(hamsterGameManager.generalUI, generalUI);
     }
 
-
+    /*
+     * Hamster[] can me 2 at max, because max. 2 hamsters can trade.
+     */
     private void SetHamsterUI(Hamster[] hamster)
     {
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
@@ -894,6 +917,67 @@ public class Hamster : ScriptableObject
                     hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[25];
                 }
                 break;
+            case HamsterColor.FullBrown:
+                if (hamster.Length == 1)
+                {
+                    hamsterGameManager.hamsterImage.sprite = hamsterGameManager.hamsterSprites[29];
+                }
+                else
+                {
+                    hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[29];
+                }
+                break;
+            case HamsterColor.FullBlue:
+                if (hamster.Length == 1)
+                {
+                    hamsterGameManager.hamsterImage.sprite = hamsterGameManager.hamsterSprites[33];
+                }
+                else
+                {
+                    hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[33];
+                }
+                break;
+            case HamsterColor.FullGrey:
+                if (hamster.Length == 1)
+                {
+                    hamsterGameManager.hamsterImage.sprite = hamsterGameManager.hamsterSprites[37];
+                }
+                else
+                {
+                    hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[37];
+                }
+                break;
+            case HamsterColor.FullWhite:
+                if (hamster.Length == 1)
+                {
+                    hamsterGameManager.hamsterImage.sprite = hamsterGameManager.hamsterSprites[41];
+                }
+                else
+                {
+                    hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[41];
+                }
+                break;
+            case HamsterColor.Evil:
+                if (hamster.Length == 1)
+                {
+                    hamsterGameManager.hamsterImage.sprite = hamsterGameManager.hamsterSprites[45];
+                }
+                else
+                {
+                    hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[45];
+                }
+                break;
+            default:
+                if (hamster.Length == 1)
+                {
+                    hamsterGameManager.hamsterImage.sprite = hamsterGameManager.hamsterSprites[2];
+                }
+                else
+                {
+                    hamsterGameManager.tradeHamster1Image.sprite = hamsterGameManager.hamsterSprites[2];
+                }
+                break;
+
         }
 
         if (hamster.Length > 1)
@@ -920,6 +1004,24 @@ public class Hamster : ScriptableObject
                     break;
                 case HamsterColor.Pink:
                     hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[25];
+                    break;
+                case HamsterColor.FullBrown:
+                    hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[29];
+                    break;
+                case HamsterColor.FullBlue:
+                    hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[33];
+                    break;
+                case HamsterColor.FullGrey:
+                    hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[37];
+                    break;
+                case HamsterColor.FullWhite:
+                    hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[41];
+                    break;
+                case HamsterColor.Evil:
+                    hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[45];
+                    break;
+                default:
+                    hamsterGameManager.tradeHamster2Image.sprite = hamsterGameManager.hamsterSprites[2];
                     break;
             }
         }
@@ -1107,7 +1209,7 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Kaufe ein <paramref name="item"/> vom <paramref name="hamster"/>.
+    /// Buy an <paramref name="item"/> from <paramref name="hamster"/>.
     /// </summary>
     /// <param name="item"></param>
     /// <param name="hamster"></param>
@@ -1140,7 +1242,7 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
-    /// Verwende ein bestimmtes <paramref name="item"/>.
+    /// Use <paramref name="item"/> once.
     /// </summary>
     /// <param name="item"></param>
     public void UseItem(Item item)
