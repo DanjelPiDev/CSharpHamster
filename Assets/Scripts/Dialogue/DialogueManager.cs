@@ -12,6 +12,7 @@ public class DialogueManager : MonoBehaviour
     private Hamster _hamster2;
 
     private const string HAMSTER_NAME_PH = "[name]";
+    private const string HAMSTER_PLAYER_PH = "[playername]";
 
 
     private void Start()
@@ -41,6 +42,14 @@ public class DialogueManager : MonoBehaviour
             {
                 StringBuilder builder = new StringBuilder(sentence);
                 builder.Replace(HAMSTER_NAME_PH, _hamster1.Name);
+                string _sentence = builder.ToString();
+                sentences.Enqueue(_sentence);
+            }
+            /* Replace "[playername]" with the actual hamstername from hamster2 */
+            else if (sentence.Contains(HAMSTER_PLAYER_PH))
+            {
+                StringBuilder builder = new StringBuilder(sentence);
+                builder.Replace(HAMSTER_PLAYER_PH, _hamster2.Name);
                 string _sentence = builder.ToString();
                 sentences.Enqueue(_sentence);
             }

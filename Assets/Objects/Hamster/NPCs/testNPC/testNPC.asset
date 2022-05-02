@@ -48,7 +48,7 @@ MonoBehaviour:
   - defaultDialogue: 1
     sentences:
     - Hey, mein name ist [name].
-    - "Sch\xF6n dich kennenzulernen."
+    - "Sch\xF6n dich kennenzulernen [playername]."
     conditions: []
     onDialogueStart:
       m_PersistentCalls:

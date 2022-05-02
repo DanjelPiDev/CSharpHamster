@@ -229,7 +229,6 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
         {
             HamsterGameManager hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
-            
             if (eventData.pointerEnter.transform.parent.parent.parent.parent.name.Contains("1"))
             {
                 /* Check if the other hamster got enough grains */

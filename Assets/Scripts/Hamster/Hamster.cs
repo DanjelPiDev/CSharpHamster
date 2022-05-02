@@ -806,8 +806,7 @@ public class Hamster : ScriptableObject
         /* Finde das Item mit der SlotId und der item ID */
         foreach (ItemSlot m_slot in this.inventory)
         {
-            if (m_slot.item.Id == item.Id &&
-                m_slot.slotId == item.SlotId)
+            if (m_slot.item.Id == item.Id)
             {
                 slot = m_slot;
                 break;
@@ -815,6 +814,7 @@ public class Hamster : ScriptableObject
         }
 
         /* Falls das resultat der suche oben null ist darf nicht weiter ausgeführt werden. */
+        Debug.Log(slot);
         if (slot == null) return;
         for (int i = 0; i < amount; i++)
         {
@@ -869,6 +869,7 @@ public class Hamster : ScriptableObject
                     Territory.GetInstance().UpdateHamsterProperties(this);
                     return;
                 }
+                Territory.GetInstance().UpdateHamsterProperties(this);
             }
         }
     }
@@ -1608,7 +1609,7 @@ public class Hamster : ScriptableObject
         else
         {
             /* Aktiviere den Canvasdie General UI und deaktivere alle anderen UIs */
-            SetWindows(generalUI: true);
+            SetWindows(generalUI: hamsterGameManager.displayQuestLog);
 
             hamster1.isTrading = false;
             hamster2.isTrading = false;
@@ -1689,8 +1690,8 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     LookAtHamster(this, hamster);
-                    
-                    Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+
+                    //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
                     FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
@@ -1720,7 +1721,7 @@ public class Hamster : ScriptableObject
 
                     LookAtHamster(this, hamster);
 
-                    Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
                     FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
@@ -1750,7 +1751,7 @@ public class Hamster : ScriptableObject
 
                     LookAtHamster(this, hamster);
 
-                    Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
                     FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
@@ -1780,7 +1781,7 @@ public class Hamster : ScriptableObject
 
                     LookAtHamster(this, hamster);
 
-                    Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
                     FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);

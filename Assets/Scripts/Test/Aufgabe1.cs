@@ -29,7 +29,7 @@ public class Aufgabe1 : MonoBehaviour
 
         balu.SetGodMode(true);
         balu.Save();
-        
+        balu.SetGrainCount(100);
         /* Dein Code endet hier ... */
     }
 
