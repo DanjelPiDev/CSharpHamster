@@ -8,8 +8,8 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
     private HamsterGameManager hamsterGameManager;
 
-    private Hamster _ham1;
-    private Hamster _ham2;
+    private Hamster _hamster1;
+    private Hamster _hamster2;
 
     private const string HAMSTER_NAME_PH = "[name]";
 
@@ -25,8 +25,8 @@ public class DialogueManager : MonoBehaviour
         sentences.Clear();
 
 
-        _ham1 = hamster1;
-        _ham2 = hamster2;
+        _hamster1 = hamster1;
+        _hamster2 = hamster2;
 
         /* Search for the hamster which is in the dialogue */
         hamsterGameManager.npcHamsterNameDialogue.SetText(hamster1.Name);
@@ -36,10 +36,11 @@ public class DialogueManager : MonoBehaviour
         foreach (string sentence in dialogue.sentences)
         {
             /* Change keywords in dialogue */
+            /* Replace "[name]" with the actual hamstername */
             if (sentence.Contains(HAMSTER_NAME_PH))
             {
                 StringBuilder builder = new StringBuilder(sentence);
-                builder.Replace(HAMSTER_NAME_PH, _ham1.Name);
+                builder.Replace(HAMSTER_NAME_PH, _hamster1.Name);
                 string _sentence = builder.ToString();
                 sentences.Enqueue(_sentence);
             }
@@ -79,11 +80,12 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        _ham1.IsTalking = false;
-        _ham2.IsTalking = false;
-        Territory.GetInstance().UpdateHamsterProperties(_ham1);
-        Territory.GetInstance().UpdateHamsterProperties(_ham2);
+        _hamster1.IsTalking = false;
+        _hamster2.IsTalking = false;
+        Territory.GetInstance().UpdateHamsterProperties(_hamster1);
+        Territory.GetInstance().UpdateHamsterProperties(_hamster2);
 
         hamsterGameManager.SetCanvasVisibility(hamsterGameManager.dialogueCanvas, false);
+        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.generalUI, true);
     }
 }

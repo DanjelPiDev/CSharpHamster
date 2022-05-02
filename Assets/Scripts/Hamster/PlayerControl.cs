@@ -370,11 +370,13 @@ public class PlayerControl : MonoBehaviour
             }
             else if (Input.GetKeyDown(talk[0]))
             {
-                hamster.Talk();
+                if (!hamster.IsTalking && !hamster2.IsTalking)
+                    hamster.Talk();
             }
             else if (Input.GetKeyDown(talk[1]))
             {
-                hamster2.Talk();
+                if (!hamster.IsTalking && !hamster2.IsTalking)
+                    hamster2.Talk();
             }
             else if (Input.GetKeyDown(trade[0]))
             {
@@ -603,7 +605,8 @@ public class PlayerControl : MonoBehaviour
             {
                 if (Input.GetKeyDown(keycode))
                 {
-                    hamster.Talk();
+                    if (!hamster.IsTalking)
+                        hamster.Talk();
                     return;
                 }
             }

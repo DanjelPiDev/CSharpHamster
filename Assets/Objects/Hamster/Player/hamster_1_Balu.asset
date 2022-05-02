@@ -29,6 +29,7 @@ MonoBehaviour:
   canMove: 0
   canTrade: 1
   canTalk: 1
+  inventory: []
   godMode: 1
   healthPoints: 3
   endurancePoints: 0
@@ -44,10 +45,17 @@ MonoBehaviour:
   currentMovementSpeed: 10
   attackSpeedDelay: 2
   attackPower: 1
-  dialogue:
-    sentences: []
+  dialogues: []
+  turnToSpeaker: 1
   isEvil: 0
   aggroRadius: 1
   isDisplayingName: 1
   isDisplayingHealth: 1
   isDisplayingEndurance: 0
+  isTrading: 0
+  isTalking: 0
+  isInInventory: 0
+  isUsingItem: 0
+  effectsActiv: 1
+  isUsingEndurance: 0
+  tookDamage: 0

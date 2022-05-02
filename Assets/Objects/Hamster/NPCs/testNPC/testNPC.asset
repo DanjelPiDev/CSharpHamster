@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: testNPC
   m_EditorClassIdentifier: 
   id: 0
-  hamsterName: Udo
+  hamsterName: Harry
   row: 0
   column: 0
   direction: 2
-  grainCount: 0
+  grainCount: 10
   playerControl: 0
   respawn: 0
   isNPC: 1
@@ -25,10 +25,14 @@ MonoBehaviour:
   movementPattern: 0
   spriteRenderer: {fileID: 0}
   hamsterObject: {fileID: 0}
-  hamsterColor: 11
+  hamsterColor: 8
   canMove: 1
-  canTrade: 0
+  canTrade: 1
   canTalk: 1
+  inventory:
+  - slotId: 0
+    item: {fileID: 11400000, guid: ba24753d3ff502a41aa3708b70202891, type: 2}
+    quantity: 2
   godMode: 0
   healthPoints: 2
   endurancePoints: 0
@@ -40,12 +44,28 @@ MonoBehaviour:
   currentMovementSpeed: 1
   attackSpeedDelay: 3
   attackPower: 1
-  dialogue:
+  dialogues:
+  - defaultDialogue: 1
     sentences:
-    - Hey, mein Name ist [name].
+    - Hey, mein name ist [name].
     - "Sch\xF6n dich kennenzulernen."
+    conditions: []
+    onDialogueStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onDialogueEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  turnToSpeaker: 1
   isEvil: 0
   aggroRadius: 1
   isDisplayingName: 0
   isDisplayingHealth: 1
   isDisplayingEndurance: 0
+  isTrading: 0
+  isTalking: 0
+  isInInventory: 0
+  isUsingItem: 0
+  effectsActiv: 0
+  isUsingEndurance: 0
+  tookDamage: 0

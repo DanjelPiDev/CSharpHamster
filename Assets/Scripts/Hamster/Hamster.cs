@@ -12,7 +12,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEditor;
 #endif
 
-
+[System.Serializable]
 public class ItemSlot : IComparable<ItemSlot>
 {
     public int slotId = int.MinValue + 1;
@@ -68,7 +68,8 @@ public class Hamster : ScriptableObject
     [SerializeField] private int attackPower = 1;
 
     [Header("NPC Options")]
-    [SerializeField] private Dialogue dialogue;
+    [SerializeField] private List<Dialogue> dialogues = new List<Dialogue>();
+    [SerializeField] private bool turnToSpeaker = true;
     [SerializeField] private bool isEvil = false;
     [SerializeField] private int aggroRadius = 1;
 
@@ -77,15 +78,15 @@ public class Hamster : ScriptableObject
     [SerializeField] private bool isDisplayingHealth = false;
     [SerializeField] private bool isDisplayingEndurance = false;
 
+    [Header("Current States (Don't change)")]
+    [SerializeField] private bool isTrading = false;
+    [SerializeField] private bool isTalking = false;
+    [SerializeField] private bool isInInventory = false;
+    [SerializeField] private bool isUsingItem = false;
 
-    private bool isTrading = false;
-    private bool isTalking = false;
-    private bool isInInventory = false;
-    private bool isUsingItem = false;
-    
-    private bool effectsActiv = true;
-    private bool isUsingEndurance = false;
-    private bool tookDamage = false;
+    [SerializeField] private bool effectsActiv = true;
+    [SerializeField] private bool isUsingEndurance = false;
+    [SerializeField] private bool tookDamage = false;
 
     private HamsterGameManager hamsterGameManager;
     private readonly string path = "Assets/Objects/Hamster/Player/hamster_";
@@ -115,9 +116,9 @@ public class Hamster : ScriptableObject
         set { id = value; }
     }
 
-    public Dialogue NPCDialogue
+    public List<Dialogue> NPCDialogues
     {
-        get { return dialogue; }
+        get { return dialogues; }
     }
 
     public bool Respawn
@@ -354,7 +355,9 @@ public class Hamster : ScriptableObject
         this.healthPointsFull = Mathf.Abs(healthPoints);
         this.hamsterColor = color;
         this.playerControl = playerControl;
-        
+        this.isTrading = false;
+        this.isTalking = false;
+        this.isInInventory = false;
 
         //collisionLayer[0] |= (1 << LayerMask.NameToLayer("Wall"));
         //collisionLayer[1] |= (1 << LayerMask.NameToLayer("Water"));
@@ -365,12 +368,13 @@ public class Hamster : ScriptableObject
         //if (this.playerControl)
         //    Camera.main.transform.parent = Territory.GetInstance().GetHamsterObject(this.id).transform;
 
-        inventory = new List<ItemSlot>();
+        //inventory = new List<ItemSlot>();
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
         this.DisplayName(this.isDisplayingName);
         this.DisplayHealth(this.isDisplayingHealth);
         this.DisplayEndurance(this.isDisplayingEndurance);
+        Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
     public void Save()
@@ -446,12 +450,14 @@ public class Hamster : ScriptableObject
         /* Check here if the player/hamster is moving, if yes, disable UIs like inventory/trade/dialogue */
         if (this.isTrading)
         {
+            HamsterGameManager.isTrading = false;
+            this.isTrading = false;
             DisplayTradeWindow(HamsterGameManager.hamster1, HamsterGameManager.hamster2);
         }
 
         if (this.isTalking)
         {
-            // need to implement
+            SetWindows(dialogueUI: false);
         }
 
         if (this.isInInventory)
@@ -496,7 +502,7 @@ public class Hamster : ScriptableObject
         }
         else
         {
-            if (this.playerControl) return;
+            if (this.playerControl || this.isNPC) return;
             Debug.LogError(this.hamsterName + noGrainsString + "\nPosition (" + this.column + ", " + this.row + ")");
         }
     }
@@ -524,7 +530,7 @@ public class Hamster : ScriptableObject
         }
         else
         {
-            if (this.playerControl) return;
+            if (this.playerControl || this.isNPC) return;
             Debug.LogError(this.hamsterName + noItemString + "\nPosition (" + this.column + ", " + this.row + ")");
         }
     }
@@ -1156,7 +1162,7 @@ public class Hamster : ScriptableObject
                 
                 if (hamster == null)
                 {
-                    if (this.playerControl) return;
+                    if (this.playerControl || this.isNPC) return;
                     Debug.LogError(this.hamsterName + noTradeString);
                     return;
                 }
@@ -1165,10 +1171,16 @@ public class Hamster : ScriptableObject
                 {
                     this.isTrading = true;
                     hamster.IsTrading = true;
-
+                    
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    LookAtHamster(this, hamster);
+
+                    HamsterGameManager.isTrading = true;
                     DisplayTradeWindow(this, hamster);
                 }
                 else if(hamster != null && !hamster.CanTrade)
@@ -1181,7 +1193,7 @@ public class Hamster : ScriptableObject
 
                 if (hamster == null)
                 {
-                    if (this.playerControl) return;
+                    if (this.playerControl || this.isNPC) return;
                     Debug.LogError(this.hamsterName + noTradeString);
                     return;
                 }
@@ -1194,6 +1206,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    LookAtHamster(this, hamster);
+
+                    HamsterGameManager.isTrading = true;
                     DisplayTradeWindow(this, hamster);
                 }
                 else if (hamster != null && !hamster.CanTrade)
@@ -1206,7 +1224,7 @@ public class Hamster : ScriptableObject
 
                 if (hamster == null)
                 {
-                    if (this.playerControl) return;
+                    if (this.playerControl || this.isNPC) return;
                     Debug.LogError(this.hamsterName + noTradeString);
                     return;
                 }
@@ -1219,6 +1237,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    LookAtHamster(this, hamster);
+
+                    HamsterGameManager.isTrading = true;
                     DisplayTradeWindow(this, hamster);
                 }
                 else if (hamster != null && !hamster.CanTrade)
@@ -1231,7 +1255,7 @@ public class Hamster : ScriptableObject
 
                 if (hamster == null)
                 {
-                    if (this.playerControl) return;
+                    if (this.playerControl || this.isNPC) return;
                     Debug.LogError(this.hamsterName + noTradeString);
                     return;
                 }
@@ -1244,6 +1268,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    LookAtHamster(this, hamster);
+
+                    HamsterGameManager.isTrading = true;
                     DisplayTradeWindow(this, hamster);
                 }
                 else if (hamster != null && !hamster.CanTrade)
@@ -1252,10 +1282,6 @@ public class Hamster : ScriptableObject
                 }
                 break;
         }
-
-        // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-        Territory.GetInstance().UpdateHamsterProperties(this);
-        Territory.GetInstance().UpdateHamsterProperties(hamster);
     }
 
     /// <summary>
@@ -1527,7 +1553,7 @@ public class Hamster : ScriptableObject
     {
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
-        if (!HamsterGameManager.isTrading)
+        if (hamster1.isTrading && hamster2.isTrading)
         {
             /* Aktiviere den Canvas für den Handel und deaktivere alle anderen UIs */
             SetWindows(tradeUI: true);
@@ -1536,36 +1562,38 @@ public class Hamster : ScriptableObject
             SetHamsterUI(new Hamster[] { hamster1, hamster2 });
 
             /* Füge alle items in die inventare ein "Hamster1" */
-            for (int i = 0; i < hamster1.inventory.Count; i++)
+            if (hamster1.inventory != null && hamster1.inventory.Count > 0)
             {
-                GameObject itemSlot = Instantiate(hamsterGameManager.itemPrefab, hamsterGameManager.tradeItemContentHamster1);
-                itemSlot.GetComponent<ItemHolder>().item = hamster1.inventory[i].item;
-                itemSlot.GetComponent<ItemHolder>().quantity = hamster1.inventory[i].quantity;
-                itemSlot.GetComponent<ItemHolder>().itemName.SetText(hamster1.inventory[i].item.Name);
-                itemSlot.GetComponent<ItemHolder>().itemBuyPrice.SetText(hamster1.inventory[i].item.BuyPrice.ToString());
-                itemSlot.GetComponent<ItemHolder>().itemSellPrice.SetText(hamster1.inventory[i].item.SellPrice.ToString());
-                itemSlot.GetComponent<ItemHolder>().itemQuantity.SetText(itemSlot.GetComponent<ItemHolder>().quantity + "/" + hamster1.inventory[i].item.StackAmount.ToString());
-                itemSlot.GetComponent<ItemHolder>().itemImage.sprite = itemSlot.GetComponent<ItemHolder>().item.ItemImage;
+                for (int i = 0; i < hamster1.inventory.Count; i++)
+                {
+                    GameObject itemSlot = Instantiate(hamsterGameManager.itemPrefab, hamsterGameManager.tradeItemContentHamster1);
+                    itemSlot.GetComponent<ItemHolder>().item = hamster1.inventory[i].item;
+                    itemSlot.GetComponent<ItemHolder>().quantity = hamster1.inventory[i].quantity;
+                    itemSlot.GetComponent<ItemHolder>().itemName.SetText(hamster1.inventory[i].item.Name);
+                    itemSlot.GetComponent<ItemHolder>().itemBuyPrice.SetText(hamster1.inventory[i].item.BuyPrice.ToString());
+                    itemSlot.GetComponent<ItemHolder>().itemSellPrice.SetText(hamster1.inventory[i].item.SellPrice.ToString());
+                    itemSlot.GetComponent<ItemHolder>().itemQuantity.SetText(itemSlot.GetComponent<ItemHolder>().quantity + "/" + hamster1.inventory[i].item.StackAmount.ToString());
+                    itemSlot.GetComponent<ItemHolder>().itemImage.sprite = itemSlot.GetComponent<ItemHolder>().item.ItemImage;
+                }
             }
+                
 
             /* Füge alle items in die inventare ein "Hamster2" */
-            for (int i = 0; i < hamster2.inventory.Count; i++)
+            if (hamster2.inventory != null && hamster2.inventory.Count > 0)
             {
-                GameObject itemSlot = Instantiate(hamsterGameManager.itemPrefab, hamsterGameManager.tradeItemContentHamster2);
-                itemSlot.GetComponent<ItemHolder>().item = hamster2.inventory[i].item;
-                itemSlot.GetComponent<ItemHolder>().quantity = hamster2.inventory[i].quantity;
-                itemSlot.GetComponent<ItemHolder>().itemName.SetText(hamster2.inventory[i].item.Name);
-                itemSlot.GetComponent<ItemHolder>().itemBuyPrice.SetText(hamster2.inventory[i].item.BuyPrice.ToString());
-                itemSlot.GetComponent<ItemHolder>().itemSellPrice.SetText(hamster2.inventory[i].item.SellPrice.ToString());
-                itemSlot.GetComponent<ItemHolder>().itemQuantity.SetText(itemSlot.GetComponent<ItemHolder>().quantity + "/" + hamster2.inventory[i].item.StackAmount.ToString());
-                itemSlot.GetComponent<ItemHolder>().itemImage.sprite = itemSlot.GetComponent<ItemHolder>().item.ItemImage;
+                for (int i = 0; i < hamster2.inventory.Count; i++)
+                {
+                    GameObject itemSlot = Instantiate(hamsterGameManager.itemPrefab, hamsterGameManager.tradeItemContentHamster2);
+                    itemSlot.GetComponent<ItemHolder>().item = hamster2.inventory[i].item;
+                    itemSlot.GetComponent<ItemHolder>().quantity = hamster2.inventory[i].quantity;
+                    itemSlot.GetComponent<ItemHolder>().itemName.SetText(hamster2.inventory[i].item.Name);
+                    itemSlot.GetComponent<ItemHolder>().itemBuyPrice.SetText(hamster2.inventory[i].item.BuyPrice.ToString());
+                    itemSlot.GetComponent<ItemHolder>().itemSellPrice.SetText(hamster2.inventory[i].item.SellPrice.ToString());
+                    itemSlot.GetComponent<ItemHolder>().itemQuantity.SetText(itemSlot.GetComponent<ItemHolder>().quantity + "/" + hamster2.inventory[i].item.StackAmount.ToString());
+                    itemSlot.GetComponent<ItemHolder>().itemImage.sprite = itemSlot.GetComponent<ItemHolder>().item.ItemImage;
+                }
             }
-
-
-
-
-            hamster1.isTrading = true;
-            hamster2.isTrading = true;
+            
 
             hamster1.canMove = false;
             hamster2.canMove = false;
@@ -1574,7 +1602,8 @@ public class Hamster : ScriptableObject
                 Territory.playerCanMove = false;
                 Territory.player2CanMove = false;
             }
-            HamsterGameManager.isTrading = true;
+
+            //HamsterGameManager.isTrading = true;
         }
         else
         {
@@ -1603,7 +1632,27 @@ public class Hamster : ScriptableObject
                 Destroy(hamsterGameManager.tradeItemContentHamster2.GetChild(i).gameObject);
             }
 
-            HamsterGameManager.isTrading = false;
+            //HamsterGameManager.isTrading = false;
+        }
+        Territory.GetInstance().UpdateHamsterProperties(HamsterGameManager.hamster1);
+        Territory.GetInstance().UpdateHamsterProperties(HamsterGameManager.hamster2);
+    }
+
+    private void LookAtHamster(Hamster hamster1, Hamster hamster2)
+    {
+        if (hamster2.turnToSpeaker)
+        {
+            /* Change the looking direction of hamster2 */
+            if (hamster1.direction == LookingDirection.North)
+                hamster2.direction = LookingDirection.South;
+            else if (hamster1.direction == LookingDirection.South)
+                hamster2.direction = LookingDirection.North;
+            else if (hamster1.direction == LookingDirection.East)
+                hamster2.direction = LookingDirection.West;
+            else if (hamster1.direction == LookingDirection.West)
+                hamster2.direction = LookingDirection.East;
+
+            Territory.GetInstance().UpdateHamsterProperties(hamster2);
         }
     }
 
@@ -1639,10 +1688,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    LookAtHamster(this, hamster);
+                    
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1667,10 +1718,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    LookAtHamster(this, hamster);
+
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1695,10 +1748,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    LookAtHamster(this, hamster);
+
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1723,10 +1778,12 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
 
+                    LookAtHamster(this, hamster);
+
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1959,6 +2016,15 @@ public class Hamster : ScriptableObject
             if (this.isInInventory)
             {
                 DisplayInventory();
+            }
+            if (this.isTalking)
+            {
+                SetWindows(generalUI: true, dialogueUI: false);
+                this.isTalking = false;
+            }
+            if (this.isTrading)
+            {
+                Trade();
             }
 
             Territory.GetInstance().UpdateHamsterProperties(this, updateEnduranceUI: true);

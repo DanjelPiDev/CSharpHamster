@@ -976,6 +976,8 @@ public class Territory : MonoBehaviour
                 ham.Inventory               = hamster.Inventory;
                 ham.CanTalk                 = hamster.CanTalk;
                 ham.CanTrade                = hamster.CanTrade;
+                ham.IsTrading               = hamster.IsTrading;
+                ham.IsTalking               = hamster.IsTalking;
                 ham.IsInInventory           = hamster.IsInInventory;
                 ham.IsUsingEndurance        = hamster.IsUsingEndurance;
                 ham.IsDisplayingName        = hamster.IsDisplayingName;
@@ -991,23 +993,6 @@ public class Territory : MonoBehaviour
                 {
                     ham.StartPoint = hamster.StartPoint;
                 }
-                
-                // Refresh moving effect (Aktiv or not)
-                /*if (!ham.EffectsActiv)
-                {
-                    //ham.MoveSpeed = 1;
-                }
-                else
-                {
-                    foreach(ItemSlot slot in ham.Inventory)
-                    {
-                        if (slot.item.IsEquipped && slot.item.hasSpecialEffects && slot.item.MoveSpeed > 0)
-                        {
-                            //ham.MoveSpeed = slot.item.MoveSpeed;
-                        }
-                    }
-                    
-                }*/
 
                 if (createNameUI)
                 {
