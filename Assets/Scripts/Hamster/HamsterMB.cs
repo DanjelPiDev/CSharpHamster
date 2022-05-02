@@ -8,6 +8,7 @@ public class HamsterMB : MonoBehaviour
     public Hamster hamster;
 
     private HamsterGameManager hamsterGameManager;
+    private WaitForSecondsRealtime wait;
 
     private void Start()
     {
@@ -15,7 +16,9 @@ public class HamsterMB : MonoBehaviour
 
         this.hamster = Instantiate(hamster);
 
+        wait = new WaitForSecondsRealtime(this.hamster.AttackSpeedDelay);
         base.StartCoroutine(ReadInAllHamsterInformation());
+        base.StartCoroutine(HitTargetRegistry());
     }
 
     private void Guard(int aggroRadius = 1)
@@ -24,10 +27,37 @@ public class HamsterMB : MonoBehaviour
 
         foreach (Hamster ham in Territory.activHamsters)
         {
-            // check for the hamster
+            if (Vector2.Equals(new Vector2(this.hamster.GetHamsterPosition().x + aggroRadius, this.hamster.GetHamsterPosition().y), ham.GetHamsterPosition()))
+            {
+                this.hamster.SetLookingDirection(Hamster.LookingDirection.East);
+                this.hamster.Hit();
+            }
+            else if (Vector2.Equals(new Vector2(this.hamster.GetHamsterPosition().x - aggroRadius, this.hamster.GetHamsterPosition().y), ham.GetHamsterPosition()))
+            {
+                this.hamster.SetLookingDirection(Hamster.LookingDirection.West);
+                this.hamster.Hit();
+            }
+            else if (Vector2.Equals(new Vector2(this.hamster.GetHamsterPosition().x, this.hamster.GetHamsterPosition().y + aggroRadius), ham.GetHamsterPosition()))
+            {
+                this.hamster.SetLookingDirection(Hamster.LookingDirection.North);
+                this.hamster.Hit();
+            }
+            else if (Vector2.Equals(new Vector2(this.hamster.GetHamsterPosition().x, this.hamster.GetHamsterPosition().y - aggroRadius), ham.GetHamsterPosition()))
+            {
+                this.hamster.SetLookingDirection(Hamster.LookingDirection.South);
+                this.hamster.Hit();
+            }
         }
     }
 
+    private IEnumerator HitTargetRegistry()
+    {
+        while (true)
+        {
+            yield return wait;
+            Guard(this.hamster.AggroRadius);
+        }
+    }
 
     private IEnumerator ReadInAllHamsterInformation()
     {

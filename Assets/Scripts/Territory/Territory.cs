@@ -985,8 +985,13 @@ public class Territory : MonoBehaviour
                 ham.EffectsActiv            = hamster.EffectsActiv;
                 ham.MoveSpeed               = hamster.MoveSpeed;
                 ham.Respawn                 = hamster.Respawn;
+                ham.GodMode                 = hamster.GodMode;
 
-
+                if (ham.Respawn && ham.StartPoint == null)
+                {
+                    ham.StartPoint = hamster.StartPoint;
+                }
+                
                 // Refresh moving effect (Aktiv or not)
                 /*if (!ham.EffectsActiv)
                 {
@@ -1226,6 +1231,15 @@ public class Territory : MonoBehaviour
 
         this.hamsters.Remove(hamster);
         activHamsters = this.hamsters;
+
+        for (int i = 0; i < hamsterGameManager.npcHamsterCollection.childCount; i++)
+        {
+            if (hamsterGameManager.npcHamsterCollection.GetChild(i).GetComponent<HamsterMB>().hamster.Id == hamster.Id)
+            {
+                Destroy(hamsterGameManager.npcHamsterCollection.GetChild(i).gameObject);
+                return;
+            }
+        }
     }
 
     public void RemoveHamster(int index)

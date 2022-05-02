@@ -22,13 +22,14 @@ MonoBehaviour:
   respawn: 0
   isNPC: 1
   moveRandom: 0
-  movementPattern: 0
+  movementPattern: 4
   spriteRenderer: {fileID: 0}
   hamsterObject: {fileID: 0}
   hamsterColor: 11
   canMove: 1
   canTrade: 0
   canTalk: 0
+  godMode: 0
   healthPoints: 4
   endurancePoints: 0
   healthPointsFull: 4
@@ -41,6 +42,10 @@ MonoBehaviour:
     m_Bits: 16
   movePoint: {fileID: 0}
   currentMovementSpeed: 0
+  attackSpeedDelay: 3
+  attackPower: 1
+  isEvil: 1
+  aggroRadius: 1
   isDisplayingName: 0
-  isDisplayingHealth: 0
+  isDisplayingHealth: 1
   isDisplayingEndurance: 0

@@ -27,6 +27,7 @@ public class Aufgabe1 : MonoBehaviour
         balu.DisplayName(true);
         balu.DisplayHealth(true);
 
+        balu.SetGodMode(true);
         balu.Save();
         /* Dein Code endet hier ... */
     }

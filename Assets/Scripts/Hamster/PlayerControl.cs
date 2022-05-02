@@ -591,7 +591,9 @@ public class PlayerControl : MonoBehaviour
             {
                 if (Input.GetKeyDown(keycode))
                 {
+                    /* Dein Code startet hier ... */
                     hamster.Hit();
+                    /* Dein Code endet hier ... */
                     return;
                 }
             }

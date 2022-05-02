@@ -52,6 +52,7 @@ public class Hamster : ScriptableObject
     [SerializeField] private bool canTrade = true;
     [SerializeField] private bool canTalk = true;
     [SerializeField] private List<ItemSlot> inventory = new List<ItemSlot>();
+    [SerializeField] private bool godMode = true; // Off, because of reasons
     [SerializeField] private int healthPoints;
     [SerializeField] private int endurancePoints;
     [SerializeField, Min(0)] private int healthPointsFull;
@@ -62,10 +63,12 @@ public class Hamster : ScriptableObject
     [SerializeField] private LayerMask[] collisionLayer = new LayerMask[2];
     [SerializeField] private Transform movePoint;
     [SerializeField] private float currentMovementSpeed = 10f;
+    [SerializeField] private float attackSpeedDelay = 2f;
+    [SerializeField] private int attackPower = 1;
 
     [Header("NPC Options")]
     [SerializeField] private bool isEvil = false;
-    [SerializeField] private float aggroRadius = 1;
+    [SerializeField] private int aggroRadius = 1;
 
     [Header("Hamster UI")]
     [SerializeField] private bool isDisplayingName = false;
@@ -115,6 +118,12 @@ public class Hamster : ScriptableObject
         set { healthPoints = value; }
     }
 
+    public bool GodMode
+    {
+        get { return godMode; }
+        set { godMode = value; }
+    }
+
     public Transform MovePoint
     {
         get { return movePoint; }
@@ -127,10 +136,22 @@ public class Hamster : ScriptableObject
         set { isEvil = value; }
     }
 
-    public float AggroRadius
+    public int AggroRadius
     {
         get { return aggroRadius; }
         set { aggroRadius = value; }
+    }
+
+    public float AttackSpeedDelay
+    {
+        get { return attackSpeedDelay; }
+        set { attackSpeedDelay = value; }
+    }
+
+    public int AttackPower
+    {
+        get { return attackPower; }
+        set { attackPower = value; }
     }
 
     public int EndurancePoints
@@ -352,6 +373,9 @@ public class Hamster : ScriptableObject
         AssetDatabase.CreateAsset(this, path + this.id + "_" + this.hamsterName + ".asset");
     }
 
+    /*
+     * For one Task
+     */
     public void RandomMove()
     {
         System.Random rnd = new System.Random();
@@ -376,6 +400,13 @@ public class Hamster : ScriptableObject
     public void SetRespawn(bool b)
     {
         this.respawn = b;
+        this.startPoint = new Vector2(this.column, this.row);
+        Territory.GetInstance().UpdateHamsterProperties(this);
+    }
+
+    public void SetGodMode(bool b)
+    {
+        this.godMode = b;
         Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
@@ -518,7 +549,7 @@ public class Hamster : ScriptableObject
 
         points = Mathf.Abs(points);
         this.healthPointsFull -= points;
-        if (this.healthPointsFull <= 0 && this.respawn)
+        if (this.healthPointsFull <= 0 && this.respawn && !this.godMode)
         {
             Debug.Log(this.hamsterName + noMoreHealthString);
             this.column = (int)startPoint.x;
@@ -526,13 +557,18 @@ public class Hamster : ScriptableObject
 
             this.healthPointsFull = this.healthPoints;
         }
-        else if (this.healthPointsFull <= 0 && !this.respawn)
+        else if (this.healthPointsFull <= 0 && !this.respawn && !this.godMode)
         {
             this.hamsterObject.transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
 
             this.isDisplayingHealth = false;
             this.isDisplayingEndurance = false;
             this.isDisplayingName = false;
+
+            Destroy(this.hamsterObject);
+            Territory.GetInstance().RemoveHamster(this);
+            //Destroy(this);
+            return;
         }
 
         Territory.GetInstance().UpdateHamsterProperties(this, updateHealthUI: true);
@@ -2075,6 +2111,10 @@ public class Hamster : ScriptableObject
         Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
+    /* 
+     * For one task
+     * 
+     */
     public void Hit()
     {
         if (!FrontIsClear() && !FrontIsClearNoHamster())

@@ -29,6 +29,7 @@ MonoBehaviour:
   canMove: 0
   canTrade: 1
   canTalk: 1
+  godMode: 1
   healthPoints: 3
   endurancePoints: 0
   healthPointsFull: 2
@@ -41,6 +42,10 @@ MonoBehaviour:
     m_Bits: 16
   movePoint: {fileID: 0}
   currentMovementSpeed: 10
+  attackSpeedDelay: 2
+  attackPower: 1
+  isEvil: 0
+  aggroRadius: 1
   isDisplayingName: 1
   isDisplayingHealth: 1
   isDisplayingEndurance: 0
