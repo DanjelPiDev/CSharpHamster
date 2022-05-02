@@ -29,6 +29,7 @@ public class Aufgabe1 : MonoBehaviour
 
         balu.SetGodMode(true);
         balu.Save();
+        
         /* Dein Code endet hier ... */
     }
 

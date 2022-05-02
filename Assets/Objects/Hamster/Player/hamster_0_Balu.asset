@@ -44,6 +44,9 @@ MonoBehaviour:
   currentMovementSpeed: 10
   attackSpeedDelay: 2
   attackPower: 1
+  dialogue:
+    sentences:
+    - 
   isEvil: 0
   aggroRadius: 1
   isDisplayingName: 1

@@ -68,6 +68,7 @@ public class Hamster : ScriptableObject
     [SerializeField] private int attackPower = 1;
 
     [Header("NPC Options")]
+    [SerializeField] private Dialogue dialogue;
     [SerializeField] private bool isEvil = false;
     [SerializeField] private int aggroRadius = 1;
 
@@ -112,6 +113,11 @@ public class Hamster : ScriptableObject
     {
         get { return id; }
         set { id = value; }
+    }
+
+    public Dialogue NPCDialogue
+    {
+        get { return dialogue; }
     }
 
     public bool Respawn
@@ -1634,6 +1640,9 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    /* Display the dialogue UI and insert all information */
+                    SetWindows(dialogueUI: true);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1659,6 +1668,9 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    /* Display the dialogue UI and insert all information */
+                    SetWindows(dialogueUI: true);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1684,6 +1696,9 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    /* Display the dialogue UI and insert all information */
+                    SetWindows(dialogueUI: true);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1709,6 +1724,9 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     Territory.GetInstance().DisplayDialogueWindow(this, hamster);
+                    /* Display the dialogue UI and insert all information */
+                    SetWindows(dialogueUI: true);
+                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {

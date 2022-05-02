@@ -84,6 +84,11 @@ public class HamsterGameManager : MonoBehaviour
     [ConditionalHide("showReferences", true)] public Transform npcHamsterCollection;
     [ConditionalHide("showReferences", true)] public Transform hamsterCollection;
 
+    [Header("Dialogue")]
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI npcHamsterNameDialogue;
+    [ConditionalHide("showReferences", true)] public TextMeshProUGUI npcHamsterSentenceDialogue;
+    [ConditionalHide("showReferences", true)] public Image npcHamsterImageDialogue;
+
     public static Hamster hamster1;
     public static Hamster hamster2;
 

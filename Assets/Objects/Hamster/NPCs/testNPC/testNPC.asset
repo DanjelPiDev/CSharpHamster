@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: testNPC
   m_EditorClassIdentifier: 
   id: 0
-  hamsterName: 
+  hamsterName: Udo
   row: 0
   column: 0
   direction: 2
@@ -28,7 +28,7 @@ MonoBehaviour:
   hamsterColor: 11
   canMove: 1
   canTrade: 0
-  canTalk: 0
+  canTalk: 1
   godMode: 0
   healthPoints: 2
   endurancePoints: 0
@@ -40,7 +40,11 @@ MonoBehaviour:
   currentMovementSpeed: 1
   attackSpeedDelay: 3
   attackPower: 1
-  isEvil: 1
+  dialogue:
+    sentences:
+    - Hey, mein Name ist [name].
+    - "Sch\xF6n dich kennenzulernen."
+  isEvil: 0
   aggroRadius: 1
   isDisplayingName: 0
   isDisplayingHealth: 1

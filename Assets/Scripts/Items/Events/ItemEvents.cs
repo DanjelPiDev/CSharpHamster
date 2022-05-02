@@ -70,7 +70,8 @@ public class ItemEvents : MonoBehaviour
                 if (slot.item.Id == item.Id &&
                     slot.item.hasSpecialEffects)
                 {
-                    hamster.MoveSpeed -= slot.item.MoveSpeed;
+                    if (slot.item.MoveSpeed > 0)
+                        hamster.MoveSpeed -= slot.item.MoveSpeed;
                     hamster.EffectsActiv = false;
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
                 }
