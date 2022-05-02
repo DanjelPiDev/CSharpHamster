@@ -85,10 +85,18 @@ public class HamsterMB : MonoBehaviour
                  * Look if the npc hamster should load the data from the file
                  * instead of loading it from the gameObject position 
                  */
+                float tmpXPos = hamsterGameManager.npcHamsterCollection.GetChild(i).position.x;
+                float tmpYPos = hamsterGameManager.npcHamsterCollection.GetChild(i).position.y;
                 if (!hamsterGameManager.loadStoredInfo)
                 {
-                    hamster.Column = (int)Math.Round((hamsterGameManager.npcHamsterCollection.GetChild(i).position.x / 2.56f), MidpointRounding.ToEven);
-                    hamster.Row = (int)Math.Round((hamsterGameManager.npcHamsterCollection.GetChild(i).position.y / 2.56f), MidpointRounding.ToEven);
+                    hamster.Column = (int)Math.Round((Math.Abs(hamsterGameManager.npcHamsterCollection.GetChild(i).position.x) / 2.56f), MidpointRounding.ToEven);
+                    hamster.Row = (int)Math.Round((Math.Abs(hamsterGameManager.npcHamsterCollection.GetChild(i).position.y) / 2.56f), MidpointRounding.ToEven);
+
+
+                    if (tmpXPos < 0)
+                        hamster.Column = -1 * (hamster.Column + 1);
+                    if (tmpYPos < 0)
+                        hamster.Row = -1 * (hamster.Row + 1);
                 }
 
                 hamster.Id = idCounter;

@@ -12,6 +12,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEditor;
 #endif
 
+
 public class ItemSlot : IComparable<ItemSlot>
 {
     public int slotId = int.MinValue + 1;
@@ -83,6 +84,7 @@ public class Hamster : ScriptableObject
     
     private bool effectsActiv = true;
     private bool isUsingEndurance = false;
+    private bool tookDamage = false;
 
     private HamsterGameManager hamsterGameManager;
     private readonly string path = "Assets/Objects/Hamster/Player/hamster_";
@@ -98,6 +100,12 @@ public class Hamster : ScriptableObject
     {
         get { return inventory; }
         set { inventory = value; }
+    }
+
+    public bool TookDamage
+    {
+        get { return tookDamage; }
+        set { tookDamage = value; }
     }
 
     public int Id
@@ -342,8 +350,8 @@ public class Hamster : ScriptableObject
         this.playerControl = playerControl;
         
 
-        collisionLayer[0] |= (1 << LayerMask.NameToLayer("Wall"));
-        collisionLayer[1] |= (1 << LayerMask.NameToLayer("Water"));
+        //collisionLayer[0] |= (1 << LayerMask.NameToLayer("Wall"));
+        //collisionLayer[1] |= (1 << LayerMask.NameToLayer("Water"));
 
         this.id = Territory.GetInstance().GetHamsters().Count;
         Territory.GetInstance().AddHamster(Instantiate(this));
@@ -549,6 +557,7 @@ public class Hamster : ScriptableObject
 
         points = Mathf.Abs(points);
         this.healthPointsFull -= points;
+        this.tookDamage = true;
         if (this.healthPointsFull <= 0 && this.respawn && !this.godMode)
         {
             Debug.Log(this.hamsterName + noMoreHealthString);
@@ -567,7 +576,6 @@ public class Hamster : ScriptableObject
 
             Destroy(this.hamsterObject);
             Territory.GetInstance().RemoveHamster(this);
-            //Destroy(this);
             return;
         }
 
