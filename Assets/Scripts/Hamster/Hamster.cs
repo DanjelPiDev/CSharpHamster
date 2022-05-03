@@ -87,6 +87,7 @@ public class Hamster : ScriptableObject
     [SerializeField] private bool effectsActiv = true;
     [SerializeField] private bool isUsingEndurance = false;
     [SerializeField] private bool tookDamage = false;
+    [SerializeField] private bool snapCamera = false;
 
     private HamsterGameManager hamsterGameManager;
     private readonly string path = "Assets/Objects/Hamster/Player/hamster_";
@@ -119,6 +120,12 @@ public class Hamster : ScriptableObject
     public List<Dialogue> NPCDialogues
     {
         get { return dialogues; }
+    }
+
+    public bool SnapCamera
+    {
+        get { return snapCamera; }
+        set { snapCamera = value; }
     }
 
     public bool Respawn
@@ -374,6 +381,7 @@ public class Hamster : ScriptableObject
         this.DisplayName(this.isDisplayingName);
         this.DisplayHealth(this.isDisplayingHealth);
         this.DisplayEndurance(this.isDisplayingEndurance);
+        Territory.GetInstance().UpdateHamsterProperties(this, createNameUI: true);
         Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
@@ -872,6 +880,12 @@ public class Hamster : ScriptableObject
                 Territory.GetInstance().UpdateHamsterProperties(this);
             }
         }
+    }
+
+    public void SetCameraSnap(bool b)
+    {
+        this.snapCamera = b;
+        Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
     /// <summary>
@@ -2161,11 +2175,7 @@ public class Hamster : ScriptableObject
     public void SetPlayerControls(bool playerControl, bool cameraFollow = false)
     {
         this.playerControl = playerControl;
-        // Soll die Kamera den spieler verfolgen?
-        if (cameraFollow)
-            Camera.main.transform.parent = Territory.GetInstance().GetHamsterObject(this.id).transform;
-        else
-            Camera.main.transform.parent = null;
+        this.snapCamera = cameraFollow;
 
         // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
         Territory.GetInstance().UpdateHamsterProperties(this);

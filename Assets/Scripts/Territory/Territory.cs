@@ -23,8 +23,10 @@ public class Territory : MonoBehaviour
     [SerializeField] private Transform itemsTransform;
     
     [SerializeField] private int grainCount = 0;
+    [SerializeField] private GameObject cam;
     private float gameSpeed;
 
+    
 
     public ItemCollection itemCollection;
 
@@ -75,6 +77,8 @@ public class Territory : MonoBehaviour
         lampTilemap = GameObject.FindGameObjectWithTag("TileMap").transform.GetChild(1).GetComponent<Tilemap>();
         itemsTilemap = GameObject.FindGameObjectWithTag("TileMap").transform.GetChild(2).GetComponent<Tilemap>();
         g_itemsTransform = itemsTransform;
+
+        cam = GameObject.Find("Main Camera 2");
 
         BoundsInt bound = tilemap.cellBounds;
 
@@ -988,10 +992,28 @@ public class Territory : MonoBehaviour
                 ham.MoveSpeed               = hamster.MoveSpeed;
                 ham.Respawn                 = hamster.Respawn;
                 ham.GodMode                 = hamster.GodMode;
+                ham.SnapCamera              = hamster.SnapCamera;
 
                 if (ham.Respawn && ham.StartPoint == null)
                 {
                     ham.StartPoint = hamster.StartPoint;
+                }
+
+                if (ham.SnapCamera)
+                {
+                    cam = GameObject.Find("Main Camera 2");
+                    if (Camera.main.GetComponent<CameraFollow>().target == null)
+                    {
+                        Camera.main.GetComponent<CameraFollow>().target = ham.HamsterObject.transform;
+                    }
+                    else if (cam.GetComponent<CameraFollow>().target == null)
+                    {
+                        cam.GetComponent<CameraFollow>().target = ham.HamsterObject.transform;
+                        cam.GetComponent<Camera>().enabled = true;
+                        cam.tag = "MainCamera";
+
+                        Camera.main.GetComponent<Camera>().rect = new Rect(0, 0, 0.5f, 1f);
+                    }
                 }
 
                 if (createNameUI)

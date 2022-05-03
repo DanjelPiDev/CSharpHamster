@@ -20,16 +20,15 @@ public class Aufgabe1 : MonoBehaviour
         balu = new Hamster();
         balu.SetName("Balu");
         balu.SetPosition(-5, -3);
-        balu.SetPlayerControls(true);
+
+
+        
         balu.SetHealthPoints(3);
         balu.HealHamster(2);
 
-        balu.DisplayName(true);
-        balu.DisplayHealth(true);
 
-        balu.SetGodMode(true);
-        balu.Save();
-        balu.SetGrainCount(100);
+        balu.SetPlayerControls(true);
+
         /* Dein Code endet hier ... */
     }
 

@@ -47,6 +47,7 @@ public class PlayerControl : MonoBehaviour
             if(ham.PlayerControl)
             {
                 hamster = ham;
+                
                 playerHamster = ham;
                 Territory.GetInstance().UpdateHamsterProperties(ham);
                 break;
@@ -72,6 +73,11 @@ public class PlayerControl : MonoBehaviour
         {
             multiplayer = false;
         }
+        else
+        {
+            hamster.SetCameraSnap(true);
+            hamster2.SetCameraSnap(true);
+        }
         
 
         foreach (Hamster ham in Territory.activHamsters)
@@ -90,7 +96,6 @@ public class PlayerControl : MonoBehaviour
     private void ManagePlayerMovement()
     {
         if (hamster == null) return;
-
         /*
         * Case: 2 Player, 1 Keyboard
         */
