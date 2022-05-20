@@ -1208,6 +1208,15 @@ public class Territory : MonoBehaviour
             }
         }
 
+        
+        foreach (Dialogue dialogue in hamster.NPCDialogues)
+        {
+            foreach (DialogueCondition condition in dialogue.conditions)
+            {
+                condition.IsDone = false;
+            }
+        }
+
         this.hamsters.Add(hamster);
         activHamsters = this.hamsters;
         //if (!hamster.IsNPC)

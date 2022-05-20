@@ -339,7 +339,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 446100653}
   m_HandleRect: {fileID: 446100652}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -851,7 +851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.02597972}
+  m_AnchoredPosition: {x: 0, y: 0.026891384}
   m_SizeDelta: {x: 0, y: 1003.6}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &61234005
@@ -13946,7 +13946,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 46460320}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.9999998
+  m_Size: 0.99999976
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16944,8 +16944,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 964632459}
   m_HandleRect: {fileID: 964632458}
   m_Direction: 2
-  m_Value: 0.0023419203
-  m_Size: 0.99997246
+  m_Value: -0.032786883
+  m_Size: 0.9999719
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18178,12 +18178,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSpeed: 0.25
   displayQuestLog: 1
-  displayWorldInformation: 0
+  displayWorldInformation: 1
   saveHamsterInfo: 0
   savePlayer: 0
   saveEachFrame: 0
   loadStoredInfo: 0
-  snapHamstersToGrid: 0
+  snapHamstersToGrid: 1
   showReferences: 1
   hamsterInstance: {fileID: 8688514454558771519, guid: ca5d1e19324b75b4fb5cfa2d14a10c9f, type: 3}
   hamsterSprites:
@@ -18321,7 +18321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb74bda88b29c2409975d15baf355ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiplayer: 0
+  multiplayer: 1
   moveRight: 1301000064000000
   moveLeft: 1401000061000000
   moveUp: 1101000077000000
@@ -19834,7 +19834,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2013332891}
   m_HandleRect: {fileID: 2013332890}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -22492,7 +22492,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 225081827}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.99999666
+  m_Size: 0.9999967
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -22891,7 +22891,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1350158677}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

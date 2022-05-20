@@ -10,8 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad99b2d5e0d7911469ea064126695ffe, type: 3}
-  m_Name: testNPCDialogueCondition1
+  m_Name: itemNeededTestCondition
   m_EditorClassIdentifier: 
-  isDefault: 1
-  needsItem: 0
-  neededItem: {fileID: 0}
+  isDefault: 0
+  isDone: 1
+  needsItem: 1
+  neededItem: {fileID: 11400000, guid: f6f048caba00c9a4b8bef47c38901c86, type: 2}
+  needsQuestDone: 0
+  questDone: {fileID: 0}
+  needsQuestStarted: 0
+  questStarted: {fileID: 0}

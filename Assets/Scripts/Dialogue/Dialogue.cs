@@ -14,7 +14,6 @@ public class Dialogue
     public UnityEvent onDialogueStart;
     public UnityEvent onDialogueEnd;
 
-
     public void OnDialogueStart()
     {
         onDialogueEnd?.Invoke();

@@ -26,6 +26,7 @@ public class ItemSlot : IComparable<ItemSlot>
         else
             return -1;
     }
+
 }
 
 [CreateAssetMenu(menuName = "HamsterGame/Hamster", fileName = "new Hamster")]
@@ -61,7 +62,6 @@ public class Hamster : ScriptableObject
     private Vector2 startPoint;
     [Header("Location and Movement Info")]
     [SerializeField, Range(1,5)] private int moveSpeed = 1;
-    [SerializeField] private LayerMask[] collisionLayer = new LayerMask[2];
     [SerializeField] private Transform movePoint;
     [SerializeField] private float currentMovementSpeed = 10f;
     [SerializeField] private float attackSpeedDelay = 2f;
@@ -366,16 +366,9 @@ public class Hamster : ScriptableObject
         this.isTalking = false;
         this.isInInventory = false;
 
-        //collisionLayer[0] |= (1 << LayerMask.NameToLayer("Wall"));
-        //collisionLayer[1] |= (1 << LayerMask.NameToLayer("Water"));
-
         this.id = Territory.GetInstance().GetHamsters().Count;
         Territory.GetInstance().AddHamster(Instantiate(this));
 
-        //if (this.playerControl)
-        //    Camera.main.transform.parent = Territory.GetInstance().GetHamsterObject(this.id).transform;
-
-        //inventory = new List<ItemSlot>();
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
         this.DisplayName(this.isDisplayingName);
@@ -730,12 +723,12 @@ public class Hamster : ScriptableObject
                 Territory.GetInstance().UpdateHamsterProperties(this);
                 return;
             }
-            /* If it found the item, but the slotId does not fit
+            /* If the item was found, but the slotId does not fit
              * Hint: (This else is only for the case if two hamsters trading)
-             *          Each item is connect through a slotId with the itemSlot,
-             *          in case buying from one another, the slotIds cannot be equal.
+             *          Each item is connected to a slot through a slotId,
+             *          in case buying an item from another hamster, 
+             *          the slotIds can or cannot be equal.
              *          For this reason we are entering this else
-             *          rest is as the same as above.
              *          
              */
             else if (this.inventory[i].item.Id == item.Id &&
@@ -910,7 +903,7 @@ public class Hamster : ScriptableObject
     }
 
     /*
-     * Hamster[] can me 2 at max, because max. 2 hamsters can trade.
+     * Hamster[] max size is 2, because max. 2 hamsters can trade.
      */
     private void SetHamsterUI(Hamster[] hamster)
     {
@@ -1135,10 +1128,6 @@ public class Hamster : ScriptableObject
             /* Falls die Spielerkontrolle aktiv ist, zeige kein Error im Log und pausiere das spiel auch nicht. */
             if (this.playerControl) return;
             Debug.LogError(this.hamsterName + noGrainsDropString);
-            /* Code nur wenn man sich im editor befinden. Pausiere die Unity Engine. */
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPaused = true;
-#endif
             return;
         }
         
@@ -1708,7 +1697,48 @@ public class Hamster : ScriptableObject
                     //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
+
+                    Dialogue _dialogue = null;
+                    // Find default
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.IsDefault)
+                            {
+                                _dialogue = dialogue;
+                                break;
+                            }
+                        }
+                        if (_dialogue != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.NeedsItem && condition.NeededItem != null && !condition.IsDone)
+                            {
+                                for (int i = 0; i < this.inventory.Count; i++)
+                                {
+                                    if (this.inventory[i].item.Id == condition.NeededItem.Id)
+                                    {
+                                        condition.IsDone = true;
+                                        _dialogue = dialogue;
+                                        break;
+                                    }
+                                }
+                                if (_dialogue != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    FindObjectOfType<DialogueManager>().StartDialogue(_dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1738,7 +1768,48 @@ public class Hamster : ScriptableObject
                     //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
+
+                    Dialogue _dialogue = null;
+                    // Find default
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.IsDefault)
+                            {
+                                _dialogue = dialogue;
+                                break;
+                            }
+                        }
+                        if (_dialogue != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.NeedsItem && condition.NeededItem != null && !condition.IsDone)
+                            {
+                                for (int i = 0; i < this.inventory.Count; i++)
+                                {
+                                    if (this.inventory[i].item.Id == condition.NeededItem.Id)
+                                    {
+                                        condition.IsDone = true;
+                                        _dialogue = dialogue;
+                                        break;
+                                    }
+                                }
+                                if (_dialogue != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    FindObjectOfType<DialogueManager>().StartDialogue(_dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1768,7 +1839,48 @@ public class Hamster : ScriptableObject
                     //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
+
+                    Dialogue _dialogue = null;
+                    // Find default
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.IsDefault)
+                            {
+                                _dialogue = dialogue;
+                                break;
+                            }
+                        }
+                        if (_dialogue != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.NeedsItem && condition.NeededItem != null && !condition.IsDone)
+                            {
+                                for (int i = 0; i < this.inventory.Count; i++)
+                                {
+                                    if (this.inventory[i].item.Id == condition.NeededItem.Id)
+                                    {
+                                        condition.IsDone = true;
+                                        _dialogue = dialogue;
+                                        break;
+                                    }
+                                }
+                                if (_dialogue != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    FindObjectOfType<DialogueManager>().StartDialogue(_dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {
@@ -1798,7 +1910,48 @@ public class Hamster : ScriptableObject
                     //Territory.GetInstance().DisplayDialogueWindow(this, hamster);
                     /* Display the dialogue UI and insert all information */
                     SetWindows(dialogueUI: true);
-                    FindObjectOfType<DialogueManager>().StartDialogue(HamsterGameManager.hamster2.dialogues[0], HamsterGameManager.hamster2, this);
+
+                    Dialogue _dialogue = null;
+                    // Find default
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.IsDefault)
+                            {
+                                _dialogue = dialogue;
+                                break;
+                            }
+                        }
+                        if (_dialogue != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    foreach (Dialogue dialogue in HamsterGameManager.hamster2.dialogues)
+                    {
+                        foreach (DialogueCondition condition in dialogue.conditions)
+                        {
+                            if (condition.NeedsItem && condition.NeededItem != null && !condition.IsDone)
+                            {
+                                for (int i = 0; i < this.inventory.Count; i++)
+                                {
+                                    if (this.inventory[i].item.Id == condition.NeededItem.Id)
+                                    {
+                                        condition.IsDone = true;
+                                        _dialogue = dialogue;
+                                        break;
+                                    }
+                                }
+                                if (_dialogue != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    FindObjectOfType<DialogueManager>().StartDialogue(_dialogue, HamsterGameManager.hamster2, this);
                 }
                 else if (hamster != null && !hamster.CanTalk)
                 {

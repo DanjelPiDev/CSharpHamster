@@ -22,7 +22,7 @@ MonoBehaviour:
   respawn: 0
   isNPC: 1
   moveRandom: 0
-  movementPattern: 0
+  movementPattern: 4
   spriteRenderer: {fileID: 0}
   hamsterObject: {fileID: 0}
   hamsterColor: 8
@@ -39,7 +39,6 @@ MonoBehaviour:
   healthPointsFull: 2
   endurancePointsFull: 0
   moveSpeed: 0
-  collisionLayer: []
   movePoint: {fileID: 0}
   currentMovementSpeed: 1
   attackSpeedDelay: 3
@@ -49,7 +48,19 @@ MonoBehaviour:
     sentences:
     - Hey, mein name ist [name].
     - "Sch\xF6n dich kennenzulernen [playername]."
-    conditions: []
+    conditions:
+    - {fileID: 11400000, guid: 7440cb061b17b7a45855a23f4439aba8, type: 2}
+    onDialogueStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onDialogueEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - defaultDialogue: 0
+    sentences:
+    - Du hast ein Item, cool.
+    conditions:
+    - {fileID: 11400000, guid: 7524161158ef08b4a92acd7095e7670e, type: 2}
     onDialogueStart:
       m_PersistentCalls:
         m_Calls: []
@@ -69,3 +80,4 @@ MonoBehaviour:
   effectsActiv: 0
   isUsingEndurance: 0
   tookDamage: 0
+  snapCamera: 0

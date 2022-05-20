@@ -13,7 +13,7 @@ public class ItemCollection : MonoBehaviour
     private void Awake()
     {
         /*
-         * Sort the list, afterwards set the id for each item again, for simply get lateron
+         * Sort the list, afterwards set the id for each item again
          */
         items.Sort();
         AssignIDs();
