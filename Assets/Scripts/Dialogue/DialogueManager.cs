@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     private Hamster hamster1;
     private Hamster hamster2;
     private DialogueCondition condition;
+    private Dialogue dialogue;
 
     private const string HAMSTER_NAME_PH = "[name]";
     private const string HAMSTER_PLAYER_PH = "[playername]";
@@ -27,7 +28,8 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(Dialogue dialogue, Hamster hamster1, Hamster hamster2, DialogueCondition condition = null)
     {
         sentences.Clear();
-
+        this.dialogue = dialogue;
+        this.dialogue.OnDialogueStart();
 
         this.hamster1 = hamster1;
         this.hamster2 = hamster2;
@@ -94,6 +96,7 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        this.dialogue.OnDialogueEnd();
         this.hamster1.IsTalking = false;
         this.hamster2.IsTalking = false;
         Territory.GetInstance().UpdateHamsterProperties(this.hamster1);
@@ -101,5 +104,6 @@ public class DialogueManager : MonoBehaviour
 
         hamsterGameManager.SetCanvasVisibility(hamsterGameManager.dialogueCanvas, false);
         hamsterGameManager.SetCanvasVisibility(hamsterGameManager.generalUI, true);
+        this.dialogue = null;
     }
 }

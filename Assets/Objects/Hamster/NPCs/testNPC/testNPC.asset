@@ -53,20 +53,49 @@ MonoBehaviour:
     onDialogueStart:
       m_PersistentCalls:
         m_Calls: []
+    onDialogueStartCommands: []
     onDialogueEnd:
       m_PersistentCalls:
         m_Calls: []
+    onDialogueEndCommands: []
   - defaultDialogue: 0
     sentences:
-    - Du hast ein Item, cool.
+    - "Cool, du hast die Hamsterschuhe gefunden, als Belohnung erh\xE4ltst du 10
+      K\xF6rner."
     conditions:
     - {fileID: 11400000, guid: 7524161158ef08b4a92acd7095e7670e, type: 2}
     onDialogueStart:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 3811377404439079508, guid: a5c51ea08a6628d409fd12f128297c74, type: 3}
+          m_TargetAssemblyTypeName: DialogueEvents, Assembly-CSharp
+          m_MethodName: SetHamster
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 3811377404439079508, guid: a5c51ea08a6628d409fd12f128297c74, type: 3}
+          m_TargetAssemblyTypeName: DialogueEvents, Assembly-CSharp
+          m_MethodName: AddGrain
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 10
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    onDialogueStartCommands: []
     onDialogueEnd:
       m_PersistentCalls:
         m_Calls: []
+    onDialogueEndCommands: []
   turnToSpeaker: 1
   isEvil: 0
   aggroRadius: 1
