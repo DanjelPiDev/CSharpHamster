@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bef1cb57dc7b5464d911f8fc32dc4a36, type: 3}
-  m_Name: new Condition
+  m_Name: SampleQuestDropAll
   m_EditorClassIdentifier: 
   pickUpAllGrains: 0
+  dropAllGrains: 1
   needSpecificAmountOfGrains: 0
   specificAmountOfGrains: 0
   hasLimitedEndurance: 0
@@ -26,7 +27,19 @@ MonoBehaviour:
       m_Calls: []
   onRemoveGrain:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7448994024144065395, guid: 8164c3bf618d0644a85a3a9af162617d, type: 3}
+        m_TargetAssemblyTypeName: QuestEvents, Assembly-CSharp
+        m_MethodName: CheckGlobalGrainCount
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 565d4541e0ab66d489f9aa3b652ab9f5, type: 2}
+          m_ObjectArgumentAssemblyTypeName: Quest, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onMove:
     m_PersistentCalls:
       m_Calls: []

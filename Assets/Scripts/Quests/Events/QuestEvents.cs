@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,28 @@ public class QuestEvents : MonoBehaviour
 {
     public void CheckGlobalGrainCount(Quest quest)
     {
-        if (Territory.globalGrainCount == 0 && quest.stageInfo.condition.pickUpAllGrains)
+        foreach (StageInfo stageInfo in quest.stageInfos)
         {
-            quest.questDone = true;
+            if (stageInfo.isActive && Territory.globalGrainCount == 0 && stageInfo.condition.pickUpAllGrains && stageInfo.questDone)
+            {
+                //quest.questDone = true;
+                stageInfo.isDone = true;
+            }
+            else if (stageInfo.isActive && Territory.globalGrainCount == Int32.Parse(stageInfo.questCommands[0].commandString) && stageInfo.condition.dropAllGrains && stageInfo.questDone)
+            {
+                //quest.questDone = true;
+                stageInfo.isDone = true;
+            }
+            else if (stageInfo.isActive && Territory.globalGrainCount == 0 && stageInfo.condition.pickUpAllGrains)
+            {
+                foreach (QuestCommands command in stageInfo.questCommands)
+                {
+                    if (command.command == QuestCommands.Commands.SetStage)
+                    {
+                        quest.SetQuestStage(Int32.Parse(command.commandString));
+                    }
+                }
+            }
         }
     }
 
@@ -33,36 +53,53 @@ public class QuestEvents : MonoBehaviour
 
     public void AllTilesNeedSpecificGrainCount(Quest quest)
     {
-        if (!quest.stageInfo.condition.needSpecificAmountOfGrains) return;
+        foreach (StageInfo stageInfo in quest.stageInfos)
+        {
+            if (!stageInfo.condition.needSpecificAmountOfGrains || !stageInfo.isActive) return;
+        }
 
         int tileCount = 0;
         int tileGrainCounter = 0;
 
         for (int i = 0; i < Territory.tileCollection.childCount; i++)
         {
-            if (Territory.tileCollection.GetChild(i).GetComponent<TileHolder>().tile.type != Tile.TileType.Wall)
+            foreach (StageInfo stageInfo in quest.stageInfos)
             {
-                tileCount += 1;
-            }
+                if (Territory.tileCollection.GetChild(i).GetComponent<TileHolder>().tile.type != Tile.TileType.Wall)
+                {
+                    tileCount += 1;
+                }
 
-            if (Territory.tileCollection.GetChild(i).GetComponent<TileHolder>().tile.type != Tile.TileType.Wall &&
-                Territory.tileCollection.GetChild(i).GetComponent<TileHolder>().tile.grainCount == quest.stageInfo.condition.specificAmountOfGrains)
-            {
-                tileGrainCounter += 1;
-            }
+                if (Territory.tileCollection.GetChild(i).GetComponent<TileHolder>().tile.type != Tile.TileType.Wall &&
+                    Territory.tileCollection.GetChild(i).GetComponent<TileHolder>().tile.grainCount == stageInfo.condition.specificAmountOfGrains)
+                {
+                    tileGrainCounter += 1;
+                }
+            }    
+            
         }
 
         if (tileGrainCounter == tileCount)
         {
-            quest.questDone = true;
+            if (quest.questStarted)
+            {
+                quest.questDone = true;
+            }
         }
     }
 
     public void VerifyHamsterTriggerPosition(Quest quest)
     {
-        if (!quest.stageInfo.condition.findExit) return;
+        Vector2 exitPos = Vector2.zero;
 
-        Vector2 exitPos = quest.stageInfo.condition.exitTransform.position;
+        foreach (StageInfo stageInfo in quest.stageInfos)
+        {
+            if (!stageInfo.condition.findExit || !stageInfo.isActive) return;
+            else exitPos = stageInfo.condition.exitTransform.position;
+        }
+        
+
+        
 
         foreach (Hamster hamster in Territory.activHamsters)
         {
@@ -76,10 +113,14 @@ public class QuestEvents : MonoBehaviour
 
     public void LimitedEndurance(Quest quest)
     {
-        if ((!quest.stageInfo.condition.hasLimitedEndurance && !quest.stageInfo.condition.needToFindExit) ||
-            quest.questFailed) return;
+        Vector2 exitPos = Vector2.zero;
 
-        Vector2 exitPos = quest.stageInfo.condition.exitTransform.position;
+        foreach (StageInfo stageInfo in quest.stageInfos)
+        {
+            if ((!stageInfo.condition.hasLimitedEndurance && !stageInfo.condition.needToFindExit) ||
+            quest.questFailed || !stageInfo.isActive) return;
+            else exitPos = stageInfo.condition.exitTransform.position;
+        }
 
         foreach (Hamster hamster in Territory.activHamsters)
         {

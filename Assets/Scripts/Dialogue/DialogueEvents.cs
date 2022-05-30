@@ -33,13 +33,27 @@ public class DialogueEvents : MonoBehaviour
         this.playerHamster.SetGrainCount(this.playerHamster.GetGrainCount() - amount);
     }
 
+    public void StartQuest(Quest quest)
+    {
+        
+    }
+
+    public void SetQuestStage(Quest quest)
+    {
+
+    }
+
+    public void CompleteQuest(Quest quest)
+    {
+
+    }
+
     public void AddItem(Item item)
     {
         if (this.playerHamster.GetDialogue() != null && this.playerHamster != null)
         {
             if (this.playerHamster.GetDialogue().DialogueStarts)
             {
-                Debug.Log("Here 2");
                 for (int i = 0; i < this.playerHamster.GetDialogue().onDialogueStartCommands.Count; i++)
                 {
                     if (this.playerHamster.GetDialogue().onDialogueStartCommands[i].command == DialogueCommands.Commands.AddItem)

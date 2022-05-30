@@ -282,7 +282,13 @@ public class Territory : MonoBehaviour
 
                         foreach (Quest quest in quests)
                         {
-                            quest.stageInfo.condition.OnRemoveGrain();
+                            foreach (StageInfo stageInfo in quest.stageInfos)
+                            {
+                                if (stageInfo.isActive)
+                                {
+                                    stageInfo.condition.OnRemoveGrain();
+                                }
+                            }
                         }
                     }
                     else
@@ -293,7 +299,16 @@ public class Territory : MonoBehaviour
 
                         foreach (Quest quest in quests)
                         {
-                            quest.stageInfo.condition.OnAddGrain();
+                            if (quest.questStarted)
+                            {
+                                foreach (StageInfo stageInfo in quest.stageInfos)
+                                {
+                                    if (stageInfo.isActive)
+                                    {
+                                        stageInfo.condition.OnAddGrain();
+                                    }
+                                }
+                            }
                         }
                     }
 

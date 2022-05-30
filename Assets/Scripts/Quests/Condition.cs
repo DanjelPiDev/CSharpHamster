@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class Condition : ScriptableObject
 {
     public bool pickUpAllGrains;
+    public bool dropAllGrains;
     public bool needSpecificAmountOfGrains;
     [ConditionalHide("needSpecificAmountOfGrains")] public int specificAmountOfGrains;
     public bool hasLimitedEndurance;

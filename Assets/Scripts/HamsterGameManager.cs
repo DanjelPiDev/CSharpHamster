@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using System.Collections;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -108,10 +109,29 @@ public class HamsterGameManager : MonoBehaviour
 
         foreach (Quest quest in quests)
         {
+            quest.questStarted = false;
             quest.questDone = false;
             quest.questFailed = false;
-            GameObject n_quest = Instantiate(questContainer, questContent);
-            n_quest.GetComponent<TextMeshProUGUI>().text = quest.stageInfo.stageDescription;
+            foreach (StageInfo _stageInfo in quest.stageInfos)
+            {
+                _stageInfo.isActive = false;
+                _stageInfo.isDone = false;
+                _stageInfo.failed = false;
+            }
+
+            if (quest.startQuestOnStartup)
+            {
+                quest.questStarted = true;
+                GameObject n_quest = Instantiate(questContainer, questContent);
+                foreach (StageInfo stageInfo in quest.stageInfos)
+                {
+                    if (stageInfo.onStartup)
+                    {
+                        n_quest.GetComponent<TextMeshProUGUI>().text = stageInfo.stageDescription;
+                        stageInfo.isActive = true;
+                    }
+                }
+            }
         }
 
         SetCanvasVisibility(generalUI, true);
@@ -134,15 +154,22 @@ public class HamsterGameManager : MonoBehaviour
 
         foreach (Quest quest in quests)
         {
-            if (quest.stageInfo.condition.displayEndurance)
+            if (quest.questStarted)
             {
-                foreach (Hamster hamster in Territory.activHamsters)
+                foreach (StageInfo info in quest.stageInfos)
                 {
-                    hamster.SetEndurancePoints(quest.stageInfo.condition.maxEndurancePoints);
-                    hamster.HealEndurance(quest.stageInfo.condition.maxEndurancePoints);
-                    hamster.SetEnduranceConsumption(true);
-                    hamster.DisplayEndurance(true);
+                    if (info.isActive && info.condition.displayEndurance)
+                    {
+                        foreach (Hamster hamster in Territory.activHamsters)
+                        {
+                            hamster.SetEndurancePoints(info.condition.maxEndurancePoints);
+                            hamster.HealEndurance(info.condition.maxEndurancePoints);
+                            hamster.SetEnduranceConsumption(true);
+                            hamster.DisplayEndurance(true);
+                        }
+                    }
                 }
+                
             }
         }
     }
@@ -275,16 +302,37 @@ public class HamsterGameManager : MonoBehaviour
 
         for (int i = 0; i < quests.Count; i++)
         {
-            if (quests[i].questDone) // && !questImages[i].activeSelf
+            for (int j = 0; j < questContent.childCount; j++)
             {
-                for (int j = 0; j < questContent.childCount; j++)
+                foreach (StageInfo info in quests[i].stageInfos)
                 {
-                    if (string.Compare(questContent.GetChild(j).GetComponent<TextMeshProUGUI>().text, quests[i].stageInfo.stageDescription) == 0)
+                    if (info.isDone && 
+                        string.Compare(questContent.GetChild(j).GetComponent<TextMeshProUGUI>().text, info.stageDescription) == 0)
                     {
                         questContent.GetChild(j).GetChild(0).GetChild(0).gameObject.SetActive(true);
                     }
+
+                    if (info.isDone && info.questDone) // info == quests[i].stageInfos.Last()
+                    {
+                        quests[i].questDone = true;
+                    }
                 }
             }
+            /*
+            if (quests[i].questDone)
+            {
+                for (int j = 0; j < questContent.childCount; j++)
+                {
+                    foreach (StageInfo info in quests[i].stageInfos)
+                    {
+                        if (string.Compare(questContent.GetChild(j).GetComponent<TextMeshProUGUI>().text, info.stageDescription) == 0)
+                        {
+                            questContent.GetChild(j).GetChild(0).GetChild(0).gameObject.SetActive(true);
+                        }
+                    }
+                }
+            }
+            */
         }
     }
 

@@ -15,8 +15,17 @@ public class QuestCollection : MonoBehaviour
     {
         foreach(Quest quest in quests)
         {
-            quest.stageInfo.condition.OnAddGrain();
-            quest.stageInfo.condition.OnRemoveGrain();
+            if (quest.questStarted)
+            {
+                foreach (StageInfo stageInfo in quest.stageInfos)
+                {
+                    if (stageInfo.isActive)
+                    {
+                        stageInfo.condition.OnAddGrain();
+                        stageInfo.condition.OnRemoveGrain();
+                    }
+                }
+            }
         }
     }
 }

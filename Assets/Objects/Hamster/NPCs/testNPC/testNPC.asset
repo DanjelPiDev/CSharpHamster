@@ -21,8 +21,8 @@ MonoBehaviour:
   playerControl: 0
   respawn: 0
   isNPC: 1
-  moveRandom: 0
-  movementPattern: 4
+  moveRandom: 1
+  movementPattern: 0
   spriteRenderer: {fileID: 0}
   hamsterObject: {fileID: 0}
   hamsterColor: 8
@@ -38,7 +38,7 @@ MonoBehaviour:
   endurancePoints: 0
   healthPointsFull: 2
   endurancePointsFull: 0
-  moveSpeed: 0
+  moveSpeed: 1
   movePoint: {fileID: 0}
   currentMovementSpeed: 1
   attackSpeedDelay: 3
