@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b287e039a01014b8559f2f25a01bc2, type: 3}
+  m_Name: SampleQuest2
+  m_EditorClassIdentifier: 
+  questName: SampleQuest 2
+  questDescription: Eine Beispielaufgabe.
+  stageInfos:
+  - stage: 0
+    stageDescription: "Sammle keine K\xF6rner auf"
+    condition: {fileID: 11400000, guid: 14dc14efd05e1084aa1e8bebe8ccf718, type: 2}
+    questCommands:
+    - command: 0
+      commandString: 10
+    onStartup: 1
+    questDone: 0
+    questFailed: 0
+    debug: 0
+    isActive: 1
+    isDone: 0
+    failed: 0
+  - stage: 10
+    stageDescription: "Lege nun alle K\xF6rner wieder ab."
+    condition: {fileID: 11400000, guid: 370f05b835d56e74d8f330a67bb313a5, type: 2}
+    questCommands:
+    - command: 1
+      commandString: 2
+    onStartup: 0
+    questDone: 1
+    questFailed: 0
+    debug: 0
+    isActive: 0
+    isDone: 0
+    failed: 0
+  startQuestOnStartup: 1
+  debugQuests: 0
+  questStarted: 1
+  questDone: 0
+  questFailed: 0

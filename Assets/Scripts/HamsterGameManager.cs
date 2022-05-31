@@ -52,6 +52,7 @@ public class HamsterGameManager : MonoBehaviour
 
     [Header("UI")]
     [ConditionalHide("showReferences", true)] public GameObject generalUI;
+    [ConditionalHide("showReferences", true)] public TMP_Dropdown questSelector; // part of generalUI
     [ConditionalHide("showReferences", true)] public GameObject dialogueCanvas;
     [ConditionalHide("showReferences", true)] public GameObject tradeCanvas;
     [ConditionalHide("showReferences", true)] public GameObject inventoryCanvas;
@@ -121,6 +122,8 @@ public class HamsterGameManager : MonoBehaviour
 
             if (quest.startQuestOnStartup)
             {
+                quest.StartQuest();
+                /*
                 quest.questStarted = true;
                 GameObject n_quest = Instantiate(questContainer, questContent);
                 foreach (StageInfo stageInfo in quest.stageInfos)
@@ -131,6 +134,7 @@ public class HamsterGameManager : MonoBehaviour
                         stageInfo.isActive = true;
                     }
                 }
+                */
             }
         }
 
@@ -311,8 +315,13 @@ public class HamsterGameManager : MonoBehaviour
                     {
                         questContent.GetChild(j).GetChild(0).GetChild(0).gameObject.SetActive(true);
                     }
+                    else if (info.failed &&
+                        string.Compare(questContent.GetChild(j).GetComponent<TextMeshProUGUI>().text, info.stageDescription) == 0)
+                    {
+                        questContent.GetChild(j).GetChild(0).GetChild(1).gameObject.SetActive(true);
+                    }
 
-                    if (info.isDone && info.questDone) // info == quests[i].stageInfos.Last()
+                    if (info.isDone && (info.questDone || info.questFailed))
                     {
                         quests[i].questDone = true;
                     }

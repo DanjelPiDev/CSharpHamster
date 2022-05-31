@@ -22,13 +22,19 @@ public class Quest : ScriptableObject
 
     public void StartQuest()
     {
+        HamsterGameManager hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
+
         if (!this.questStarted && !this.questDone && !this.questFailed)
         {
             this.questStarted = true;
+            hamsterGameManager.questSelector.AddOptions(new List<TMP_Dropdown.OptionData> { new TMP_Dropdown.OptionData(this.questName) });
             foreach (StageInfo stageInfo in this.stageInfos)
             {
                 if (stageInfo.onStartup)
                 {
+                    /* Display text in questlog */
+                    GameObject n_quest = Instantiate(hamsterGameManager.questContainer, hamsterGameManager.questContent);
+                    n_quest.GetComponent<TextMeshProUGUI>().text = stageInfo.stageDescription;
                     stageInfo.isActive = true;
                     break;
                 }
@@ -126,6 +132,7 @@ public class StageInfo
     public int stage;
     [TextArea(5, 5)] public string stageDescription;
     public Condition condition;
+    public Condition failCondition;
     public List<QuestCommands> questCommands;
     public bool onStartup;
     public bool questDone;
