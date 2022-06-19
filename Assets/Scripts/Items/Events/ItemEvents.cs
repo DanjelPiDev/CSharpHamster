@@ -42,19 +42,39 @@ public class ItemEvents : MonoBehaviour
         }
     }
 
+    public void EnhanceDamage(Item item)
+    {
+        foreach (Hamster hamster in Territory.activHamsters)
+        {
+            if (hamster.IsInInventory)
+            {
+                foreach (ItemSlot slot in hamster.Inventory)
+                {
+                    if (slot.item.Id == item.Id)
+                    {
+                        hamster.AttackPower += item.AttackPower;
+                        hamster.EffectsActiv = true;
+                        Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    }
+                }
+            }
+        }
+    }
+
     public void FasterMove(Item item)
     {
-        
         foreach(Hamster hamster in Territory.activHamsters)
         {
-            if (!hamster.IsInInventory) return;
-            foreach (ItemSlot slot in hamster.Inventory)
+            if (hamster.IsInInventory)
             {
-                if (slot.item.Id == item.Id)
+                foreach (ItemSlot slot in hamster.Inventory)
                 {
-                    hamster.MoveSpeed += item.MoveSpeed;
-                    hamster.EffectsActiv = true;
-                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    if (slot.item.Id == item.Id)
+                    {
+                        hamster.MoveSpeed += item.MoveSpeed;
+                        hamster.EffectsActiv = true;
+                        Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    }
                 }
             }
         }
@@ -64,16 +84,20 @@ public class ItemEvents : MonoBehaviour
     {
         foreach (Hamster hamster in Territory.activHamsters)
         {
-            if (!hamster.IsInInventory) return;
-            foreach (ItemSlot slot in hamster.Inventory)
+            if (hamster.IsInInventory)
             {
-                if (slot.item.Id == item.Id &&
-                    slot.item.hasSpecialEffects)
+                foreach (ItemSlot slot in hamster.Inventory)
                 {
-                    if (slot.item.MoveSpeed > 0)
-                        hamster.MoveSpeed -= slot.item.MoveSpeed;
-                    hamster.EffectsActiv = false;
-                    Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    if (slot.item.Id == item.Id &&
+                        slot.item.hasSpecialEffects)
+                    {
+                        if (slot.item.MoveSpeed > 0)
+                            hamster.MoveSpeed -= slot.item.MoveSpeed;
+                        if (slot.item.AttackPower > 0)
+                            hamster.AttackPower -= slot.item.AttackPower;
+                        hamster.EffectsActiv = true;
+                        Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    }
                 }
             }
         }

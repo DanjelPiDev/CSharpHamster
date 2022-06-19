@@ -69,18 +69,6 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 3811377404439079508, guid: a5c51ea08a6628d409fd12f128297c74, type: 3}
           m_TargetAssemblyTypeName: DialogueEvents, Assembly-CSharp
-          m_MethodName: SetHamster
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 3811377404439079508, guid: a5c51ea08a6628d409fd12f128297c74, type: 3}
-          m_TargetAssemblyTypeName: DialogueEvents, Assembly-CSharp
           m_MethodName: AddGrain
           m_Mode: 3
           m_Arguments:
@@ -102,6 +90,7 @@ MonoBehaviour:
   isDisplayingName: 0
   isDisplayingHealth: 1
   isDisplayingEndurance: 0
+  debug: 0
   isTrading: 0
   isTalking: 0
   isInInventory: 0

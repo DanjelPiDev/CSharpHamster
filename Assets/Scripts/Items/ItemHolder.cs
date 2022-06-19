@@ -82,6 +82,7 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
                 {
                     if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item != null)
                     {
+                        
                         UnequipItem();
                     }
 

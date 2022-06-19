@@ -4,37 +4,28 @@ using UnityEngine;
 
 public class Aufgabe1 : MonoBehaviour
 {
-    #region Variablen defintion
+    #region Variablen definition
     public ItemCollection itemCollection;
     private WaitForSeconds wait;
     private float gameSpeed = 1;
     #endregion
 
     /* Dein Code startet hier ... */
-    Hamster balu;
+    Hamster ham;
     /* Dein Code endet hier ... */
 
     private void HamsterEigenschaften()
     {
         /* Dein Code startet hier ... */
-        balu = new Hamster();
-        balu.SetName("Balu");
-        balu.SetPosition(-5, -3);
-
-
-        
-        balu.SetHealthPoints(3);
-        balu.HealHamster(2);
-
-
-        balu.SetPlayerControls(true);
-
+        ham = new Hamster();
+        ham.SetPosition(-5, -3);
+        ham.SetPlayerControls(true);
         /* Dein Code endet hier ... */
     }
 
     private IEnumerator HamsterBewegung()
     {
-        #region Variablen defintion
+        #region Variablen definition
         wait = new WaitForSeconds(HamsterGameManager.hamsterGameSpeed);
         yield return new WaitForSeconds(1.5f);
 

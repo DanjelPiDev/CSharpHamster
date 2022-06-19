@@ -19,6 +19,7 @@ public class Condition : ScriptableObject
 
     public UnityEvent onAddGrain;
     public UnityEvent onRemoveGrain;
+    public UnityEvent onDialogueStart;
     public UnityEvent onMove;
 
     public void OnAddGrain()
@@ -29,6 +30,11 @@ public class Condition : ScriptableObject
     public void OnRemoveGrain()
     {
         onRemoveGrain?.Invoke();
+    }
+
+    public void OnDialogueStart()
+    {
+        onDialogueStart?.Invoke();
     }
 
     public void OnMove()

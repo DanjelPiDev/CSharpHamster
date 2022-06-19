@@ -32,6 +32,7 @@ public class Item : ScriptableObject, IComparable<Item>
     public bool hasSpecialEffects = false;
     [Header("Special Effects")]
     [SerializeField, ConditionalHide("hasSpecialEffects", true)] private int moveSpeed = 0;
+    [SerializeField, ConditionalHide("hasSpecialEffects", true)] private int attackPower = 0;
     [Header("Item Events")]
     public UnityEvent onEquip;
     public UnityEvent onUnequip;
@@ -148,6 +149,11 @@ public class Item : ScriptableObject, IComparable<Item>
     public int MoveSpeed
     {
         get { return moveSpeed; }
+    }
+
+    public int AttackPower
+    {
+        get { return attackPower; }
     }
 
     #endregion

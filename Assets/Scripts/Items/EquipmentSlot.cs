@@ -13,11 +13,15 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
     [Header("UI")]
     public Image itemImage;
 
+    private Item selectedItem = null;
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            UnequipItem(this.item);
+            GameObject go = eventData.pointerCurrentRaycast.gameObject;
+            selectedItem = go.GetComponent<EquipmentSlot>().item;
+            UnequipItem(selectedItem);
         }
     }
 
@@ -34,7 +38,7 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
 
         for (int i = 0; i < hamsterGameManager.itemContent.childCount; i++)
         {
-            if (hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.IsEquipped)
+            if (hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.IsEquipped && hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item == selectedItem)
             {
                 hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().UnequipColor;
                 hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.IsEquipped = false;

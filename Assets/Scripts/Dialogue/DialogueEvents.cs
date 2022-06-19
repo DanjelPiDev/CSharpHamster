@@ -5,32 +5,34 @@ using UnityEngine;
 
 public class DialogueEvents : MonoBehaviour
 {
-    private Hamster playerHamster;
-    private Hamster npcTalkingHamster;
+    private static Hamster playerHamster;
+    private static Hamster npcTalkingHamster;
 
-    public void SetHamster()
+    private void SetHamster()
     {
         foreach (Hamster hamster in Territory.GetInstance().GetHamsters())
         {
             if (!hamster.IsNPC && hamster.IsTalking)
             {
-                this.playerHamster = hamster;
+                playerHamster = hamster;
             }
             else if (hamster.IsNPC && hamster.IsTalking)
             {
-                this.npcTalkingHamster = hamster;
+                npcTalkingHamster = hamster;
             }
         }
     }
 
     public void AddGrain(int amount)
     {
-        this.playerHamster.SetGrainCount(this.playerHamster.GetGrainCount() + amount);
+        SetHamster();
+        playerHamster.SetGrainCount(playerHamster.GetGrainCount() + amount);
     }
 
     public void RemoveGrain(int amount)
     {
-        this.playerHamster.SetGrainCount(this.playerHamster.GetGrainCount() - amount);
+        SetHamster();
+        playerHamster.SetGrainCount(playerHamster.GetGrainCount() - amount);
     }
 
     public void StartQuest(Quest quest)
@@ -50,25 +52,26 @@ public class DialogueEvents : MonoBehaviour
 
     public void AddItem(Item item)
     {
-        if (this.playerHamster.GetDialogue() != null && this.playerHamster != null)
+        SetHamster();
+        if (playerHamster.GetDialogue() != null && playerHamster != null)
         {
-            if (this.playerHamster.GetDialogue().DialogueStarts)
+            if (playerHamster.GetDialogue().DialogueStarts)
             {
-                for (int i = 0; i < this.playerHamster.GetDialogue().onDialogueStartCommands.Count; i++)
+                for (int i = 0; i < playerHamster.GetDialogue().onDialogueStartCommands.Count; i++)
                 {
-                    if (this.playerHamster.GetDialogue().onDialogueStartCommands[i].command == DialogueCommands.Commands.AddItem)
+                    if (playerHamster.GetDialogue().onDialogueStartCommands[i].command == DialogueCommands.Commands.AddItem)
                     {
-                        this.playerHamster.AddItem(item, Int32.Parse(this.playerHamster.GetDialogue().onDialogueStartCommands[i].commandString));
+                        playerHamster.AddItem(item, Int32.Parse(playerHamster.GetDialogue().onDialogueStartCommands[i].commandString));
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < this.playerHamster.GetDialogue().onDialogueEndCommands.Count; i++)
+                for (int i = 0; i < playerHamster.GetDialogue().onDialogueEndCommands.Count; i++)
                 {
-                    if (this.playerHamster.GetDialogue().onDialogueEndCommands[i].command == DialogueCommands.Commands.AddItem)
+                    if (playerHamster.GetDialogue().onDialogueEndCommands[i].command == DialogueCommands.Commands.AddItem)
                     {
-                        this.playerHamster.AddItem(item, Int32.Parse(this.playerHamster.GetDialogue().onDialogueEndCommands[i].commandString));
+                        playerHamster.AddItem(item, Int32.Parse(playerHamster.GetDialogue().onDialogueEndCommands[i].commandString));
                     }
                 }
             }
@@ -78,25 +81,26 @@ public class DialogueEvents : MonoBehaviour
 
     public void RemoveItem(Item item)
     {
-        if (this.playerHamster != null)
+        SetHamster();
+        if (playerHamster != null)
         {
-            if (this.npcTalkingHamster.GetDialogue().DialogueStarts)
+            if (npcTalkingHamster.GetDialogue().DialogueStarts)
             {
-                for (int i = 0; i < this.playerHamster.GetDialogue().onDialogueStartCommands.Count; i++)
+                for (int i = 0; i < playerHamster.GetDialogue().onDialogueStartCommands.Count; i++)
                 {
-                    if (this.npcTalkingHamster.GetDialogue().onDialogueStartCommands[i].command == DialogueCommands.Commands.RemoveItem)
+                    if (npcTalkingHamster.GetDialogue().onDialogueStartCommands[i].command == DialogueCommands.Commands.RemoveItem)
                     {
-                        this.playerHamster.RemoveItem(item, Int32.Parse(this.playerHamster.GetDialogue().onDialogueStartCommands[i].commandString));
+                        playerHamster.RemoveItem(item, Int32.Parse(playerHamster.GetDialogue().onDialogueStartCommands[i].commandString));
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < this.playerHamster.GetDialogue().onDialogueEndCommands.Count; i++)
+                for (int i = 0; i < playerHamster.GetDialogue().onDialogueEndCommands.Count; i++)
                 {
-                    if (this.playerHamster.GetDialogue().onDialogueEndCommands[i].command == DialogueCommands.Commands.RemoveItem)
+                    if (playerHamster.GetDialogue().onDialogueEndCommands[i].command == DialogueCommands.Commands.RemoveItem)
                     {
-                        this.playerHamster.RemoveItem(item, Int32.Parse(this.playerHamster.GetDialogue().onDialogueEndCommands[i].commandString));
+                        playerHamster.RemoveItem(item, Int32.Parse(playerHamster.GetDialogue().onDialogueEndCommands[i].commandString));
                     }
                 }
             }

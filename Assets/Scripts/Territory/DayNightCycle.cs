@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/************************************************
+ * 
+ ************************************************/
 public class DayNightCycle : MonoBehaviour
 {
     [SerializeField] private Light sun;
     [SerializeField] private Gradient lightColor;
-    [SerializeField] private const float cycleLength = 500; // Ändere die cycleLength hier
+    [SerializeField] private const float cycleLength = 500; // <-- Change cycleLength here
 #if UNITY_EDITOR
     [Help("Change the length of a day in the script, varname = 'cycleLength'\nDefault cycleLength = 500\nDefault nightTime = 230.", UnityEditor.MessageType.Info)]
 #endif

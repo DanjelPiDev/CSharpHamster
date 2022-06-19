@@ -12,6 +12,9 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEditor;
 #endif
 
+/************************************************
+ * 
+ ************************************************/
 [System.Serializable]
 public class ItemSlot : IComparable<ItemSlot>
 {
@@ -29,32 +32,37 @@ public class ItemSlot : IComparable<ItemSlot>
 
 }
 
+/************************************************
+ * This class controls all the properties and
+ * actions for the Hamster.
+ ************************************************/
 [CreateAssetMenu(menuName = "HamsterGame/Hamster", fileName = "new Hamster")]
 public class Hamster : ScriptableObject
 {
     [Header("General Hamster Info")]
 #if UNITY_EDITOR
-    [Help("Has to be unique for each hamster!", UnityEditor.MessageType.Warning)]
+    [Help("Enable only for testing!", UnityEditor.MessageType.Info)]
 #endif
-    [SerializeField] private int id;
+    [SerializeField] private bool debug = false;
+    [SerializeField, ConditionalHide("debug")] private int id;
     [SerializeField] private string hamsterName;
-    [SerializeField] private int row;
-    [SerializeField] private int column;
+    [SerializeField, ConditionalHide("debug")] private int row;
+    [SerializeField, ConditionalHide("debug")] private int column;
     [SerializeField] private LookingDirection direction;
     [SerializeField] private int grainCount;
-    [SerializeField] private bool playerControl;
+    [SerializeField, ConditionalHide("debug")] private bool playerControl;
     [SerializeField] private bool respawn = true;
     [SerializeField] private bool isNPC;
     [SerializeField] private bool moveRandom;
     [SerializeField] private MovementPattern movementPattern;
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private GameObject hamsterObject;
+    [SerializeField, ConditionalHide("debug")] private SpriteRenderer spriteRenderer;
+    [SerializeField, ConditionalHide("debug")] private GameObject hamsterObject;
     [SerializeField] private HamsterColor hamsterColor;
     [SerializeField] private bool canMove = false;
     [SerializeField] private bool canTrade = true;
     [SerializeField] private bool canTalk = true;
     [SerializeField] private List<ItemSlot> inventory = new List<ItemSlot>();
-    [SerializeField] private bool godMode = true; // Off, because of reasons
+    [SerializeField, ConditionalHide("debug")] private bool godMode = true; // Off, because of reasons
     [SerializeField] private int healthPoints;
     [SerializeField] private int endurancePoints;
     [SerializeField, Min(0)] private int healthPointsFull;
@@ -63,7 +71,7 @@ public class Hamster : ScriptableObject
     [Header("Location and Movement Info")]
     [SerializeField, Range(1,5)] private int moveSpeed = 1;
     [SerializeField] private Transform movePoint;
-    [SerializeField] private float currentMovementSpeed = 10f;
+    [SerializeField] private float currentMovementSpeed = 1f;
     [SerializeField] private float attackSpeedDelay = 2f;
     [SerializeField] private int attackPower = 1;
 
@@ -78,16 +86,16 @@ public class Hamster : ScriptableObject
     [SerializeField] private bool isDisplayingHealth = false;
     [SerializeField] private bool isDisplayingEndurance = false;
 
-    [Header("Current States (Don't change)")]
-    [SerializeField] private bool isTrading = false;
-    [SerializeField] private bool isTalking = false;
-    [SerializeField] private bool isInInventory = false;
-    [SerializeField] private bool isUsingItem = false;
+    [Header("Current States (Change only for testing)")]
+    [SerializeField, ConditionalHide("debug")] private bool isTrading = false;
+    [SerializeField, ConditionalHide("debug")] private bool isTalking = false;
+    [SerializeField, ConditionalHide("debug")] private bool isInInventory = false;
+    [SerializeField, ConditionalHide("debug")] private bool isUsingItem = false;
 
-    [SerializeField] private bool effectsActiv = true;
-    [SerializeField] private bool isUsingEndurance = false;
-    [SerializeField] private bool tookDamage = false;
-    [SerializeField] private bool snapCamera = false;
+    [SerializeField, ConditionalHide("debug")] private bool effectsActiv = true;
+    [SerializeField, ConditionalHide("debug")] private bool isUsingEndurance = false;
+    [SerializeField, ConditionalHide("debug")] private bool tookDamage = false;
+    [SerializeField, ConditionalHide("debug")] private bool snapCamera = false;
 
     private HamsterGameManager hamsterGameManager;
     private Dialogue dialogue = null;

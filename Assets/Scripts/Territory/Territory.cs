@@ -8,6 +8,9 @@ using TMPro;
 using UnityEditor;
 #endif
 
+/************************************************
+ * 
+ ************************************************/
 public class Territory : MonoBehaviour
 {
     [Header("Hamsters")]

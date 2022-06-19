@@ -136,6 +136,9 @@ public class HamsterGameManager : MonoBehaviour
                 }
                 */
             }
+
+            this.questSelector.value = this.questSelector.options.Count - 1;
+            this.questSelector.value = 0;
         }
 
         SetCanvasVisibility(generalUI, true);
