@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1687dc0662a8d6478aa700a507dca5b, type: 3}
   m_Name: testNPC
   m_EditorClassIdentifier: 
+  debug: 0
   id: 0
   hamsterName: Harry
   row: 0
@@ -42,7 +43,7 @@ MonoBehaviour:
   movePoint: {fileID: 0}
   currentMovementSpeed: 1
   attackSpeedDelay: 3
-  attackPower: 1
+  attackPower: 0
   dialogues:
   - defaultDialogue: 1
     sentences:
@@ -90,7 +91,6 @@ MonoBehaviour:
   isDisplayingName: 0
   isDisplayingHealth: 1
   isDisplayingEndurance: 0
-  debug: 0
   isTrading: 0
   isTalking: 0
   isInInventory: 0

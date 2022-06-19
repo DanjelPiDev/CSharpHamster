@@ -73,7 +73,7 @@ public class Hamster : ScriptableObject
     [SerializeField] private Transform movePoint;
     [SerializeField] private float currentMovementSpeed = 1f;
     [SerializeField] private float attackSpeedDelay = 2f;
-    [SerializeField] private int attackPower = 1;
+    [SerializeField] private int attackPower = 0;
 
     [Header("NPC Options")]
     [SerializeField] private List<Dialogue> dialogues = new List<Dialogue>();
