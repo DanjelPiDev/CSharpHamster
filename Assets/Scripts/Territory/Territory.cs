@@ -1,3 +1,8 @@
+/************************************************
+ * Created by:  Danjel Galic
+ * 
+ * Modified by: -
+ ************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +14,7 @@ using UnityEditor;
 #endif
 
 /************************************************
- * 
+ * Handles everything on the territory
  ************************************************/
 public class Territory : MonoBehaviour
 {
@@ -969,7 +974,7 @@ public class Territory : MonoBehaviour
         }
     }
 
-    public void UpdateHamsterProperties(Hamster hamster, bool createNameUI = false, bool createHealthUI = false, bool createEnduranceUI = false, bool updateNameUI = false, bool updateHealthUI = false, bool updateEnduranceUI = false)
+    public void UpdateHamsterProperties(Hamster hamster, bool createNameUI = false, bool createHealthUI = false, bool createEnduranceUI = false, bool updateNameUI = false, bool updateHealthUI = false, bool updateEnduranceUI = false, bool showSpeechBubble = false, string speechText = "", float speechTimer = 2f)
     {
         foreach (Transform transform in hamsterCollection)
         {
@@ -1045,6 +1050,15 @@ public class Territory : MonoBehaviour
                     {
                         transform.GetChild(2).gameObject.SetActive(false);
                     }
+                }
+
+                if (showSpeechBubble)
+                {
+                    transform.GetChild(6).gameObject.SetActive(true);
+                    transform.GetChild(7).gameObject.SetActive(true);
+                    transform.GetChild(7).GetComponent<TextMeshPro>().SetText(speechText);
+
+                    GameObject.Find("Grid").GetComponent<Territory>().StartCoroutine(ham.HamsterObject.GetComponent<HamsterHolder>().DisplaySpeechBubble(speechTimer));
                 }
 
                 if (createHealthUI)
@@ -1143,6 +1157,7 @@ public class Territory : MonoBehaviour
             }
         }
     }
+    
 
     private IEnumerator PlayerControlMovementTimer()
     {

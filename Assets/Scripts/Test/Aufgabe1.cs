@@ -1,3 +1,8 @@
+/************************************************
+ * Created by:  Danjel Galic
+ * 
+ * Modified by: -
+ ************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,15 +16,15 @@ public class Aufgabe1 : MonoBehaviour
     #endregion
 
     /* Dein Code startet hier ... */
-    Hamster ham;
+    Hamster test;
     /* Dein Code endet hier ... */
 
     private void HamsterEigenschaften()
     {
         /* Dein Code startet hier ... */
-        ham = new Hamster();
-        ham.SetPosition(-5, -3);
-        ham.SetPlayerControls(true);
+        test = new Hamster();
+        test.SetPosition(-5, -3);
+        test.SetPlayerControls(true);
         /* Dein Code endet hier ... */
     }
 
@@ -35,7 +40,7 @@ public class Aufgabe1 : MonoBehaviour
         #endregion
 
         /* Dein Code startet hier ... */
-        
+
         /* Dein Code endet hier ... */
     }
 

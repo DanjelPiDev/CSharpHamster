@@ -1,3 +1,8 @@
+/************************************************
+ * Created by:  Danjel Galic
+ * 
+ * Modified by: -
+ ************************************************/
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -6,6 +11,7 @@ using System.Collections;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using TMPro;
 
 
 #if UNITY_EDITOR
@@ -824,7 +830,6 @@ public class Hamster : ScriptableObject
         }
 
         /* Falls das resultat der suche oben null ist darf nicht weiter ausgeführt werden. */
-        Debug.Log(slot);
         if (slot == null) return;
         for (int i = 0; i < amount; i++)
         {
@@ -1159,7 +1164,7 @@ public class Hamster : ScriptableObject
 
     /// <summary>
     /// <para>Starte einen Handel mit einem anderen Hamster. Falls es keinen Hamster zum handeln gibt wird ein Fehler geworfen.</para>
-    /// <para>this Hamster kann nur einen Handel starten, wenn sich vor ihm, in Blickrichtung + 1, ein anderer Hamster befindet.</para>
+    /// <para>Dieser Hamster kann nur einen Handel starten, wenn sich vor ihm, in Blickrichtung + 1, ein anderer Hamster befindet.</para>
     /// </summary>
     public void Trade()
     {
@@ -1349,7 +1354,6 @@ public class Hamster : ScriptableObject
                 slot.item.OnUse();
                 this.isUsingItem = false;
                 /*
-                 *  Funkt net.
                     this.isUsingItem = false;
                     Territory.UpdateHamsterProperties(this);
                 */
@@ -2394,6 +2398,15 @@ public class Hamster : ScriptableObject
      */
     public void Hit()
     {
+        int damage = 0;
+        foreach (ItemSlot slot in inventory)
+        {
+            if (slot.item.AttackPower > 0)
+            {
+                damage += slot.item.AttackPower;
+            }
+        }
+
         if (!FrontIsClear() && !FrontIsClearNoHamster())
         {
             Hamster ham = null;
@@ -2401,24 +2414,32 @@ public class Hamster : ScriptableObject
             {
                 case LookingDirection.North:
                     ham = Territory.GetInstance().GetHamsterAt(this.column, this.row + 1);
-                    ham.Damage(1);
+                    ham.Damage(damage);
                     return;
                 case LookingDirection.West:
                     ham = Territory.GetInstance().GetHamsterAt(this.column - 1, this.row);
-                    ham.Damage(1);
+                    ham.Damage(damage);
                     return;
                 case LookingDirection.South:
                     ham = Territory.GetInstance().GetHamsterAt(this.column, this.row - 1);
-                    ham.Damage(1);
+                    ham.Damage(damage);
                     return;
                 case LookingDirection.East:
                     ham = Territory.GetInstance().GetHamsterAt(this.column + 1, this.row);
-                    ham.Damage(1);
+                    ham.Damage(damage);
                     return;
             }
         }
     }
     
+
+    public void Say(string sentence, float displayTime = 2f)
+    {
+        Territory.GetInstance().UpdateHamsterProperties(this, showSpeechBubble: true, speechText: sentence, speechTimer: displayTime);
+
+        Debug.Log(this.Name + ": " + sentence);
+    }
+
     /// <summary>
     /// Überprüfe ob der Weg vor dem Hamster frei ist.
     /// </summary>

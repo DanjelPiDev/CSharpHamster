@@ -1,3 +1,8 @@
+/************************************************
+ * Created by:  Danjel Galic
+ * 
+ * Modified by: -
+ ************************************************/
 using UnityEngine;
 
 public class ItemEvents : MonoBehaviour
