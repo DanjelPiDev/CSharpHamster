@@ -19,6 +19,8 @@ using UnityEditor;
 #endif
 
 /************************************************
+ * -- ItemSlot --
+ * 
  * 
  ************************************************/
 [System.Serializable]
@@ -39,8 +41,12 @@ public class ItemSlot : IComparable<ItemSlot>
 }
 
 /************************************************
+ * -- Hamster --
+ * 
  * This class controls all the properties and
  * actions for the Hamster.
+ * 
+ * Hint: This is a ScriptableObject
  ************************************************/
 [CreateAssetMenu(menuName = "HamsterGame/Hamster", fileName = "new Hamster")]
 public class Hamster : ScriptableObject

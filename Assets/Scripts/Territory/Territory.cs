@@ -14,7 +14,14 @@ using UnityEditor;
 #endif
 
 /************************************************
- * Handles everything on the territory
+ * -- Territory --
+ * 
+ * Handles everything on the Territory
+ * 
+ * Tasks:
+ *  - Instantiate Hamsters
+ *  - Instantiate Tiles
+ *  - Instantiate Items (Tiles)
  ************************************************/
 public class Territory : MonoBehaviour
 {

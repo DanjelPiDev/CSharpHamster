@@ -7,9 +7,24 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIButtonEvents : MonoBehaviour
 {
+    private GameObject hamsterUI;
+
+    private void Start()
+    {
+        hamsterUI = GameObject.Find("HamsterUI");
+    }
+
+    public void DisplayTasks()
+    {
+        hamsterUI.transform.GetChild(2).GetComponent<CanvasGroup>().alpha = hamsterUI.transform.GetChild(3).GetComponent<Toggle>().isOn ? 1 : 0;
+        hamsterUI.transform.GetChild(2).GetComponent<CanvasGroup>().blocksRaycasts = hamsterUI.transform.GetChild(3).GetComponent<Toggle>().isOn;
+        hamsterUI.transform.GetChild(2).GetComponent<CanvasGroup>().interactable = hamsterUI.transform.GetChild(3).GetComponent<Toggle>().isOn;
+    }
+
     public void StopTrading()
     {
         HamsterGameManager.hamster1.IsTrading = false;
