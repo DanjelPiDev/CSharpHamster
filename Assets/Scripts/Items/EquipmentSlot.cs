@@ -19,6 +19,7 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
     public Image itemImage;
 
     private Item selectedItem = null;
+    private Color empty = new Color(0.57f, 0.49f, 0.39f, 0.74f);
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -35,7 +36,7 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
         if (item == null) return;
 
         item.OnUnequip();
-
+        this.GetComponent<Image>().color = empty;
         this.item = null;
         this.itemImage.sprite = null;
 
@@ -45,7 +46,20 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
         {
             if (hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.IsEquipped && hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item == selectedItem)
             {
-                hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().UnequipColor;
+                switch (hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.ItemRarity)
+                {
+                    case Item.Rarity.Normal: 
+                        hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.Normal; break;
+                    case Item.Rarity.Rare: 
+                        hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.Rare; break;
+                    case Item.Rarity.Epic: 
+                        hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.Epic; break;
+                    case Item.Rarity.Legendary: 
+                        hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.Legendary; break;
+                    case Item.Rarity.Unique: 
+                        hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.Unique; break;
+                    default: break;
+                }
                 hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.IsEquipped = false;
             }
         }
@@ -63,6 +77,19 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
         {
             itemImage.color = new Color(1, 1, 1, 1);
             itemImage.sprite = item.ItemImage;
+            switch (item.ItemRarity)
+            {
+                case Item.Rarity.Normal:
+                    this.GetComponent<Image>().color = item.Normal; break;
+                case Item.Rarity.Rare:
+                    this.GetComponent<Image>().color = item.Rare; break;
+                case Item.Rarity.Epic:
+                    this.GetComponent<Image>().color = item.Epic; break;
+                case Item.Rarity.Legendary:
+                    this.GetComponent<Image>().color = item.Legendary; break;
+                case Item.Rarity.Unique:
+                    this.GetComponent<Image>().color = item.Unique; break;
+            }
         }
     }
 }

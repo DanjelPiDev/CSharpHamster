@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db967b1071319f43bbe3b221dcd4920, type: 3}
   m_Name: "Schwert des Gro\xDFen Hamsters Ham"
   m_EditorClassIdentifier: 
-  id: 4
+  id: 3
   name: "Schwert des Gro\xDFen Hamsters Ham"
   itemImage: {fileID: 21300000, guid: e235ddd184934cd4e9a1675c3cd111c9, type: 3}
   description: "Dieses Schwert geh\xF6rte eins dem Gro\xDFen Hamster Ham, der \xFCber
     ein Kornk\xF6nigreich herrschte der seines gleichen sucht. "
   type: 0
+  rarity: 2
   canChangeHamsterValues: 0
   healValue: 0
   damageValue: 0

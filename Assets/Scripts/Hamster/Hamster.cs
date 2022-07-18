@@ -1439,7 +1439,15 @@ public class Hamster : ScriptableObject
                 }
                 else
                 {
-                    itemSlot.gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().UnequipColor;
+                    switch (itemSlot.GetComponent<ItemHolder>().item.ItemRarity)
+                    {
+                        case Item.Rarity.Normal: itemSlot.gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Normal; break;
+                        case Item.Rarity.Rare: itemSlot.gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Rare; break;
+                        case Item.Rarity.Epic: itemSlot.gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Epic; break;
+                        case Item.Rarity.Legendary: itemSlot.gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Legendary; break;
+                        case Item.Rarity.Unique: itemSlot.gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Unique; break;
+                        default: break;
+                    }
                 }
 
                 if (itemSlot.GetComponent<ItemHolder>().item.IsEquipped)

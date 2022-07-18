@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db967b1071319f43bbe3b221dcd4920, type: 3}
   m_Name: Hamsterschuhe
   m_EditorClassIdentifier: 
-  id: 3
+  id: 2
   name: Hamsterschuhe
   itemImage: {fileID: 21300000, guid: 6563d749cb6457d418ee450c7dc2531b, type: 3}
   description: Schuhe die dich die doppelt distanz auf einmal laufen lassen.
   type: 0
+  rarity: 1
   canChangeHamsterValues: 0
   healValue: 0
   damageValue: 0
@@ -30,6 +31,7 @@ MonoBehaviour:
   slotId: -2147483648
   hasSpecialEffects: 1
   moveSpeed: 1
+  attackPower: 0
   onEquip:
     m_PersistentCalls:
       m_Calls:

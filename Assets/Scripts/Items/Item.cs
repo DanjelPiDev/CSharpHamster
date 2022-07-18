@@ -22,6 +22,7 @@ public class Item : ScriptableObject, IComparable<Item>
     [SerializeField] private Sprite itemImage;
     [SerializeField, TextArea(5, 5)] private string description;
     [SerializeField] private ItemType type;
+    [SerializeField] private Rarity rarity;
     [ConditionalHide("type", true)] public bool canChangeHamsterValues = false;
     [SerializeField, Tooltip("Relevant if Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int healValue;
     [SerializeField, Tooltip("Relevant if Type == Consumable"), ConditionalHide("canChangeHamsterValues", true)] private int damageValue;
@@ -42,6 +43,14 @@ public class Item : ScriptableObject, IComparable<Item>
     public UnityEvent onEquip;
     public UnityEvent onUnequip;
     public UnityEvent onUse;
+
+    private Color normal = new Color(0.69f, 0.85f, 0.60f);
+    private Color rare = new Color(0.19f, 0.29f, 0.92f);
+    private Color epic = new Color(0.47f, 0.19f, 0.92f);
+    private Color legendary = new Color(0.92f, 0.55f, 0.19f);
+    private Color unique = new Color(0.92f, 0.88f, 0.19f);
+
+
 
     public void OnEquip()
     {
@@ -75,10 +84,40 @@ public class Item : ScriptableObject, IComparable<Item>
         set { id = value; }
     }
 
+    public Rarity ItemRarity
+    {
+        get { return rarity; }
+    }
+
     public int SlotId
     {
         get { return slotId; }
         set { slotId = value; }
+    }
+
+    public Color Normal
+    {
+        get { return normal; }
+    }
+
+    public Color Rare
+    {
+        get { return rare; }
+    }
+
+    public Color Epic
+    {
+        get { return epic; }
+    }
+
+    public Color Legendary
+    {
+        get { return legendary; }
+    }
+
+    public Color Unique
+    {
+        get { return unique; }
     }
 
     public string Name
@@ -177,5 +216,14 @@ public class Item : ScriptableObject, IComparable<Item>
         Foot,
         Extra1,
         Extra2
+    };
+
+    public enum Rarity
+    {
+        Normal,
+        Rare,
+        Epic,
+        Legendary,
+        Unique
     };
 }

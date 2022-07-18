@@ -26,16 +26,10 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
 
     public GameObject itemInfoPrefab;
 
-    private Color unequipColor = new Color(0.2618814f, 0.5188679f, 0.388993f);
     private Color equipColor = new Color(0.5176471f, 0.2934902f, 0.2627451f);
     private GameObject itemInfoGo;
 
     #region GETTER
-    public Color UnequipColor
-    {
-        get { return unequipColor; }
-    }
-
     public Color EquipColor
     {
         get { return equipColor; }
@@ -113,6 +107,16 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
                 if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().equipType == item.EquipType &&
                     equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
                 {
+                    Transform equipmentTransform = this.transform.parent.parent.parent.parent.GetChild(5);
+                    for (int j = 1; j < equipmentTransform.childCount; j++)
+                    {
+                        if (equipmentTransform.GetChild(j).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
+                        {
+                            equipmentTransform.GetChild(j).GetChild(1).GetComponent<Image>().color = new Color(0.57f, 0.49f, 0.39f, 0.74f);
+                            break;
+                        }
+                    }
+
                     equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item.OnUnequip();
                     equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item = null;
 
@@ -125,9 +129,30 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
         {
             if (hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.IsEquipped)
             {
-                hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = unequipColor;
+                switch (this.item.ItemRarity)
+                {
+                    case Item.Rarity.Normal: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Normal; break;
+                    case Item.Rarity.Rare: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Rare; break;
+                    case Item.Rarity.Epic: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Epic; break;
+                    case Item.Rarity.Legendary: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Legendary; break;
+                    case Item.Rarity.Unique: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Unique; break;
+                }
+
+                // Disable color of equipment slot
+                Transform equipmentTransform = this.transform.parent.parent.parent.parent.GetChild(5);
+                for (int i = 1; i < equipmentTransform.childCount; i++)
+                {
+                    if (equipmentTransform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
+                    {
+                        equipmentTransform.GetChild(i).GetChild(1).GetComponent<Image>().color = new Color(0.57f, 0.49f, 0.39f, 0.74f);
+                        break;
+                    }
+                }
+
                 hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.OnUnequip();
                 hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.IsEquipped = false;
+
+                
             }
         }
 
@@ -204,7 +229,9 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
         {
             if (!this.item.IsEquipped && this.item.Type == Item.ItemType.Equippable)
             {
-                this.gameObject.GetComponent<Image>().color = equipColor;
+                //
+                this.gameObject.GetComponent<Image>().color = EquipColor;
+                //this.gameObject.GetComponent<Image>().color = equipColor;
 
                 EquipItem(this.item);
                 this.item.IsEquipped = true;
@@ -224,7 +251,14 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
             }
             else if (this.item.IsEquipped)
             {
-                this.gameObject.GetComponent<Image>().color = unequipColor;
+                switch (this.item.ItemRarity)
+                {
+                    case Item.Rarity.Normal: this.gameObject.GetComponent<Image>().color = this.item.Normal; break;
+                    case Item.Rarity.Rare: this.gameObject.GetComponent<Image>().color = this.item.Rare; break;
+                    case Item.Rarity.Epic: this.gameObject.GetComponent<Image>().color = this.item.Epic; break;
+                    case Item.Rarity.Legendary: this.gameObject.GetComponent<Image>().color = this.item.Legendary; break;
+                    case Item.Rarity.Unique: this.gameObject.GetComponent<Image>().color = this.item.Unique; break;
+                }
 
                 UnequipItem();
                 this.item.IsEquipped = false;

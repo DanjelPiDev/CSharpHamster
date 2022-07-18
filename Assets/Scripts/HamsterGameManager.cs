@@ -277,6 +277,17 @@ public class HamsterGameManager : MonoBehaviour
 
             if (hamster.Inventory[i].item.IsEquipped)
             {
+                /*
+                switch (itemSlot.GetComponent<ItemHolder>().item.ItemRarity)
+                {
+                    case Item.Rarity.Normal: itemSlot.GetComponent<ItemHolder>().gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Normal; break;
+                    case Item.Rarity.Rare: itemSlot.GetComponent<ItemHolder>().gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Rare; break;
+                    case Item.Rarity.Epic: itemSlot.GetComponent<ItemHolder>().gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Epic; break;
+                    case Item.Rarity.Legendary: itemSlot.GetComponent<ItemHolder>().gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Legendary; break;
+                    case Item.Rarity.Unique: itemSlot.GetComponent<ItemHolder>().gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().item.Unique; break;
+                    default: break;
+                }
+                */
                 itemSlot.GetComponent<ItemHolder>().gameObject.GetComponent<Image>().color = itemSlot.GetComponent<ItemHolder>().EquipColor;
             }
         }

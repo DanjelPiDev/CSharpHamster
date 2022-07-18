@@ -52,7 +52,9 @@ public class Territory : MonoBehaviour
     private const string GRASS_TILE = "Grass";
     private const string SAND_TILE = "Sand";
     private const string LAMP_TILE = "Lamp";
-    private const string WALL_TILE = "mauer";
+    private const string WALL_TILE = "Wall";
+    private const string WATER_TILE = "Water";
+    private const string GRAIN_TILE = "Grain";
     private const string GRAIN1_TILE = "Grain_1";
     private const string GRAIN2_TILE = "Grain_2";
     private const string GRAIN3_TILE = "Grain_3";
@@ -113,15 +115,13 @@ public class Territory : MonoBehaviour
                     tile.Row = y;
                     tile.type = Tile.TileType.Floor;
                     go.GetComponent<TileHolder>().tile = tile;
-                    // new Tile(x, y, Tile.TileType.Floor);
 
-
-                    if (string.Compare(tilemap.GetTile(currentTile).name, GRASS_TILE) == 0 ||
-                        string.Compare(tilemap.GetTile(currentTile).name, SAND_TILE) == 0)
+                    if (string.Compare(tilemap.GetTile(currentTile).name.ToLower(), GRASS_TILE.ToLower()) == 0 ||
+                        string.Compare(tilemap.GetTile(currentTile).name.ToLower(), SAND_TILE.ToLower()) == 0)
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Floor;
                     }
-                    else if (tilemap.GetTile(currentTile).name.Contains("Grain"))
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(GRAIN_TILE.ToLower()))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Grain;
                         go.GetComponent<TileHolder>().tile.hasGrain = true;
@@ -162,11 +162,41 @@ public class Territory : MonoBehaviour
                             go.GetComponent<TileHolder>().tile.grainCount = 9;
                         }
                     }
-                    else if (tilemap.GetTile(currentTile).name.Contains("Water"))
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WATER_TILE.ToLower()))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Water;
                     }
-                    else
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "4x").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 4);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "3x").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 3);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "2x").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 2);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WALL_TILE.ToLower()))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
                         /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
@@ -178,7 +208,7 @@ public class Territory : MonoBehaviour
 
                     if (lampTilemap.GetTile(currentTile) != null)
                     {
-                        if (lampTilemap.GetTile(currentTile).name.Contains(LAMP_TILE))
+                        if (lampTilemap.GetTile(currentTile).name.ToLower().Contains(LAMP_TILE.ToLower()))
                         {
                             GameObject light = Instantiate(lampLight01);
                             light.transform.parent = lampLightsTransform;
