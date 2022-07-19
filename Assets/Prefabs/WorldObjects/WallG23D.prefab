@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6073177442621963500}
   - component: {fileID: 6073177442621963503}
   m_Layer: 0
-  m_Name: Wall3D_2x
+  m_Name: WallG23D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6073177442621963502}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.84}
-  m_LocalScale: {x: 2.56, y: 2.56, z: 11.33424}
+  m_LocalScale: {x: 2.56, y: 2.56, z: 5.66712}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: af9ced8eaa05d0d468fa506925f03884, type: 2}
+  - {fileID: 2100000, guid: 05548707dc4b9584b96329459e970afa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

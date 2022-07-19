@@ -112,12 +112,19 @@ public class Hamster : ScriptableObject
     private HamsterGameManager hamsterGameManager;
     private Dialogue dialogue = null;
     private readonly string path = "Assets/Objects/Hamster/Player/hamster_";
+    private int currentLevel = 0; // See Tile class (var.: level)
 
     #region Getter and Setter
     public string Name
     {
         get { return hamsterName; }
         set { hamsterName = value; }
+    }
+
+    public int CurrentLevel
+    {
+        get { return currentLevel; }
+        set { currentLevel = value; }
     }
 
     public List<ItemSlot> Inventory
@@ -371,6 +378,7 @@ public class Hamster : ScriptableObject
         this.row = row;
         this.column = column;
         this.direction = direction;
+        this.currentLevel = 0;
 
         if (string.Compare(name, string.Empty) == 0)
             this.hamsterName = "Ham";
@@ -1200,8 +1208,8 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
                     LookAtHamster(this, hamster);
 
                     HamsterGameManager.isTrading = true;
@@ -1231,8 +1239,8 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
                     LookAtHamster(this, hamster);
 
                     HamsterGameManager.isTrading = true;
@@ -1262,8 +1270,8 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
                     LookAtHamster(this, hamster);
 
                     HamsterGameManager.isTrading = true;
@@ -1293,8 +1301,8 @@ public class Hamster : ScriptableObject
                     HamsterGameManager.hamster2 = hamster;
 
                     // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
                     LookAtHamster(this, hamster);
 
                     HamsterGameManager.isTrading = true;
@@ -1720,8 +1728,8 @@ public class Hamster : ScriptableObject
                 {
                     this.isTalking = true;
                     hamster.IsTalking = true;
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
 
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
@@ -1793,8 +1801,8 @@ public class Hamster : ScriptableObject
                 {
                     this.isTalking = true;
                     hamster.IsTalking = true;
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
 
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
@@ -1866,8 +1874,8 @@ public class Hamster : ScriptableObject
                 {
                     this.isTalking = true;
                     hamster.IsTalking = true;
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
 
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
@@ -1939,8 +1947,8 @@ public class Hamster : ScriptableObject
                 {
                     this.isTalking = true;
                     hamster.IsTalking = true;
-                    Territory.GetInstance().UpdateHamsterProperties(this);
                     Territory.GetInstance().UpdateHamsterProperties(hamster);
+                    Territory.GetInstance().UpdateHamsterProperties(this);
 
                     HamsterGameManager.hamster1 = this;
                     HamsterGameManager.hamster2 = hamster;
@@ -2000,8 +2008,8 @@ public class Hamster : ScriptableObject
         }
 
         // Nach jeder Änderung am Hamster, muss das Territory den Hamster aktualisieren.
-        Territory.GetInstance().UpdateHamsterProperties(this);
         Territory.GetInstance().UpdateHamsterProperties(hamster);
+        Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
     /// <summary>
@@ -2465,7 +2473,8 @@ public class Hamster : ScriptableObject
             case LookingDirection.East:
                 if(Territory.GetInstance().GetTileAt(this.column + 1, this.row).type != Tile.TileType.Wall &&
                    Territory.GetInstance().GetTileAt(this.column + 1, this.row).type != Tile.TileType.Water &&
-                   FrontIsClearNoHamster())
+                   FrontIsClearNoHamster() &&
+                   this.currentLevel == Territory.GetInstance().GetTileAt(this.column + 1, this.row).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
@@ -2475,7 +2484,8 @@ public class Hamster : ScriptableObject
             case LookingDirection.North:
                 if (Territory.GetInstance().GetTileAt(this.column, this.row + 1).type != Tile.TileType.Wall &&
                     Territory.GetInstance().GetTileAt(this.column, this.row + 1).type != Tile.TileType.Water &&
-                    FrontIsClearNoHamster())
+                    FrontIsClearNoHamster() &&
+                    this.currentLevel == Territory.GetInstance().GetTileAt(this.column, this.row + 1).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
@@ -2485,7 +2495,8 @@ public class Hamster : ScriptableObject
             case LookingDirection.West:
                 if (Territory.GetInstance().GetTileAt(this.column - 1, this.row).type != Tile.TileType.Wall &&
                     Territory.GetInstance().GetTileAt(this.column - 1, this.row).type != Tile.TileType.Water &&
-                    FrontIsClearNoHamster())
+                    FrontIsClearNoHamster() &&
+                    this.currentLevel == Territory.GetInstance().GetTileAt(this.column - 1, this.row).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;
@@ -2495,7 +2506,8 @@ public class Hamster : ScriptableObject
             case LookingDirection.South:
                 if (Territory.GetInstance().GetTileAt(this.column, this.row - 1).type != Tile.TileType.Wall &&
                     Territory.GetInstance().GetTileAt(this.column, this.row - 1).type != Tile.TileType.Water &&
-                    FrontIsClearNoHamster())
+                    FrontIsClearNoHamster() &&
+                    this.currentLevel == Territory.GetInstance().GetTileAt(this.column, this.row - 1).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
                     return true;

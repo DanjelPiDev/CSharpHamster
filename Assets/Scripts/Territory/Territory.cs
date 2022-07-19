@@ -28,7 +28,7 @@ public class Territory : MonoBehaviour
     [Header("Hamsters")]
     [SerializeField] private List<Hamster> hamsters = new List<Hamster>();
     [Header("Walls")]
-    [SerializeField] private GameObject wall3D;
+    [SerializeField] private GameObject[] wall3D;
     [SerializeField] private Transform wall3DTransform;
     [Header("Lights")]
     [SerializeField] private GameObject lampLight01;
@@ -120,11 +120,13 @@ public class Territory : MonoBehaviour
                         string.Compare(tilemap.GetTile(currentTile).name.ToLower(), SAND_TILE.ToLower()) == 0)
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Floor;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 0;
                     }
                     else if (tilemap.GetTile(currentTile).name.ToLower().Contains(GRAIN_TILE.ToLower()))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Grain;
                         go.GetComponent<TileHolder>().tile.hasGrain = true;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 0;
                         if (tilemap.GetTile(currentTile).name.Contains("1"))
                         {
                             go.GetComponent<TileHolder>().tile.grainCount = 1;
@@ -161,47 +163,208 @@ public class Territory : MonoBehaviour
                         {
                             go.GetComponent<TileHolder>().tile.grainCount = 9;
                         }
+                        go.GetComponent<TileHolder>().tile.tileLevel = 0;
                     }
                     else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WATER_TILE.ToLower()))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Water;
+                        go.GetComponent<TileHolder>().tile.tileLevel = -1;
                     }
-                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "4x").ToLower()))
+                    /* -- WALL NORMAL -- */
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "4x").ToLower()) &&
+                        !(tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower())))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 4;
                         /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
 
-                        GameObject wall = Instantiate(wall3D);
+                        GameObject wall = Instantiate(wall3D[0]);
                         wall.transform.parent = wall3DTransform;
                         wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
                         wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 4);
                     }
-                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "3x").ToLower()))
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "3x").ToLower()) && 
+                        !(tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower())))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 3;
                         /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
 
-                        GameObject wall = Instantiate(wall3D);
+                        GameObject wall = Instantiate(wall3D[0]);
                         wall.transform.parent = wall3DTransform;
                         wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
                         wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 3);
                     }
-                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "2x").ToLower()))
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains((WALL_TILE + "2x").ToLower()) && !(tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower())))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 2;
                         /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
 
-                        GameObject wall = Instantiate(wall3D);
+                        GameObject wall = Instantiate(wall3D[0]);
                         wall.transform.parent = wall3DTransform;
                         wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
                         wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 2);
                     }
-                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WALL_TILE.ToLower()))
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WALL_TILE.ToLower()) && !(tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()) ||
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower())))
                     {
                         go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 1;
                         /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
 
-                        GameObject wall = Instantiate(wall3D);
+                        GameObject wall = Instantiate(wall3D[0]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                    }
+                    /* -- WALL G1 -- */
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("4x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 4;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[1]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 4);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("3x").ToLower()) && 
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 3;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[1]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 3);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("2x").ToLower()) && 
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 2;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[1]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 2);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WALL_TILE.ToLower()) && 
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G1").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 1;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[1]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                    }
+                    /* -- WALL G2 -- */
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("4x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 4;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[2]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 4);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("3x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 3;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[2]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 3);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("2x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 2;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[2]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 2);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WALL_TILE.ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G2").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 1;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[2]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                    }
+                    /* -- WALL G3 -- */
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("4x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 4;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[3]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 4);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("3x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 3;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[3]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 3);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(("2x").ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 2;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[3]);
+                        wall.transform.parent = wall3DTransform;
+                        wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
+                        wall.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, wall.transform.localScale.z * 2);
+                    }
+                    else if (tilemap.GetTile(currentTile).name.ToLower().Contains(WALL_TILE.ToLower()) &&
+                        tilemap.GetTile(currentTile).name.ToLower().Contains(("G3").ToLower()))
+                    {
+                        go.GetComponent<TileHolder>().tile.type = Tile.TileType.Wall;
+                        go.GetComponent<TileHolder>().tile.tileLevel = 1;
+                        /* Set 3D Objects as walls, to cast shadows and move the hamster in z axis further to the camera */
+
+                        GameObject wall = Instantiate(wall3D[3]);
                         wall.transform.parent = wall3DTransform;
                         wall.transform.position = new Vector3((x * TILESIZE) + (TILESIZE / 2), (y * TILESIZE) + (TILESIZE / 2), 0);
                     }
@@ -1363,30 +1526,33 @@ public class Territory : MonoBehaviour
         {
             foreach(Hamster ham in activHamsters)
             {
-                if (ham.IsNPC && 
-                    ham.MoveRandom && 
+                if (!ham.IsTalking || !ham.IsTrading)
+                {
+                    if (ham.IsNPC &&
+                    ham.MoveRandom &&
                     ham.Pattern == Hamster.MovementPattern.Random)
-                {
-                    ham.RandomMove();
-                }
-                else if (ham.IsNPC &&
-                    (ham.Pattern == Hamster.MovementPattern.LeftRight || ham.Pattern == Hamster.MovementPattern.UpDown))
-                {
-                    if (ham.FrontIsClear())
                     {
-                        ham.Move();
+                        ham.RandomMove();
                     }
-                    else
+                    else if (ham.IsNPC &&
+                        (ham.Pattern == Hamster.MovementPattern.LeftRight || ham.Pattern == Hamster.MovementPattern.UpDown))
                     {
-                        for (int i = 0; i < 2; i++)
+                        if (ham.FrontIsClear())
                         {
-                            ham.TurnLeft();
+                            ham.Move();
+                        }
+                        else
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                ham.TurnLeft();
+                            }
                         }
                     }
-                }
-                else if (ham.IsNPC && ham.Pattern == Hamster.MovementPattern.Rotate)
-                {
-                    ham.TurnLeft();
+                    else if (ham.IsNPC && ham.Pattern == Hamster.MovementPattern.Rotate)
+                    {
+                        ham.TurnLeft();
+                    }
                 }
             }
             yield return wait;
