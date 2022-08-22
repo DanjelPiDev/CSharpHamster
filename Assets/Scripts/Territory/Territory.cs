@@ -1126,6 +1126,8 @@ public class Territory : MonoBehaviour
     public void UpdateHamsterPosition(Hamster hamster)
     {
         Transform hamTransform = null;
+        int _level = 0;
+
         foreach (Transform transform in hamsterCollection)
         {
             Hamster ham = transform.GetChild(1).GetComponent<HamsterHolder>().hamster;
@@ -1135,12 +1137,14 @@ public class Territory : MonoBehaviour
                 ham.CanMove = hamster.CanMove;
 
                 hamTransform = transform;
+                _level = hamster.CurrentLevel;
                 ham.Row = hamster.Row;
                 ham.Column = hamster.Column;
+                break;
             }
         }
 
-        hamTransform.position = new Vector3((hamster.Column * TILESIZE), (hamster.Row * TILESIZE), hamTransform.position.z);
+        hamTransform.position = new Vector3((hamster.Column * TILESIZE), (hamster.Row * TILESIZE), hamTransform.position.z - (1.42f * _level));
     }
 
 
@@ -1216,6 +1220,7 @@ public class Territory : MonoBehaviour
                 ham.Respawn                 = hamster.Respawn;
                 ham.GodMode                 = hamster.GodMode;
                 ham.SnapCamera              = hamster.SnapCamera;
+                ham.CurrentLevel            = hamster.CurrentLevel;
 
                 if (ham.Respawn && ham.StartPoint == null)
                 {

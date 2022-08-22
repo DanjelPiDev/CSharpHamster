@@ -379,9 +379,13 @@ public class HamsterGameManager : MonoBehaviour
     /// </summary>
     /// <param name="canvas"></param>
     /// <param name="b"></param>
-    public void SetCanvasVisibility(GameObject canvas, bool b)
+    public void SetCanvasVisibility(GameObject canvas, bool b, float alpha = -1)
     {
-        canvas.GetComponent<CanvasGroup>().alpha = b ? 1 : 0;
+        if (alpha == -1)
+            canvas.GetComponent<CanvasGroup>().alpha = b ? 1 : 0;
+        else
+            canvas.GetComponent<CanvasGroup>().alpha = alpha;
+
         canvas.GetComponent<CanvasGroup>().interactable = b;
         canvas.GetComponent<CanvasGroup>().blocksRaycasts = b;
     }
@@ -391,8 +395,13 @@ public class HamsterGameManager : MonoBehaviour
     /// </summary>
     /// <param name="canvas"></param>
     /// <param name="b"></param>
-    public void SetCanvasVisibility(Canvas canvas, bool b)
+    public void SetCanvasVisibility(Canvas canvas, bool b, float alpha = -1)
     {
+        if (alpha == -1)
+            canvas.GetComponent<CanvasGroup>().alpha = b ? 1 : 0;
+        else
+            canvas.GetComponent<CanvasGroup>().alpha = alpha;
+
         canvas.GetComponent<CanvasGroup>().alpha = b ? 1 : 0;
         canvas.GetComponent<CanvasGroup>().interactable = b;
         canvas.GetComponent<CanvasGroup>().blocksRaycasts = b;

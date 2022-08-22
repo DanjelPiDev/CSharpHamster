@@ -31,7 +31,7 @@ public class EquipmentSlot : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private void UnequipItem(Item item)
+    public void UnequipItem(Item item)
     {
         if (item == null) return;
 

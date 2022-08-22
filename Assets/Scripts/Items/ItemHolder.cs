@@ -47,10 +47,13 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
         this.itemImage.sprite = this.item.ItemImage;
     }
 
-    private void UseItem()
+    public void UseItem(Item item = null)
     {
         HamsterGameManager hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
-        this.item.OnUse();
+        if (item == null)
+            this.item.OnUse();
+        else
+            item.OnUse();
         
         /* Finde den Hamster der im inventar ist oder das Item verwendet */
         Hamster hamster = null;
@@ -67,7 +70,7 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
         hamsterGameManager.RefreshInventoryWindow();
     }
 
-    private void EquipItem(Item item)
+    public void EquipItem(Item item)
     {
         Transform equipment = this.transform.parent.parent.parent.parent.GetChild(5);
 
@@ -85,6 +88,8 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
                         UnequipItem();
                     }
 
+                    item.IsEquipped = true;
+                    
                     equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item = item;
                     item.OnEquip();
                     return;
@@ -93,70 +98,75 @@ public class ItemHolder : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private void UnequipItem()
+    public void UnequipItem(Item.EquipmentType type = Item.EquipmentType.None)
     {
-        HamsterGameManager hamsterGameManager = hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
-        Transform equipment = this.transform.parent.parent.parent.parent.GetChild(5);
-
-        for (int i = 1; i < equipment.childCount; i++)
+        /* 
+         * This case is if the player uses the mouse to unequip
+         * The other case would be via script 
+         */
+        if (type == Item.EquipmentType.None)
         {
-            // Erst überprüfen ob die Komponente existiert.
-            if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>())
+            HamsterGameManager hamsterGameManager = hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
+            Transform equipment = this.transform.parent.parent.parent.parent.GetChild(5);
+
+            for (int i = 1; i < equipment.childCount; i++)
             {
-                // Falls die Komponente überprüft, prüfe ob der EquipmentType übereinstimmt.
-                if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().equipType == item.EquipType &&
-                    equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
+                // Erst überprüfen ob die Komponente existiert.
+                if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>())
                 {
-                    Transform equipmentTransform = this.transform.parent.parent.parent.parent.GetChild(5);
-                    for (int j = 1; j < equipmentTransform.childCount; j++)
+                    // Falls die Komponente überprüft, prüfe ob der EquipmentType übereinstimmt.
+                    if (equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().equipType == item.EquipType &&
+                        equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
                     {
-                        if (equipmentTransform.GetChild(j).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
+                        Transform equipmentTransform = this.transform.parent.parent.parent.parent.GetChild(5);
+                        for (int j = 1; j < equipmentTransform.childCount; j++)
                         {
-                            equipmentTransform.GetChild(j).GetChild(1).GetComponent<Image>().color = new Color(0.57f, 0.49f, 0.39f, 0.74f);
+                            if (equipmentTransform.GetChild(j).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
+                            {
+                                equipmentTransform.GetChild(j).GetChild(1).GetComponent<Image>().color = new Color(0.57f, 0.49f, 0.39f, 0.74f);
+                                break;
+                            }
+                        }
+
+                        equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item.OnUnequip();
+                        equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item = null;
+
+                        return;
+                    }
+                }
+            }
+
+            for (int j = 0; j < hamsterGameManager.itemContent.childCount; j++)
+            {
+                if (hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.IsEquipped)
+                {
+                    switch (this.item.ItemRarity)
+                    {
+                        case Item.Rarity.Normal: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Normal; break;
+                        case Item.Rarity.Rare: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Rare; break;
+                        case Item.Rarity.Epic: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Epic; break;
+                        case Item.Rarity.Legendary: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Legendary; break;
+                        case Item.Rarity.Unique: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Unique; break;
+                    }
+
+                    // Disable color of equipment slot
+                    Transform equipmentTransform = this.transform.parent.parent.parent.parent.GetChild(5);
+                    for (int i = 1; i < equipmentTransform.childCount; i++)
+                    {
+                        if (equipmentTransform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
+                        {
+                            equipmentTransform.GetChild(i).GetChild(1).GetComponent<Image>().color = new Color(0.57f, 0.49f, 0.39f, 0.74f);
                             break;
                         }
                     }
 
-                    equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item.OnUnequip();
-                    equipment.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item = null;
+                    hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.OnUnequip();
+                    hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.IsEquipped = false;
 
-                    return;
+
                 }
             }
         }
-
-        for (int j = 0; j < hamsterGameManager.itemContent.childCount; j++)
-        {
-            if (hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.IsEquipped)
-            {
-                switch (this.item.ItemRarity)
-                {
-                    case Item.Rarity.Normal: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Normal; break;
-                    case Item.Rarity.Rare: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Rare; break;
-                    case Item.Rarity.Epic: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Epic; break;
-                    case Item.Rarity.Legendary: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Legendary; break;
-                    case Item.Rarity.Unique: hamsterGameManager.itemContent.GetChild(j).gameObject.GetComponent<Image>().color = this.item.Unique; break;
-                }
-
-                // Disable color of equipment slot
-                Transform equipmentTransform = this.transform.parent.parent.parent.parent.GetChild(5);
-                for (int i = 1; i < equipmentTransform.childCount; i++)
-                {
-                    if (equipmentTransform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item == this.item)
-                    {
-                        equipmentTransform.GetChild(i).GetChild(1).GetComponent<Image>().color = new Color(0.57f, 0.49f, 0.39f, 0.74f);
-                        break;
-                    }
-                }
-
-                hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.OnUnequip();
-                hamsterGameManager.itemContent.GetChild(j).GetComponent<ItemHolder>().item.IsEquipped = false;
-
-                
-            }
-        }
-
-        
     }
 
     public void SellItem()

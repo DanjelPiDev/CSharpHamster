@@ -16,15 +16,13 @@ public class Aufgabe1 : MonoBehaviour
     #endregion
 
     /* Dein Code startet hier ... */
-    Hamster test;
+
     /* Dein Code endet hier ... */
 
     private void HamsterEigenschaften()
     {
         /* Dein Code startet hier ... */
-        test = new Hamster();
-        test.SetPosition(-5, -3);
-        test.SetPlayerControls(true);
+
         /* Dein Code endet hier ... */
     }
 

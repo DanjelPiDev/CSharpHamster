@@ -113,6 +113,7 @@ public class Hamster : ScriptableObject
     private Dialogue dialogue = null;
     private readonly string path = "Assets/Objects/Hamster/Player/hamster_";
     private int currentLevel = 0; // See Tile class (var.: level)
+    private float zAxes = 0;
 
     #region Getter and Setter
     public string Name
@@ -824,6 +825,54 @@ public class Hamster : ScriptableObject
         Territory.GetInstance().UpdateHamsterProperties(this);
     }
 
+    public void UnequipItem(Item.EquipmentType type)
+    {
+        if (type != Item.EquipmentType.None)
+        {
+            hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
+            this.DisplayInventory(0);
+            for (int i = 1; i < hamsterGameManager.transform.childCount; i++)
+            {
+                if (hamsterGameManager.transform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item != null &&
+                    hamsterGameManager.transform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item.EquipType == type)
+                {
+                    hamsterGameManager.transform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item.IsEquipped = false;
+                    hamsterGameManager.transform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().UnequipItem(hamsterGameManager.transform.GetChild(i).GetChild(1).GetComponent<EquipmentSlot>().item);
+                    this.DisplayInventory();
+                }
+            }
+        }
+    }
+
+    public void EquipItem(string itemName)
+    {
+        hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
+
+        Item item = hamsterGameManager.GetComponent<ItemCollection>().GetItem(itemName);
+        EquipItem(item);
+    }
+
+    public void EquipItem(Item item)
+    {
+        if (item != null)
+        {
+            hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
+            this.DisplayInventory(0);
+            for (int i = 0; i < hamsterGameManager.itemContent.childCount; i++)
+            {
+                Item _item = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item;
+                if (string.Compare(_item.Name, item.Name) == 0 && !_item.IsEquipped)
+                {
+                    hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().item.IsEquipped = true;
+                    hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().EquipItem(item);
+                    hamsterGameManager.itemContent.GetChild(i).gameObject.GetComponent<Image>().color = hamsterGameManager.itemContent.GetChild(i).GetComponent<ItemHolder>().EquipColor;
+                    this.DisplayInventory();
+                    return;
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Entferne ein <paramref name="item"/> aus dem Inventar, <paramref name="amount"/> kann optional mitangeben werden. Andernfalls wird ein "1" <paramref name="item"/> entfernt.
     /// </summary>
@@ -920,14 +969,14 @@ public class Hamster : ScriptableObject
     /// <param name="tradeUI"></param>
     /// <param name="inventoryUI"></param>
     /// <param name="dialogueUI"></param>
-    private void SetWindows(bool generalUI = false, bool tradeUI = false, bool inventoryUI = false, bool dialogueUI = false)
+    private void SetWindows(bool generalUI = false, bool tradeUI = false, bool inventoryUI = false, bool dialogueUI = false, float alpha = -1)
     {
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
-        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.tradeCanvas, tradeUI);
-        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.inventoryCanvas, inventoryUI);
-        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.dialogueCanvas, dialogueUI);
-        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.generalUI, generalUI);
+        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.tradeCanvas, tradeUI, alpha);
+        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.inventoryCanvas, inventoryUI, alpha);
+        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.dialogueCanvas, dialogueUI, alpha);
+        hamsterGameManager.SetCanvasVisibility(hamsterGameManager.generalUI, generalUI, alpha);
     }
 
     /*
@@ -1414,9 +1463,137 @@ public class Hamster : ScriptableObject
     }
 
     /// <summary>
+    /// Climb up.
+    /// </summary>
+    /// <param name="level"></param>
+    public void ClimbUp()
+    {
+        Debug.Log(this.currentLevel);
+        switch (this.direction)
+        {
+            case LookingDirection.East:
+                if (Territory.GetInstance().GetTileAt(this.column + 1, this.row).tileLevel == this.currentLevel + 1)
+                {
+                    this.currentLevel += 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht klettern.");
+                }
+                break;
+            case LookingDirection.North:
+                if (Territory.GetInstance().GetTileAt(this.column, this.row + 1).tileLevel == this.currentLevel + 1)
+                {
+                    this.currentLevel += 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht klettern.");
+                }
+                break;
+            case LookingDirection.West:
+                if (Territory.GetInstance().GetTileAt(this.column - 1, this.row).tileLevel == this.currentLevel + 1)
+                {
+                    this.currentLevel += 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht klettern.");
+                }
+                break;
+            case LookingDirection.South:
+                if (Territory.GetInstance().GetTileAt(this.column, this.row - 1).tileLevel == this.currentLevel + 1)
+                {
+                    this.currentLevel += 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht klettern.");
+                }
+                break;
+        }
+        Debug.Log(this.currentLevel);
+    }
+
+    /// <summary>
+    /// Climb down.
+    /// </summary>
+    /// <param name="level"></param>
+    public void ClimbDown()
+    {
+        switch (this.direction)
+        {
+            case LookingDirection.East:
+                if (Territory.GetInstance().GetTileAt(this.column + 1, this.row).tileLevel == this.currentLevel - 1)
+                {
+                    this.currentLevel -= 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht runterklettern.");
+                }
+                break;
+            case LookingDirection.North:
+                if (Territory.GetInstance().GetTileAt(this.column, this.row + 1).tileLevel == this.currentLevel - 1)
+                {
+                    this.currentLevel -= 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht runterklettern.");
+                }
+                break;
+            case LookingDirection.West:
+                if (Territory.GetInstance().GetTileAt(this.column - 1, this.row).tileLevel == this.currentLevel - 1)
+                {
+                    this.currentLevel -= 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht runterklettern.");
+                }
+                break;
+            case LookingDirection.South:
+                if (Territory.GetInstance().GetTileAt(this.column, this.row - 1).tileLevel == this.currentLevel - 1)
+                {
+                    this.currentLevel -= 1;
+                    Territory.GetInstance().UpdateHamsterProperties(this);
+                    Territory.GetInstance().UpdateHamsterPosition(this);
+                    this.Move();
+                }
+                else
+                {
+                    Debug.Log(this.hamsterName + ": ich kann hier nicht runterklettern.");
+                }
+                break;
+        }
+    }
+
+    /// <summary>
     /// Das Inventar wird angezeigt, ist das Inventar bereits offen wird das Inventar geschlossen
     /// </summary>
-    public void DisplayInventory()
+    public void DisplayInventory(float alpha = -1)
     {
         hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
@@ -1514,7 +1691,7 @@ public class Hamster : ScriptableObject
                 }
             }
 
-            SetWindows(inventoryUI: true);
+            SetWindows(inventoryUI: true, alpha: alpha);
 
             /* Setze die Namen, Bilder und Kornanzahl der Hamster oben an das UI des Handelfensters. */
             SetHamsterUI(new Hamster[] { this });
@@ -1525,7 +1702,7 @@ public class Hamster : ScriptableObject
         {
             int childCount = hamsterGameManager.itemContent.childCount;
 
-            SetWindows(generalUI: true);
+            SetWindows(generalUI: true, alpha: alpha);
 
             this.isInInventory = false;
 
@@ -2471,9 +2648,7 @@ public class Hamster : ScriptableObject
         switch (this.direction)
         {
             case LookingDirection.East:
-                if(Territory.GetInstance().GetTileAt(this.column + 1, this.row).type != Tile.TileType.Wall &&
-                   Territory.GetInstance().GetTileAt(this.column + 1, this.row).type != Tile.TileType.Water &&
-                   FrontIsClearNoHamster() &&
+                if(FrontIsClearNoHamster() &&
                    this.currentLevel == Territory.GetInstance().GetTileAt(this.column + 1, this.row).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
@@ -2482,9 +2657,7 @@ public class Hamster : ScriptableObject
                 // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             case LookingDirection.North:
-                if (Territory.GetInstance().GetTileAt(this.column, this.row + 1).type != Tile.TileType.Wall &&
-                    Territory.GetInstance().GetTileAt(this.column, this.row + 1).type != Tile.TileType.Water &&
-                    FrontIsClearNoHamster() &&
+                if (FrontIsClearNoHamster() &&
                     this.currentLevel == Territory.GetInstance().GetTileAt(this.column, this.row + 1).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
@@ -2493,9 +2666,7 @@ public class Hamster : ScriptableObject
                 // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             case LookingDirection.West:
-                if (Territory.GetInstance().GetTileAt(this.column - 1, this.row).type != Tile.TileType.Wall &&
-                    Territory.GetInstance().GetTileAt(this.column - 1, this.row).type != Tile.TileType.Water &&
-                    FrontIsClearNoHamster() &&
+                if (FrontIsClearNoHamster() &&
                     this.currentLevel == Territory.GetInstance().GetTileAt(this.column - 1, this.row).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");
@@ -2504,9 +2675,7 @@ public class Hamster : ScriptableObject
                 // Debug.Log(this.name + ": FrontIsClear(): false");
                 return false;
             case LookingDirection.South:
-                if (Territory.GetInstance().GetTileAt(this.column, this.row - 1).type != Tile.TileType.Wall &&
-                    Territory.GetInstance().GetTileAt(this.column, this.row - 1).type != Tile.TileType.Water &&
-                    FrontIsClearNoHamster() &&
+                if (FrontIsClearNoHamster() &&
                     this.currentLevel == Territory.GetInstance().GetTileAt(this.column, this.row - 1).tileLevel)
                 {
                     // Debug.Log(this.name + ": FrontIsClear(): true");

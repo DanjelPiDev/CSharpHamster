@@ -29,7 +29,7 @@ public class Quest : ScriptableObject
     {
         HamsterGameManager hamsterGameManager = GameObject.FindGameObjectWithTag("HamsterGameManager").GetComponent<HamsterGameManager>();
 
-        if (!this.questStarted && !this.questDone && !this.questFailed)
+        if (!this.questStarted && (!this.questDone || !this.questFailed))
         {
             this.questStarted = true;
             hamsterGameManager.questSelector.AddOptions(new List<TMP_Dropdown.OptionData> { new TMP_Dropdown.OptionData(this.questName) });
