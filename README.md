@@ -19,7 +19,7 @@ Goal: Learn, experiment, and have fun with Unity + C#.
 - **Trading mechanics** (NPC ↔ player)
 - Easily extendable for your own tutorials or mini-games
 
-For more details, check out the [C# Hamster Wiki]([https://github.com/DanjelPiDev/CSharpHamster/wiki](https://github.com/DanjelPiDev/CSharpHamster/wiki)).
+For more details, check out the [C# Hamster Wiki](https://github.com/DanjelPiDev/CSharpHamster/wiki).
 
 ---
 
