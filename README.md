@@ -1,42 +1,46 @@
 # C# Hamster
 
-***
+--- 
 
-This project is more or less a "better" recreation of the [Java-Hamster-Model](https://www.java-hamster-modell.de/). I created this for a small tutorial teaching Object-Oriented-Programming. It sure is far from perfect, and my skills are WIP.
-Feel free to use this project to do whatever you want to do with it.
+C# Hamster is an extended reinterpretation of the well-known  
+[Java Hamster Model](https://www.java-hamster-modell.de/).  
+The project originally started as a small **OOP tutorial**, but has since grown to include many more features.
 
-For more information go to the [C#-Hamster-Wiki](https://github.com/Dagait/GDC_CSharpHamster/wiki) page.
+Goal: Learn, experiment, and have fun with Unity + C#.
 
+---
 
-[<img src="https://user-images.githubusercontent.com/103567242/163793823-fe26a09e-f108-45e5-9430-ce8e251581f0.png" width="200"/>](https://github.com/Dagait/CSharpHamster/archive/refs/heads/master.zip)
+## Features
 
-***
-# Setup
-To get the C#-Hamster running on your PC, you do have to download or clone this project.
-If you downloaded the master branch you have to unpack everything and remember the location!
+- Classic **Hamster grid gameplay** (move, turn, collect, drop...)
+- **Inventory system** for items
+- **Dialogue system** for NPCs
+- **Enemy system** with simple AI
+- **Trading mechanics** (NPC ↔ player)
+- Easily extendable for your own tutorials or mini-games
 
-Now you must start the UnityHub.
+For more details, check out the [C# Hamster Wiki](https://github.com/DanjelPiDev/GDC_CSharpHamster/wiki).
 
-* If you don't have UnityHub installed, go to the following page (Select your OS): [https://unity.com/download](https://unity.com/download)
+---
 
-After you installed UnityHub, download the Unity Engine Version 2020 LTS.
+## Setup
 
-## Import the project
-After you did all the steps above, the UnityHub should look like this:
+1. Clone the repository or download the ZIP and unpack it.  
+   [Download Master Branch](https://github.com/Dagait/CSharpHamster/archive/refs/heads/master.zip)
 
-![UnityHub_Empty](https://user-images.githubusercontent.com/103567242/163169324-e12be060-1858-4150-a649-496e57e1288e.png)
+2. Install [Unity Hub](https://unity.com/download) (if not already installed).
 
-Now you must press the "Open" button in the upper right corner. Select the folder you cloned or unpacked.
-### Version
-After you imported the project, it can happen that Unity is telling you that this project was edited with a different Version, just press "Choose another Editor version", then a window will open showing all your installed Editor versions, choose the one you will work with and press the button saying "Open with xyz" (xyz stands for the version you choose), and you're good to go.
+3. Unity version required: **2020 LTS**.
 
-![EditorVersion](https://user-images.githubusercontent.com/103567242/163705618-f288a691-63a0-4f8e-80fa-4b1b98a260a2.png)
+4. In Unity Hub -> click **Open** -> select the folder you cloned or unpacked.  
+   If Unity tells you the project was edited with a different version, just choose *"Select another Editor version"* and pick the one you want to use.
 
-![EditorVersion_selection](https://user-images.githubusercontent.com/103567242/163705634-4dbf8866-782c-4e4f-ad4c-e1e08fe48898.png)
+> Note: On non-Windows systems you might see  
+> *"Unsupported Build Target"* -> simply click *"Switch Target"* and Unity will handle it.
 
+---
 
+## Contributing
 
-If you are working with a different OS than Windows, a warning will appear telling you "Unsupported Build Target", just press the button saying "Switch Target", and Unity will do the rest for you.
-
-![EditorVersion_unsupportedBuildTarget](https://user-images.githubusercontent.com/103567242/163705638-4aecfb21-c5eb-4218-91b0-ed6663a437c6.png)
-
+This project is intended for learning purposes.  
+Pull requests, issues, or your own forks are always welcome.
